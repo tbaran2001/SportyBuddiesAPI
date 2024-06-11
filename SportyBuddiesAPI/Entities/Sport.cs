@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SportyBuddiesAPI.Entities;
 
-public class User
+public class Sport
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -11,5 +11,4 @@ public class User
     public string Name { get; set; } = String.Empty;
     public string? Description { get; set; }
     public ICollection<UserSport> UserSports { get; set; } = new List<UserSport>();
-
 }
