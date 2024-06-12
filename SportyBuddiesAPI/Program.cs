@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SportyBuddiesAPI.DbContexts;
+using SportyBuddiesAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,10 @@ builder.Services.AddDbContext<SportyBuddiesContext>(dbContextOptions =>
     dbContextOptions.UseSqlite(
         builder.Configuration["ConnectionStrings:SportyBuddiesDBConnectionString"]);
 });
+
+builder.Services.AddScoped<ISportyBuddiesRepository, SportyBuddiesRepository>();
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
 

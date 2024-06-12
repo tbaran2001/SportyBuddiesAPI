@@ -1,6 +1,8 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SportyBuddiesAPI.Models;
+using SportyBuddiesAPI.Services;
 
 namespace SportyBuddiesAPI.Controllers
 {
@@ -8,12 +10,24 @@ namespace SportyBuddiesAPI.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        [HttpGet]
-        public ActionResult<IEnumerable<UserDto>> GetUsers()
+        private readonly ISportyBuddiesRepository _sportyBuddiesRepository;
+        private readonly IMapper _mapper;
+
+        public UsersController(ISportyBuddiesRepository sportyBuddiesRepository, IMapper mapper)
         {
-            return Ok(SportyBuddiesDataStore.Current.Users);
+            _sportyBuddiesRepository = sportyBuddiesRepository ??
+                                       throw new ArgumentNullException(nameof(sportyBuddiesRepository));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
-        
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<UserWithoutSportsDto>>> GetUsers()
+        {
+            var users = await _sportyBuddiesRepository.GetUsersAsync();
+
+            return Ok(_mapper.Map<IEnumerable<UserWithoutSportsDto>>(users));
+        }
+
         [HttpGet("{id}")]
         public ActionResult<UserDto> GetUser(int id)
         {
@@ -22,6 +36,7 @@ namespace SportyBuddiesAPI.Controllers
             {
                 return NotFound();
             }
+
             return Ok(user);
         }
 
@@ -33,7 +48,8 @@ namespace SportyBuddiesAPI.Controllers
             {
                 return NotFound();
             }
-            var userSports= SportyBuddiesDataStore.Current.UserSports.Where(us => us.UserId == userId).ToList();
+
+            var userSports = SportyBuddiesDataStore.Current.UserSports.Where(us => us.UserId == userId).ToList();
             var sports = new List<SportDto>();
             foreach (var userSport in userSports)
             {
@@ -43,9 +59,10 @@ namespace SportyBuddiesAPI.Controllers
                     sports.Add(sport);
                 }
             }
+
             return Ok(sports);
         }
-        
+
         [HttpGet("{userId}/sports/{sportId}")]
         public ActionResult<SportDto> GetUserSport(int userId, int sportId)
         {
@@ -54,16 +71,21 @@ namespace SportyBuddiesAPI.Controllers
             {
                 return NotFound();
             }
-            var userSport = SportyBuddiesDataStore.Current.UserSports.FirstOrDefault(us => us.UserId == userId && us.SportId == sportId);
+
+            var userSport =
+                SportyBuddiesDataStore.Current.UserSports.FirstOrDefault(us =>
+                    us.UserId == userId && us.SportId == sportId);
             if (userSport == null)
             {
                 return NotFound();
             }
+
             var sport = SportyBuddiesDataStore.Current.Sports.FirstOrDefault(s => s.Id == sportId);
             if (sport == null)
             {
                 return NotFound();
             }
+
             return Ok(sport);
         }
     }
