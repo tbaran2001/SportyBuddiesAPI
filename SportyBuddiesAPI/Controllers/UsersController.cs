@@ -29,64 +29,103 @@ namespace SportyBuddiesAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<UserDto> GetUser(int id)
+        public async Task<IActionResult> GetUser(int id, bool includeSports = false)
         {
-            var user = SportyBuddiesDataStore.Current.Users.FirstOrDefault(u => u.Id == id);
+            var user = await _sportyBuddiesRepository.GetUserAsync(id, includeSports);
             if (user == null)
             {
                 return NotFound();
             }
 
-            return Ok(user);
+            if (includeSports)
+            {
+                return Ok(_mapper.Map<UserDto>(user));
+            }
+
+            return Ok(_mapper.Map<UserWithoutSportsDto>(user));
         }
 
         [HttpGet("{userId}/sports")]
-        public ActionResult<IEnumerable<SportDto>> GetUserSports(int userId)
+        public async Task<ActionResult<IEnumerable<SportDto>>> GetUserSports(int userId)
         {
-            var user = SportyBuddiesDataStore.Current.Users.FirstOrDefault(u => u.Id == userId);
-            if (user == null)
+            if (!await _sportyBuddiesRepository.UserExistsAsync(userId))
             {
-                return NotFound();
+                return NotFound("User not found.");
             }
-
-            var userSports = SportyBuddiesDataStore.Current.UserSports.Where(us => us.UserId == userId).ToList();
-            var sports = new List<SportDto>();
-            foreach (var userSport in userSports)
-            {
-                var sport = SportyBuddiesDataStore.Current.Sports.FirstOrDefault(s => s.Id == userSport.SportId);
-                if (sport != null)
-                {
-                    sports.Add(sport);
-                }
-            }
-
-            return Ok(sports);
+            
+            var sports = await _sportyBuddiesRepository.GetUserSportsAsync(userId);
+            
+            return Ok(_mapper.Map<IEnumerable<SportDto>>(sports));
         }
 
         [HttpGet("{userId}/sports/{sportId}")]
-        public ActionResult<SportDto> GetUserSport(int userId, int sportId)
+        public async Task<ActionResult<SportDto>> GetUserSport(int userId, int sportId)
         {
-            var user = SportyBuddiesDataStore.Current.Users.FirstOrDefault(u => u.Id == userId);
-            if (user == null)
+            if(!await _sportyBuddiesRepository.UserExistsAsync(userId))
             {
-                return NotFound();
+                return NotFound("User not found.");
             }
 
-            var userSport =
-                SportyBuddiesDataStore.Current.UserSports.FirstOrDefault(us =>
-                    us.UserId == userId && us.SportId == sportId);
+            if (!await _sportyBuddiesRepository.SportExistsAsync(sportId))
+            {
+                return NotFound("Sport not found.");
+            }
+            
+            var userSport = await _sportyBuddiesRepository.GetUserSportAsync(userId, sportId);
             if (userSport == null)
             {
-                return NotFound();
+                return NotFound("User does not have this sport.");
             }
-
-            var sport = SportyBuddiesDataStore.Current.Sports.FirstOrDefault(s => s.Id == sportId);
-            if (sport == null)
+            
+            return Ok(_mapper.Map<SportDto>(userSport));
+        }
+        
+        [HttpPost("{userId}/sports/{sportId}")]
+        public async Task<ActionResult> AddSportToUser(int userId, int sportId)
+        {
+            if (!await _sportyBuddiesRepository.UserExistsAsync(userId))
             {
-                return NotFound();
+                return NotFound("User not found.");
             }
 
-            return Ok(sport);
+            if (!await _sportyBuddiesRepository.SportExistsAsync(sportId))
+            {
+                return NotFound("Sport not found.");
+            }
+            
+            if (await _sportyBuddiesRepository.HasSportAsync(userId, sportId))
+            {
+                return BadRequest("User already has this sport.");
+            }
+
+            await _sportyBuddiesRepository.AddSportToUserAsync(userId, sportId);
+            await _sportyBuddiesRepository.SaveChangesAsync();
+
+            return NoContent();
+        }
+        
+        [HttpDelete("{userId}/sports/{sportId}")]
+        public async Task<ActionResult> RemoveSportFromUser(int userId, int sportId)
+        {
+            if (!await _sportyBuddiesRepository.UserExistsAsync(userId))
+            {
+                return NotFound("User not found.");
+            }
+
+            if (!await _sportyBuddiesRepository.SportExistsAsync(sportId))
+            {
+                return NotFound("Sport not found.");
+            }
+            
+            if (!await _sportyBuddiesRepository.HasSportAsync(userId, sportId))
+            {
+                return BadRequest("User does not have this sport.");
+            }
+
+            await _sportyBuddiesRepository.RemoveSportFromUserAsync(userId, sportId);
+            await _sportyBuddiesRepository.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }

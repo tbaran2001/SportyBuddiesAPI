@@ -1,7 +1,9 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using SportyBuddiesAPI.Models;
+using SportyBuddiesAPI.Services;
 
 namespace SportyBuddiesAPI.Controllers
 {
@@ -9,88 +11,110 @@ namespace SportyBuddiesAPI.Controllers
     [ApiController]
     public class SportsController : ControllerBase
     {
-        [HttpGet]
-        public ActionResult GetSports()
+        private readonly ISportyBuddiesRepository _sportyBuddiesRepository;
+        private readonly IMapper _mapper;
+
+        public SportsController(ISportyBuddiesRepository sportyBuddiesRepository, IMapper mapper)
         {
-            return Ok(SportyBuddiesDataStore.Current.Sports);
+            _sportyBuddiesRepository = sportyBuddiesRepository ??
+                                       throw new ArgumentNullException(nameof(sportyBuddiesRepository));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        [HttpGet("{id}")]
-        public ActionResult GetSport(int id)
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<SportDto>>> GetSports()
         {
-            var sport = SportyBuddiesDataStore.Current.Sports.FirstOrDefault(s => s.Id == id);
+            var sports = await _sportyBuddiesRepository.GetSportsAsync();
+
+            return Ok(_mapper.Map<IEnumerable<SportDto>>(sports));
+        }
+
+        [HttpGet("{sportId}", Name = "GetSport")]
+        public async Task<ActionResult<SportDto>> GetSport(int sportId)
+        {
+            var sport = await _sportyBuddiesRepository.GetSportAsync(sportId);
             if (sport == null)
             {
                 return NotFound();
             }
 
-            return Ok(sport);
+            return Ok(_mapper.Map<SportDto>(sport));
         }
 
         [HttpPost]
-        public ActionResult CreateSport(CreateSportDto sport)
+        public async Task<ActionResult<SportDto>> CreateSport(CreateSportDto sport)
         {
-            var maxSportId = SportyBuddiesDataStore.Current.Sports.Max(s => s.Id);
-            var newSport = new SportDto
-            {
-                Id = maxSportId + 1,
-                Name = sport.Name,
-                Description = sport.Description
-            };
-            SportyBuddiesDataStore.Current.Sports.Add(newSport);
-            return CreatedAtRoute("GetSport", new { id = newSport.Id }, newSport);
+            var sportEntity = _mapper.Map<Entities.Sport>(sport);
+
+            await _sportyBuddiesRepository.AddSportAsync(sportEntity);
+
+            await _sportyBuddiesRepository.SaveChangesAsync();
+
+            var sportToReturn = _mapper.Map<SportDto>(sportEntity);
+
+            return CreatedAtRoute(nameof(GetSport), new {sportId = sportToReturn.Id}, sportToReturn);
         }
 
-        [HttpPut("{id}")]
-        public ActionResult UpdateSport(int id, UpdateSportDto sport)
+        [HttpPut("{sportId}")]
+        public async Task<ActionResult> UpdateSport(int sportId, UpdateSportDto sport)
         {
-            var sportFromStore = SportyBuddiesDataStore.Current.Sports.FirstOrDefault(s => s.Id == id);
-            if (sportFromStore == null)
+            var sportEntity = await _sportyBuddiesRepository.GetSportAsync(sportId);
+            if (sportEntity == null)
             {
                 return NotFound();
             }
+            
+            _mapper.Map(sport, sportEntity);
 
-            sportFromStore.Name = sport.Name;
-            sportFromStore.Description = sport.Description;
+            await _sportyBuddiesRepository.SaveChangesAsync();
+            
             return NoContent();
         }
-        
-        [HttpPatch("{id}")]
-        public ActionResult PartiallyUpdateSport(int id, JsonPatchDocument<UpdateSportDto> patchDocument)
+
+        [HttpPatch("{sportId}")]
+        public async Task<ActionResult> PartiallyUpdateSport(int sportId, JsonPatchDocument<UpdateSportDto> patchDocument)
         {
-            var sportFromStore = SportyBuddiesDataStore.Current.Sports.FirstOrDefault(s => s.Id == id);
-            if (sportFromStore == null)
+            var sportEntity = await _sportyBuddiesRepository.GetSportAsync(sportId);
+            if (sportEntity == null)
             {
                 return NotFound();
             }
-
-            var sportToPatch = new UpdateSportDto
-            {
-                Name = sportFromStore.Name,
-                Description = sportFromStore.Description
-            };
+            
+            var sportToPatch = _mapper.Map<UpdateSportDto>(sportEntity);
+            
             patchDocument.ApplyTo(sportToPatch, ModelState);
-            if (!TryValidateModel(sportToPatch))
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            
+            if(!TryValidateModel(sportToPatch))
             {
                 return ValidationProblem(ModelState);
             }
+            
+            _mapper.Map(sportToPatch, sportEntity);
+            await _sportyBuddiesRepository.SaveChangesAsync();
 
-            sportFromStore.Name = sportToPatch.Name;
-            sportFromStore.Description = sportToPatch.Description;
             return NoContent();
         }
-        
-        [HttpDelete("{id}")]
-        public ActionResult DeleteSport(int id)
+
+        [HttpDelete("{sportId}")]
+        public async Task<ActionResult> DeleteSport(int sportId)
         {
-            var sportFromStore = SportyBuddiesDataStore.Current.Sports.FirstOrDefault(s => s.Id == id);
-            if (sportFromStore == null)
+            var sportEntity = await _sportyBuddiesRepository.GetSportAsync(sportId);
+            if (sportEntity == null)
             {
                 return NotFound();
             }
+            
+            _sportyBuddiesRepository.DeleteSport(sportEntity);
+            await _sportyBuddiesRepository.SaveChangesAsync();
 
-            SportyBuddiesDataStore.Current.Sports.Remove(sportFromStore);
             return NoContent();
         }
+        
+        
     }
 }

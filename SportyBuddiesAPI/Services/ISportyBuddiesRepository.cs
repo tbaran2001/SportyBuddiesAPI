@@ -5,9 +5,17 @@ namespace SportyBuddiesAPI.Services;
 public interface ISportyBuddiesRepository
 {
     Task<IEnumerable<User>> GetUsersAsync();
-    Task<User?> GetUser(int id, bool includeSports);
+    Task<User?> GetUserAsync(int userId, bool includeSports);
+    Task<bool> UserExistsAsync(int userId);
     Task<IEnumerable<Sport>> GetUserSportsAsync(int userId);
     Task<Sport?> GetUserSportAsync(int userId, int sportId);
+    Task<IEnumerable<Sport>> GetSportsAsync();
+    Task<Sport?> GetSportAsync(int sportId);
+    Task<bool> SportExistsAsync(int sportId);
+    Task AddSportAsync(Sport sport);
+    void DeleteSport(Sport sport);
+    Task<bool> HasSportAsync(int userId, int sportId);
     Task AddSportToUserAsync(int userId, int sportId);
     Task RemoveSportFromUserAsync(int userId, int sportId);
+    Task<bool> SaveChangesAsync();
 }

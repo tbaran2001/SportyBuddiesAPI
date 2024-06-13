@@ -10,6 +10,6 @@ public class User
     public int Id { get; set; }
     public string Name { get; set; } = String.Empty;
     public string? Description { get; set; }
-    public ICollection<UserSport> UserSports { get; set; } = new List<UserSport>();
+    public ICollection<Sport> Sports { get; set; } = new List<Sport>();
 
 }

@@ -2,8 +2,6 @@
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace SportyBuddiesAPI.Migrations
 {
     /// <inheritdoc />
@@ -41,7 +39,7 @@ namespace SportyBuddiesAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserSports",
+                name: "UserSport",
                 columns: table => new
                 {
                     UserId = table.Column<int>(type: "INTEGER", nullable: false),
@@ -49,65 +47,32 @@ namespace SportyBuddiesAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserSports", x => new { x.UserId, x.SportId });
+                    table.PrimaryKey("PK_UserSport", x => new { x.UserId, x.SportId });
                     table.ForeignKey(
-                        name: "FK_UserSports_Sports_SportId",
+                        name: "FK_UserSport_Sports_SportId",
                         column: x => x.SportId,
                         principalTable: "Sports",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserSports_Users_UserId",
+                        name: "FK_UserSport_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.InsertData(
-                table: "Sports",
-                columns: new[] { "Id", "Description", "Name" },
-                values: new object[,]
-                {
-                    { 1, null, "Sport1" },
-                    { 2, null, "Sport2" },
-                    { 3, null, "Sport3" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Users",
-                columns: new[] { "Id", "Description", "Name" },
-                values: new object[,]
-                {
-                    { 1, null, "User1" },
-                    { 2, null, "User2" },
-                    { 3, null, "User3" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "UserSports",
-                columns: new[] { "SportId", "UserId" },
-                values: new object[,]
-                {
-                    { 1, 1 },
-                    { 2, 1 },
-                    { 2, 2 },
-                    { 3, 2 },
-                    { 1, 3 },
-                    { 3, 3 }
-                });
-
             migrationBuilder.CreateIndex(
-                name: "IX_UserSports_SportId",
-                table: "UserSports",
-                column: "SportId");
+                name: "IX_UserSport_UserId",
+                table: "UserSport",
+                column: "UserId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "UserSports");
+                name: "UserSport");
 
             migrationBuilder.DropTable(
                 name: "Sports");
