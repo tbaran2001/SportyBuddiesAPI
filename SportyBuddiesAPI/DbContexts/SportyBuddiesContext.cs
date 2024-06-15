@@ -7,6 +7,7 @@ public class SportyBuddiesContext:DbContext
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Sport> Sports { get; set; }
+    public DbSet<Match> Matches { get; set; }
 
     public SportyBuddiesContext(DbContextOptions<SportyBuddiesContext> options):base(options)
     {

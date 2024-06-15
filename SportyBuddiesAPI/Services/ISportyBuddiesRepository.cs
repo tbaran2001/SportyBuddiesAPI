@@ -17,5 +17,11 @@ public interface ISportyBuddiesRepository
     Task<bool> HasSportAsync(int userId, int sportId);
     Task AddSportToUserAsync(int userId, int sportId);
     Task RemoveSportFromUserAsync(int userId, int sportId);
+    Task<IEnumerable<Match>> GetMatchesAsync();
+    Task<Match?> GetMatchAsync(int matchId);
+    Task<Match?> GetMatchAsync(int userId, int matchedUserId);
+    Task<IEnumerable<Match>> GetUserMatchesAsync(int userId);
+    Task<bool> MatchExistsAsync(int userId, int matchedUserId);
+    Task UpdateUserMatchesAsync(int userId);
     Task<bool> SaveChangesAsync();
 }

@@ -108,6 +108,70 @@ public class SportyBuddiesRepository : ISportyBuddiesRepository
         user.Sports.Remove(sport);
     }
 
+    public async Task<IEnumerable<Match>> GetMatchesAsync()
+    {
+        return await _context.Matches
+            .Include(m => m.User)
+            .Include(m => m.MatchedUser)
+            .ToListAsync();
+        
+    }
+
+    public async Task<Match?> GetMatchAsync(int matchId)
+    {
+        return await _context.Matches
+            .Include(m => m.User)
+            .Include(m => m.MatchedUser)
+            .FirstOrDefaultAsync(m => m.Id == matchId);
+    }
+
+    public async Task<Match?> GetMatchAsync(int userId, int matchedUserId)
+    {
+        return await _context.Matches
+            .Include(m => m.User)
+            .Include(m => m.MatchedUser)
+            .FirstOrDefaultAsync(m => m.User.Id == userId && m.MatchedUser.Id == matchedUserId);
+    }
+
+    public async Task<IEnumerable<Match>> GetUserMatchesAsync(int userId)
+    {
+        return await _context.Matches
+            .Include(m => m.User)
+            .Include(m => m.MatchedUser)
+            .Where(m => m.User.Id == userId)
+            .ToListAsync();
+    }
+
+    public async Task<bool> MatchExistsAsync(int userId, int matchedUserId)
+    {
+        return await _context.Matches.AnyAsync(m => m.User.Id == userId && m.MatchedUser.Id == matchedUserId);
+    }
+
+    public async Task UpdateUserMatchesAsync(int userId)
+    {
+        var user = await _context.Users
+            .FirstOrDefaultAsync(u => u.Id == userId);
+
+        foreach (var matchedUser in _context.Users.Include(u=>u.Sports))
+        {
+            if (user.Id==matchedUser.Id || await _context.Matches.AnyAsync(m => m.User.Id == user.Id && m.MatchedUser.Id == matchedUser.Id))
+            {
+                continue;
+            }
+            var sports1 = user.Sports;
+            var sports2 = matchedUser.Sports;
+            if (sports1.Intersect(sports2).Any())
+            {
+                Match match = new Match
+                {
+                    User = user,
+                    MatchedUser = matchedUser
+                };
+                await _context.Matches.AddAsync(match);
+            }
+        }
+    }
+
     public async Task<bool> SaveChangesAsync()
     {
         return (await _context.SaveChangesAsync() >= 0);
