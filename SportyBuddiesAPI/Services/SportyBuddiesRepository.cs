@@ -154,20 +154,42 @@ public class SportyBuddiesRepository : ISportyBuddiesRepository
 
         foreach (var matchedUser in _context.Users.Include(u=>u.Sports))
         {
-            if (user.Id==matchedUser.Id || await _context.Matches.AnyAsync(m => m.User.Id == user.Id && m.MatchedUser.Id == matchedUser.Id))
+            if (user.Id==matchedUser.Id)
             {
+                continue;
+            }
+            if (await _context.Matches.AnyAsync(m => m.User.Id == user.Id && m.MatchedUser.Id == matchedUser.Id))
+            {
+                Match match1 = await _context.Matches
+                    .FirstOrDefaultAsync(m => m.User.Id == user.Id && m.MatchedUser.Id == matchedUser.Id);
+                _context.Matches.Remove(match1);
+                
+                Match match2 = await _context.Matches
+                    .FirstOrDefaultAsync(m => m.User.Id == matchedUser.Id && m.MatchedUser.Id == user.Id);
+                _context.Matches.Remove(match2);
                 continue;
             }
             var sports1 = user.Sports;
             var sports2 = matchedUser.Sports;
             if (sports1.Intersect(sports2).Any())
             {
+                var now = DateTime.Now;
+                
                 Match match = new Match
                 {
                     User = user,
-                    MatchedUser = matchedUser
+                    MatchedUser = matchedUser,
+                    MatchDateTime = now
                 };
                 await _context.Matches.AddAsync(match);
+                
+                Match match2 = new Match
+                {
+                    User = matchedUser,
+                    MatchedUser = user,
+                    MatchDateTime = now
+                };
+                await _context.Matches.AddAsync(match2);
             }
         }
     }

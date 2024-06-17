@@ -86,7 +86,7 @@ namespace SportyBuddiesAPI.Controllers
             
             await _sportyBuddiesRepository.UpdateUserMatchesAsync(userId);
             
-            await _sportyBuddiesRepository.SaveChangesAsync();x fe
+            await _sportyBuddiesRepository.SaveChangesAsync();
             
             return NoContent();
         }

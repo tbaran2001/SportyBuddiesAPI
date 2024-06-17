@@ -30,12 +30,22 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseDeveloperExceptionPage();
+}
+else
+{
+    app.UseExceptionHandler("/error");
 }
 
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+app.MapGet("/error", () => Results.Problem());
+app.MapGet("/error/test", () =>
+{
+    throw new Exception("Test exception");
+});
 app.MapControllers();
 
 app.Run();

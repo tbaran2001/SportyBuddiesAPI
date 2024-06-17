@@ -99,6 +99,7 @@ namespace SportyBuddiesAPI.Controllers
             }
 
             await _sportyBuddiesRepository.AddSportToUserAsync(userId, sportId);
+            await _sportyBuddiesRepository.UpdateUserMatchesAsync(userId);
             await _sportyBuddiesRepository.SaveChangesAsync();
 
             return NoContent();
@@ -123,6 +124,7 @@ namespace SportyBuddiesAPI.Controllers
             }
 
             await _sportyBuddiesRepository.RemoveSportFromUserAsync(userId, sportId);
+            await _sportyBuddiesRepository.UpdateUserMatchesAsync(userId);
             await _sportyBuddiesRepository.SaveChangesAsync();
 
             return NoContent();
