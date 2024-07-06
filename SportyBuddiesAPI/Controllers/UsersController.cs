@@ -21,17 +21,17 @@ namespace SportyBuddiesAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserWithoutSportsDto>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<UserWithoutSportsDto>>> GetUsers(string? name, string? searchQuery)
         {
-            var users = await _sportyBuddiesRepository.GetUsersAsync();
+            var users = await _sportyBuddiesRepository.GetUsersAsync(name,searchQuery);
 
             return Ok(_mapper.Map<IEnumerable<UserWithoutSportsDto>>(users));
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetUser(int id, bool includeSports = false)
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> GetUser(int userId, bool includeSports = false)
         {
-            var user = await _sportyBuddiesRepository.GetUserAsync(id, includeSports);
+            var user = await _sportyBuddiesRepository.GetUserAsync(userId, includeSports);
             if (user == null)
             {
                 return NotFound();

@@ -2,7 +2,7 @@
 
 namespace SportyBuddiesAPI.Models;
 
-public class CreateSportDto
+public class SportForCreationDto
 {
     [Required]
     [MaxLength(50)]

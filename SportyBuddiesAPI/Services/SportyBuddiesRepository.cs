@@ -18,6 +18,30 @@ public class SportyBuddiesRepository : ISportyBuddiesRepository
         return await _context.Users.ToListAsync();
     }
 
+    public async Task<IEnumerable<User>> GetUsersAsync(string? name, string? searchQuery)
+    {
+        if (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(searchQuery))
+        {
+            return await GetUsersAsync();
+        }
+
+        var collection = _context.Users as IQueryable<User>;
+
+        if (!string.IsNullOrEmpty(name))
+        {
+            name = name.Trim();
+            collection = collection.Where(u => u.Name.Contains(name));
+        }
+
+        if (!string.IsNullOrEmpty(searchQuery))
+        {
+            searchQuery = searchQuery.Trim();
+            collection = collection.Where(u => u.Name.Contains(searchQuery) || u.Description.Contains(searchQuery));
+        }
+
+        return await collection.OrderBy(u => u.Name).ToListAsync();
+    }
+
     public async Task<User?> GetUserAsync(int userId, bool includeSports = false)
     {
         if (includeSports)
@@ -114,7 +138,6 @@ public class SportyBuddiesRepository : ISportyBuddiesRepository
             .Include(m => m.User)
             .Include(m => m.MatchedUser)
             .ToListAsync();
-        
     }
 
     public async Task<Match?> GetMatchAsync(int matchId)
@@ -150,49 +173,71 @@ public class SportyBuddiesRepository : ISportyBuddiesRepository
     public async Task UpdateUserMatchesAsync(int userId)
     {
         var user = await _context.Users
+            .Include(u => u.Sports)
             .FirstOrDefaultAsync(u => u.Id == userId);
 
-        foreach (var matchedUser in _context.Users.Include(u=>u.Sports))
+        var userSportIds = user.Sports.Select(s => s.Id).ToList();
+
+        var allUsers = await _context.Users
+            .Include(u => u.Sports)
+            .ToListAsync();
+
+        var existingMatches = await _context.Matches
+            .Where(m => m.User.Id == userId || m.MatchedUser.Id == userId)
+            .ToListAsync();
+
+        var newMatches = new List<Match>();
+        var matchesToRemove = new List<Match>();
+
+        foreach (var matchedUser in allUsers)
         {
-            if (user.Id==matchedUser.Id)
+            if (user.Id == matchedUser.Id)
             {
                 continue;
             }
-            if (await _context.Matches.AnyAsync(m => m.User.Id == user.Id && m.MatchedUser.Id == matchedUser.Id))
+
+            var now = DateTime.Now;
+
+            var commonSports = user.Sports.Intersect(matchedUser.Sports).Any();
+            if (commonSports)
             {
-                Match match1 = await _context.Matches
-                    .FirstOrDefaultAsync(m => m.User.Id == user.Id && m.MatchedUser.Id == matchedUser.Id);
-                _context.Matches.Remove(match1);
-                
-                Match match2 = await _context.Matches
-                    .FirstOrDefaultAsync(m => m.User.Id == matchedUser.Id && m.MatchedUser.Id == user.Id);
-                _context.Matches.Remove(match2);
-                continue;
+                if (!existingMatches.Any(m =>
+                        (m.User.Id == user.Id && m.MatchedUser.Id == matchedUser.Id) ||
+                        (m.User.Id == matchedUser.Id && m.MatchedUser.Id == user.Id)))
+                {
+                    newMatches.Add(new Match
+                    {
+                        User = user,
+                        MatchedUser = matchedUser,
+                        MatchDateTime = now
+                    });
+
+                    newMatches.Add(new Match
+                    {
+                        User = matchedUser,
+                        MatchedUser = user,
+                        MatchDateTime = now
+                    });
+                }
             }
-            var sports1 = user.Sports;
-            var sports2 = matchedUser.Sports;
-            if (sports1.Intersect(sports2).Any())
+            else
             {
-                var now = DateTime.Now;
-                
-                Match match = new Match
+                var toRemove = existingMatches.Where(m =>
+                        (m.User.Id == user.Id && m.MatchedUser.Id == matchedUser.Id) ||
+                        (m.User.Id == matchedUser.Id && m.MatchedUser.Id == user.Id))
+                    .ToList();
+                if (toRemove.Count != 0)
                 {
-                    User = user,
-                    MatchedUser = matchedUser,
-                    MatchDateTime = now
-                };
-                await _context.Matches.AddAsync(match);
-                
-                Match match2 = new Match
-                {
-                    User = matchedUser,
-                    MatchedUser = user,
-                    MatchDateTime = now
-                };
-                await _context.Matches.AddAsync(match2);
+                    matchesToRemove.AddRange(toRemove);
+                }
             }
         }
+
+        await _context.Matches.AddRangeAsync(newMatches);
+        _context.Matches.RemoveRange(matchesToRemove);
+        await _context.SaveChangesAsync();
     }
+
 
     public async Task<bool> SaveChangesAsync()
     {

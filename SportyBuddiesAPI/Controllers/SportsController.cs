@@ -42,9 +42,9 @@ namespace SportyBuddiesAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<SportDto>> CreateSport(CreateSportDto sport)
+        public async Task<ActionResult<SportDto>> CreateSport(SportForCreationDto sportForCreation)
         {
-            var sportEntity = _mapper.Map<Entities.Sport>(sport);
+            var sportEntity = _mapper.Map<Entities.Sport>(sportForCreation);
 
             await _sportyBuddiesRepository.AddSportAsync(sportEntity);
 
@@ -56,7 +56,7 @@ namespace SportyBuddiesAPI.Controllers
         }
 
         [HttpPut("{sportId}")]
-        public async Task<ActionResult> UpdateSport(int sportId, UpdateSportDto sport)
+        public async Task<ActionResult> UpdateSport(int sportId, SportForUpdateDto sportForUpdate)
         {
             var sportEntity = await _sportyBuddiesRepository.GetSportAsync(sportId);
             if (sportEntity == null)
@@ -64,7 +64,7 @@ namespace SportyBuddiesAPI.Controllers
                 return NotFound();
             }
             
-            _mapper.Map(sport, sportEntity);
+            _mapper.Map(sportForUpdate, sportEntity);
 
             await _sportyBuddiesRepository.SaveChangesAsync();
             
@@ -72,7 +72,7 @@ namespace SportyBuddiesAPI.Controllers
         }
 
         [HttpPatch("{sportId}")]
-        public async Task<ActionResult> PartiallyUpdateSport(int sportId, JsonPatchDocument<UpdateSportDto> patchDocument)
+        public async Task<ActionResult> PartiallyUpdateSport(int sportId, JsonPatchDocument<SportForUpdateDto> patchDocument)
         {
             var sportEntity = await _sportyBuddiesRepository.GetSportAsync(sportId);
             if (sportEntity == null)
@@ -80,7 +80,7 @@ namespace SportyBuddiesAPI.Controllers
                 return NotFound();
             }
             
-            var sportToPatch = _mapper.Map<UpdateSportDto>(sportEntity);
+            var sportToPatch = _mapper.Map<SportForUpdateDto>(sportEntity);
             
             patchDocument.ApplyTo(sportToPatch, ModelState);
 

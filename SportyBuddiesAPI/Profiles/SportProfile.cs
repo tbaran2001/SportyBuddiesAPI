@@ -7,8 +7,8 @@ public class SportProfile : Profile
     public SportProfile()
     {
         CreateMap<Entities.Sport, Models.SportDto>();
-        CreateMap<Models.CreateSportDto, Entities.Sport>();
-        CreateMap<Models.UpdateSportDto, Entities.Sport>();
-        CreateMap<Entities.Sport, Models.UpdateSportDto>();
+        CreateMap<Models.SportForCreationDto, Entities.Sport>();
+        CreateMap<Models.SportForUpdateDto, Entities.Sport>();
+        CreateMap<Entities.Sport, Models.SportForUpdateDto>();
     }
 }

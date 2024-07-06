@@ -74,7 +74,7 @@ namespace SportyBuddiesAPI.Controllers
         }
 
         [HttpPut("{userId}/{matchedUserId}")]
-        public async Task<ActionResult> UpdateMatch(int userId, int matchedUserId, UpdateMatchDto match)
+        public async Task<ActionResult> UpdateMatch(int userId, int matchedUserId, MatchForUpdateDto matchForUpdate)
         {
             var matchEntity = await _sportyBuddiesRepository.GetMatchAsync(userId, matchedUserId);
             if (matchEntity == null)
@@ -82,9 +82,7 @@ namespace SportyBuddiesAPI.Controllers
                 return NotFound();
             }
             
-            _mapper.Map(match, matchEntity);
-            
-            await _sportyBuddiesRepository.UpdateUserMatchesAsync(userId);
+            _mapper.Map(matchForUpdate, matchEntity);
             
             await _sportyBuddiesRepository.SaveChangesAsync();
             

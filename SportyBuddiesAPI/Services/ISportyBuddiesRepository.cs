@@ -5,6 +5,7 @@ namespace SportyBuddiesAPI.Services;
 public interface ISportyBuddiesRepository
 {
     Task<IEnumerable<User>> GetUsersAsync();
+    Task<IEnumerable<User>> GetUsersAsync(string? name, string? searchQuery);
     Task<User?> GetUserAsync(int userId, bool includeSports);
     Task<bool> UserExistsAsync(int userId);
     Task<IEnumerable<Sport>> GetUserSportsAsync(int userId);
