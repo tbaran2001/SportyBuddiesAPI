@@ -28,7 +28,7 @@ namespace SportyBuddiesAPI.Controllers
             return Ok(_mapper.Map<IEnumerable<UserWithoutSportsDto>>(users));
         }
 
-        [HttpGet("{userId}")]
+        [HttpGet("{userId}",Name = "GetUser")]
         public async Task<IActionResult> GetUser(int userId, bool includeSports = false)
         {
             var user = await _sportyBuddiesRepository.GetUserAsync(userId, includeSports);
@@ -45,6 +45,17 @@ namespace SportyBuddiesAPI.Controllers
             return Ok(_mapper.Map<UserWithoutSportsDto>(user));
         }
 
-        
+        [HttpPost]
+        public async Task<ActionResult<UserWithoutSportsDto>> CreateUser(UserForCreationDto userForCreation)
+        {
+            var userEntity = _mapper.Map<Entities.User>(userForCreation);
+
+            await _sportyBuddiesRepository.AddUserAsync(userEntity);
+            await _sportyBuddiesRepository.SaveChangesAsync();
+
+            var userToReturn = _mapper.Map<UserWithoutSportsDto>(userEntity);
+
+            return CreatedAtRoute(nameof(GetUser), new {userId = userToReturn.Id}, userToReturn);
+        }
     }
 }

@@ -55,6 +55,11 @@ public class SportyBuddiesRepository : ISportyBuddiesRepository
             .FirstOrDefaultAsync(u => u.Id == userId);
     }
 
+    public async Task AddUserAsync(User user)
+    {
+        await _context.Users.AddAsync(user);
+    }
+
     public Task<bool> UserExistsAsync(int userId)
     {
         return _context.Users.AnyAsync(u => u.Id == userId);
