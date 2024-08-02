@@ -13,7 +13,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowReactApp",
         builder => builder.AllowAnyOrigin()
             .AllowAnyMethod()
-            .AllowAnyHeader());
+            .AllowAnyHeader()
+            .WithExposedHeaders("X-Pagination"));
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

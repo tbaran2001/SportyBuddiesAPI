@@ -1,3 +1,4 @@
+using System.Text.Json;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,7 @@ namespace SportyBuddiesAPI.Controllers
     {
         private readonly ISportyBuddiesRepository _sportyBuddiesRepository;
         private readonly IMapper _mapper;
+        const int maxPageSize = 20;
 
         public UsersController(ISportyBuddiesRepository sportyBuddiesRepository, IMapper mapper)
         {
@@ -21,14 +23,23 @@ namespace SportyBuddiesAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserWithoutSportsDto>>> GetUsers(string? name, string? searchQuery)
+        public async Task<ActionResult<IEnumerable<UserWithoutSportsDto>>> GetUsers(string? name, string? searchQuery,
+            int pageNumber = 1, int pageSize = 10)
         {
-            var users = await _sportyBuddiesRepository.GetUsersAsync(name,searchQuery);
+            if (pageSize > maxPageSize)
+            {
+                pageSize = maxPageSize;
+            }
+
+            var (users, paginationMetaData) =
+                await _sportyBuddiesRepository.GetUsersAsync(name, searchQuery, pageNumber, pageSize);
+
+            Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(paginationMetaData));
 
             return Ok(_mapper.Map<IEnumerable<UserWithoutSportsDto>>(users));
         }
 
-        [HttpGet("{userId}",Name = "GetUser")]
+        [HttpGet("{userId}", Name = "GetUser")]
         public async Task<IActionResult> GetUser(int userId, bool includeSports = false)
         {
             var user = await _sportyBuddiesRepository.GetUserAsync(userId, includeSports);
@@ -55,7 +66,7 @@ namespace SportyBuddiesAPI.Controllers
 
             var userToReturn = _mapper.Map<UserWithoutSportsDto>(userEntity);
 
-            return CreatedAtRoute(nameof(GetUser), new {userId = userToReturn.Id}, userToReturn);
+            return CreatedAtRoute(nameof(GetUser), new { userId = userToReturn.Id }, userToReturn);
         }
     }
 }

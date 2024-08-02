@@ -18,13 +18,9 @@ public class SportyBuddiesRepository : ISportyBuddiesRepository
         return await _context.Users.ToListAsync();
     }
 
-    public async Task<IEnumerable<User>> GetUsersAsync(string? name, string? searchQuery)
+    public async Task<(IEnumerable<User>, PaginationMetaData)> GetUsersAsync(string? name, string? searchQuery,
+        int pageNumber, int pageSize)
     {
-        if (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(searchQuery))
-        {
-            return await GetUsersAsync();
-        }
-
         var collection = _context.Users as IQueryable<User>;
 
         if (!string.IsNullOrEmpty(name))
@@ -39,7 +35,15 @@ public class SportyBuddiesRepository : ISportyBuddiesRepository
             collection = collection.Where(u => u.Name.Contains(searchQuery) || u.Description.Contains(searchQuery));
         }
 
-        return await collection.OrderBy(u => u.Name).ToListAsync();
+        var totalItemCount = await collection.CountAsync();
+        var paginationMetaData = new PaginationMetaData(totalItemCount, pageSize, pageNumber);
+
+        var collectionToReturn = await collection.OrderBy(u => u.Name)
+            .Skip(pageSize * (pageNumber - 1))
+            .Take(pageSize)
+            .ToListAsync();
+
+        return (collectionToReturn, paginationMetaData);
     }
 
     public async Task<User?> GetUserAsync(int userId, bool includeSports = false)
