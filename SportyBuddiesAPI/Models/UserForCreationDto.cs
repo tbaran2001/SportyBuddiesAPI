@@ -10,4 +10,6 @@ public class UserForCreationDto
     public string Name { get; set; } = String.Empty;
     [MaxLength(200)]
     public string? Description { get; set; }
+    public DateTime LastActive { get; set; } = DateTime.Now;
+
 }
