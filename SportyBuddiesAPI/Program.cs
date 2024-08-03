@@ -1,5 +1,8 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SportyBuddiesAPI.DbContexts;
+using SportyBuddiesAPI.Entities;
 using SportyBuddiesAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,11 +24,18 @@ builder.Services.AddCors(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddAuthentication().AddBearerToken(IdentityConstants.BearerScheme);
+builder.Services.AddAuthorizationBuilder();
+
 builder.Services.AddDbContext<SportyBuddiesContext>(dbContextOptions =>
 {
     dbContextOptions.UseSqlite(
         builder.Configuration["ConnectionStrings:SportyBuddiesDBConnectionString"]);
 });
+
+builder.Services.AddIdentityCore<User>()
+    .AddEntityFrameworkStores<SportyBuddiesContext>()
+    .AddApiEndpoints();
 
 builder.Services.AddScoped<ISportyBuddiesRepository, SportyBuddiesRepository>();
 
@@ -52,11 +62,15 @@ app.UseCors("AllowReactApp");
 
 app.UseAuthorization();
 
+app.MapIdentityApi<User>();
+
 app.MapGet("/error", () => Results.Problem());
 app.MapGet("/error/test", () =>
 {
     throw new Exception("Test exception");
 });
 app.MapControllers();
+
+app.MapGet("/test",(ClaimsPrincipal user)=>$"Hello {user.Identity!.Name}").RequireAuthorization();
 
 app.Run();

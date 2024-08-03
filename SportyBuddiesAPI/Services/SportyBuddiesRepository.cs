@@ -46,7 +46,107 @@ public class SportyBuddiesRepository : ISportyBuddiesRepository
         return (collectionToReturn, paginationMetaData);
     }
 
-    public async Task<User?> GetUserAsync(int userId, bool includeSports = false)
+    public Task<User?> GetUserAsync(int userId, bool includeSports)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task AddUserAsync(User user)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> UserExistsAsync(int userId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<Sport>> GetUserSportsAsync(int userId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Sport?> GetUserSportAsync(int userId, int sportId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<Sport>> GetSportsAsync()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Sport?> GetSportAsync(int sportId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> SportExistsAsync(int sportId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task AddSportAsync(Sport sport)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void DeleteSport(Sport sport)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> HasSportAsync(int userId, int sportId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task AddSportToUserAsync(int userId, int sportId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task RemoveSportFromUserAsync(int userId, int sportId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<Match>> GetMatchesAsync()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Match?> GetMatchAsync(int matchId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Match?> GetMatchAsync(int userId, int matchedUserId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<Match>> GetUserMatchesAsync(int userId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> MatchExistsAsync(int userId, int matchedUserId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task UpdateUserMatchesAsync(int userId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> SaveChangesAsync()
+    {
+        throw new NotImplementedException();
+    }
+
+    /*public async Task<User?> GetUserAsync(int userId, bool includeSports = false)
     {
         if (includeSports)
         {
@@ -251,5 +351,5 @@ public class SportyBuddiesRepository : ISportyBuddiesRepository
     public async Task<bool> SaveChangesAsync()
     {
         return (await _context.SaveChangesAsync() >= 0);
-    }
+    }*/
 }

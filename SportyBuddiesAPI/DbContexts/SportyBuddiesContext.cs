@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using SportyBuddiesAPI.Entities;
 
 namespace SportyBuddiesAPI.DbContexts;
 
-public class SportyBuddiesContext:DbContext
+public class SportyBuddiesContext:IdentityDbContext<User>
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Sport> Sports { get; set; }
