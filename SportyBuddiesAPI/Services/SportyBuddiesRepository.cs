@@ -46,7 +46,32 @@ public class SportyBuddiesRepository : ISportyBuddiesRepository
         return (collectionToReturn, paginationMetaData);
     }
 
-    public async Task<User?> GetUserAsync(int userId, bool includeSports = false)
+    public Task<User?> GetUserAsync(int userId, bool includeSports)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task AddUserAsync(User user)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> UserExistsAsync(int userId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<Sport>> GetUserSportsAsync(int userId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Sport?> GetUserSportAsync(int userId, int sportId)
+    {
+        throw new NotImplementedException();
+    }
+
+    /*public async Task<User?> GetUserAsync(int userId, bool includeSports = false)
     {
         if (includeSports)
         {
@@ -81,7 +106,7 @@ public class SportyBuddiesRepository : ISportyBuddiesRepository
         return await _context.Sports
             .Where(s => s.Users.Any(u => u.Id == userId) && s.Id == sportId)
             .FirstOrDefaultAsync();
-    }
+    }*/
 
     public async Task<IEnumerable<Sport>> GetSportsAsync()
     {
@@ -111,6 +136,21 @@ public class SportyBuddiesRepository : ISportyBuddiesRepository
 
     public Task<bool> HasSportAsync(int userId, int sportId)
     {
+        throw new NotImplementedException();
+    }
+
+    public Task AddSportToUserAsync(int userId, int sportId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task RemoveSportFromUserAsync(int userId, int sportId)
+    {
+        throw new NotImplementedException();
+    }
+
+    /*public Task<bool> HasSportAsync(int userId, int sportId)
+    {
         return _context.Users
             .Where(u => u.Id == userId)
             .SelectMany(u => u.Sports)
@@ -139,7 +179,7 @@ public class SportyBuddiesRepository : ISportyBuddiesRepository
             .FirstOrDefaultAsync(s => s.Id == sportId);
 
         user.Sports.Remove(sport);
-    }
+    }*/
 
     public async Task<IEnumerable<Match>> GetMatchesAsync()
     {
@@ -157,7 +197,27 @@ public class SportyBuddiesRepository : ISportyBuddiesRepository
             .FirstOrDefaultAsync(m => m.Id == matchId);
     }
 
-    public async Task<Match?> GetMatchAsync(int userId, int matchedUserId)
+    public Task<Match?> GetMatchAsync(int userId, int matchedUserId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<Match>> GetUserMatchesAsync(int userId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> MatchExistsAsync(int userId, int matchedUserId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task UpdateUserMatchesAsync(int userId)
+    {
+        throw new NotImplementedException();
+    }
+
+    /*public async Task<Match?> GetMatchAsync(int userId, int matchedUserId)
     {
         return await _context.Matches
             .Include(m => m.User)
@@ -245,7 +305,7 @@ public class SportyBuddiesRepository : ISportyBuddiesRepository
         await _context.Matches.AddRangeAsync(newMatches);
         _context.Matches.RemoveRange(matchesToRemove);
         await _context.SaveChangesAsync();
-    }
+    }*/
 
 
     public async Task<bool> SaveChangesAsync()

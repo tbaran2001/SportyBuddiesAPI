@@ -1,9 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.General;
 using SportyBuddiesAPI.Entities;
 
 namespace SportyBuddiesAPI.DbContexts;
 
-public class SportyBuddiesContext:DbContext
+public class SportyBuddiesContext:IdentityDbContext<User>
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Sport> Sports { get; set; }
@@ -13,9 +16,19 @@ public class SportyBuddiesContext:DbContext
     {
         
     }
-
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+        
+        List<IdentityRole> roles = new List<IdentityRole>
+        {
+            new IdentityRole {Name = "Admin", NormalizedName = "ADMIN"},
+            new IdentityRole {Name = "User", NormalizedName = "USER"}
+        };
+        
+        modelBuilder.Entity<IdentityRole>().HasData(roles);
+        
         modelBuilder.Entity<User>()
             .HasMany(u => u.Sports)
             .WithMany(s => s.Users)
@@ -31,7 +44,6 @@ public class SportyBuddiesContext:DbContext
                     .HasForeignKey("UserId")
             );
 
-        base.OnModelCreating(modelBuilder);
     }
 
 }

@@ -6,9 +6,9 @@ public class MatchProfile:Profile
 {
     public MatchProfile()
     {
-        CreateMap<Entities.Match, Models.MatchDto>()
+        /*CreateMap<Entities.Match, Models.MatchDto>()
             .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.User.Id))
-            .ForMember(dest => dest.MatchedUserId, opt => opt.MapFrom(src => src.MatchedUser.Id));
+            .ForMember(dest => dest.MatchedUserId, opt => opt.MapFrom(src => src.MatchedUser.Id));*/
         CreateMap<Models.MatchForUpdateDto, Entities.Match>();
     }
 }
