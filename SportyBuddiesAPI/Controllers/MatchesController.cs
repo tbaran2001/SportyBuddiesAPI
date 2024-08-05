@@ -42,7 +42,7 @@ namespace SportyBuddiesAPI.Controllers
         }
         
         [HttpGet("{userId}/{matchedUserId}")]
-        public async Task<ActionResult<MatchDto>> GetMatch(int userId, int matchedUserId)
+        public async Task<ActionResult<MatchDto>> GetMatch(string userId, string matchedUserId)
         {
             if(!await _sportyBuddiesRepository.UserExistsAsync(userId) ||
                !await _sportyBuddiesRepository.UserExistsAsync(matchedUserId))
@@ -61,7 +61,7 @@ namespace SportyBuddiesAPI.Controllers
         }
         
         [HttpGet("user/{userId}")]
-        public async Task<ActionResult<IEnumerable<MatchDto>>> GetUserMatches(int userId)
+        public async Task<ActionResult<IEnumerable<MatchDto>>> GetUserMatches(string userId)
         {
             if(!await _sportyBuddiesRepository.UserExistsAsync(userId))
             {
@@ -74,7 +74,7 @@ namespace SportyBuddiesAPI.Controllers
         }
 
         [HttpPut("{userId}/{matchedUserId}")]
-        public async Task<ActionResult> UpdateMatch(int userId, int matchedUserId, MatchForUpdateDto matchForUpdate)
+        public async Task<ActionResult> UpdateMatch(string userId, string matchedUserId, MatchForUpdateDto matchForUpdate)
         {
             var matchEntity = await _sportyBuddiesRepository.GetMatchAsync(userId, matchedUserId);
             if (matchEntity == null)

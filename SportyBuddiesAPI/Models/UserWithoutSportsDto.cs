@@ -2,7 +2,7 @@
 
 public class UserWithoutSportsDto
 {
-    public int Id { get; set; }
+    public string Id { get; set; }
     public string Name { get; set; } = String.Empty;
     public string? Description { get; set; }
     public DateTime LastActive { get; set; } = DateTime.Now;

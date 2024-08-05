@@ -1,7 +1,10 @@
 using System.Text.Json;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SportyBuddiesAPI.Entities;
 using SportyBuddiesAPI.Models;
 using SportyBuddiesAPI.Services;
 
@@ -13,13 +16,16 @@ namespace SportyBuddiesAPI.Controllers
     {
         private readonly ISportyBuddiesRepository _sportyBuddiesRepository;
         private readonly IMapper _mapper;
+        private readonly UserManager<User> _userManager;
         const int maxPageSize = 20;
 
-        public UsersController(ISportyBuddiesRepository sportyBuddiesRepository, IMapper mapper)
+        public UsersController(ISportyBuddiesRepository sportyBuddiesRepository, IMapper mapper,
+            UserManager<User> userManager)
         {
             _sportyBuddiesRepository = sportyBuddiesRepository ??
                                        throw new ArgumentNullException(nameof(sportyBuddiesRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _userManager = userManager;
         }
 
         [HttpGet]
@@ -40,7 +46,7 @@ namespace SportyBuddiesAPI.Controllers
         }
 
         [HttpGet("{userId}", Name = "GetUser")]
-        public async Task<IActionResult> GetUser(int userId, bool includeSports = false)
+        public async Task<IActionResult> GetUser(string userId, bool includeSports = false)
         {
             var user = await _sportyBuddiesRepository.GetUserAsync(userId, includeSports);
             if (user == null)
@@ -54,19 +60,6 @@ namespace SportyBuddiesAPI.Controllers
             }
 
             return Ok(_mapper.Map<UserWithoutSportsDto>(user));
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<UserWithoutSportsDto>> CreateUser(UserForCreationDto userForCreation)
-        {
-            var userEntity = _mapper.Map<Entities.User>(userForCreation);
-
-            await _sportyBuddiesRepository.AddUserAsync(userEntity);
-            await _sportyBuddiesRepository.SaveChangesAsync();
-
-            var userToReturn = _mapper.Map<UserWithoutSportsDto>(userEntity);
-
-            return CreatedAtRoute(nameof(GetUser), new { userId = userToReturn.Id }, userToReturn);
         }
     }
 }

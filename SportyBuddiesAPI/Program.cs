@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using SportyBuddiesAPI.DbContexts;
 using SportyBuddiesAPI.Entities;
 using SportyBuddiesAPI.Services;
@@ -22,7 +23,32 @@ builder.Services.AddCors(options =>
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        Description = "JWT Authorization header using the Bearer scheme.",
+        In = ParameterLocation.Header,
+        Name = "Authorization"
+    });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "BearerAuth"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 
 builder.Services.AddAuthentication().AddBearerToken(IdentityConstants.BearerScheme);
 builder.Services.AddAuthorizationBuilder();
@@ -33,7 +59,14 @@ builder.Services.AddDbContext<SportyBuddiesContext>(dbContextOptions =>
         builder.Configuration["ConnectionStrings:SportyBuddiesDBConnectionString"]);
 });
 
-builder.Services.AddIdentityCore<User>()
+builder.Services.AddIdentityCore<User>(options =>
+    {
+        options.Password.RequireDigit = false;
+        options.Password.RequiredLength = 3;
+        options.Password.RequireLowercase = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequireNonAlphanumeric = false;
+    })
     .AddEntityFrameworkStores<SportyBuddiesContext>()
     .AddApiEndpoints();
 
@@ -62,15 +95,8 @@ app.UseCors("AllowReactApp");
 
 app.UseAuthorization();
 
-app.MapIdentityApi<User>();
-
-app.MapGet("/error", () => Results.Problem());
-app.MapGet("/error/test", () =>
-{
-    throw new Exception("Test exception");
-});
 app.MapControllers();
 
-app.MapGet("/test",(ClaimsPrincipal user)=>$"Hello {user.Identity!.Name}").RequireAuthorization();
+app.MapGroup("/api").MapIdentityApi<User>();
 
 app.Run();
