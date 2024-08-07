@@ -1,5 +1,6 @@
 using System.Text.Json;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SportyBuddiesAPI.Models;
@@ -23,6 +24,7 @@ namespace SportyBuddiesAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<UserWithoutSportsDto>>> GetUsers(string? name, string? searchQuery,
             int pageNumber = 1, int pageSize = 10)
         {
