@@ -46,7 +46,7 @@ public class SportyBuddiesRepository : ISportyBuddiesRepository
         return (collectionToReturn, paginationMetaData);
     }
 
-    public async Task<User?> GetUserAsync(int userId, bool includeSports = false)
+    public async Task<User?> GetUserAsync(string userId, bool includeSports = false)
     {
         if (includeSports)
         {
@@ -64,19 +64,19 @@ public class SportyBuddiesRepository : ISportyBuddiesRepository
         await _context.Users.AddAsync(user);
     }
 
-    public Task<bool> UserExistsAsync(int userId)
+    public Task<bool> UserExistsAsync(string userId)
     {
         return _context.Users.AnyAsync(u => u.Id == userId);
     }
 
-    public async Task<IEnumerable<Sport>> GetUserSportsAsync(int userId)
+    public async Task<IEnumerable<Sport>> GetUserSportsAsync(string userId)
     {
         return await _context.Sports
             .Where(s => s.Users.Any(u => u.Id == userId))
             .ToListAsync();
     }
 
-    public async Task<Sport?> GetUserSportAsync(int userId, int sportId)
+    public async Task<Sport?> GetUserSportAsync(string userId, int sportId)
     {
         return await _context.Sports
             .Where(s => s.Users.Any(u => u.Id == userId) && s.Id == sportId)
@@ -109,7 +109,7 @@ public class SportyBuddiesRepository : ISportyBuddiesRepository
         _context.Sports.Remove(sport);
     }
 
-    public Task<bool> HasSportAsync(int userId, int sportId)
+    public Task<bool> HasSportAsync(string userId, int sportId)
     {
         return _context.Users
             .Where(u => u.Id == userId)
@@ -117,7 +117,7 @@ public class SportyBuddiesRepository : ISportyBuddiesRepository
             .AnyAsync(s => s.Id == sportId);
     }
 
-    public async Task AddSportToUserAsync(int userId, int sportId)
+    public async Task AddSportToUserAsync(string userId, int sportId)
     {
         var user = await _context.Users
             .Include(u => u.Sports)
@@ -129,7 +129,7 @@ public class SportyBuddiesRepository : ISportyBuddiesRepository
         user.Sports.Add(sport);
     }
 
-    public async Task RemoveSportFromUserAsync(int userId, int sportId)
+    public async Task RemoveSportFromUserAsync(string userId, int sportId)
     {
         var user = await _context.Users
             .Include(u => u.Sports)
@@ -157,7 +157,7 @@ public class SportyBuddiesRepository : ISportyBuddiesRepository
             .FirstOrDefaultAsync(m => m.Id == matchId);
     }
 
-    public async Task<Match?> GetMatchAsync(int userId, int matchedUserId)
+    public async Task<Match?> GetMatchAsync(string userId, string matchedUserId)
     {
         return await _context.Matches
             .Include(m => m.User)
@@ -165,7 +165,7 @@ public class SportyBuddiesRepository : ISportyBuddiesRepository
             .FirstOrDefaultAsync(m => m.User.Id == userId && m.MatchedUser.Id == matchedUserId);
     }
 
-    public async Task<IEnumerable<Match>> GetUserMatchesAsync(int userId)
+    public async Task<IEnumerable<Match>> GetUserMatchesAsync(string userId)
     {
         return await _context.Matches
             .Include(m => m.User)
@@ -174,12 +174,12 @@ public class SportyBuddiesRepository : ISportyBuddiesRepository
             .ToListAsync();
     }
 
-    public async Task<bool> MatchExistsAsync(int userId, int matchedUserId)
+    public async Task<bool> MatchExistsAsync(string userId, string matchedUserId)
     {
         return await _context.Matches.AnyAsync(m => m.User.Id == userId && m.MatchedUser.Id == matchedUserId);
     }
 
-    public async Task UpdateUserMatchesAsync(int userId)
+    public async Task UpdateUserMatchesAsync(string userId)
     {
         var user = await _context.Users
             .Include(u => u.Sports)

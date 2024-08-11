@@ -22,7 +22,7 @@ namespace SportyBuddiesAPI.Controllers
         }
         
         [HttpGet("{userId}")]
-        public async Task<ActionResult<IEnumerable<SportDto>>> GetUserSports(int userId)
+        public async Task<ActionResult<IEnumerable<SportDto>>> GetUserSports(string userId)
         {
             if (!await _sportyBuddiesRepository.UserExistsAsync(userId))
             {
@@ -35,7 +35,7 @@ namespace SportyBuddiesAPI.Controllers
         }
         
         [HttpGet("{userId}/{sportId}")]
-        public async Task<ActionResult<SportDto>> GetUserSport(int userId, int sportId)
+        public async Task<ActionResult<SportDto>> GetUserSport(string userId, int sportId)
         {
             if (!await _sportyBuddiesRepository.UserExistsAsync(userId))
             {
@@ -52,7 +52,7 @@ namespace SportyBuddiesAPI.Controllers
         }
         
         [HttpPost("{userId}/{sportId}")]
-        public async Task<ActionResult> AddSportToUser(int userId, int sportId)
+        public async Task<ActionResult> AddSportToUser(string userId, int sportId)
         {
             if (!await _sportyBuddiesRepository.UserExistsAsync(userId))
             {
@@ -77,7 +77,7 @@ namespace SportyBuddiesAPI.Controllers
         }
         
         [HttpDelete("{userId}/{sportId}")]
-        public async Task<ActionResult> RemoveSportFromUser(int userId, int sportId)
+        public async Task<ActionResult> RemoveSportFromUser(string userId, int sportId)
         {
             if (!await _sportyBuddiesRepository.UserExistsAsync(userId))
             {

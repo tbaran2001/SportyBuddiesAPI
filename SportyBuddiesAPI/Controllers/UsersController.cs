@@ -1,5 +1,6 @@
 using System.Text.Json;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SportyBuddiesAPI.Models;
@@ -13,7 +14,7 @@ namespace SportyBuddiesAPI.Controllers
     {
         private readonly ISportyBuddiesRepository _sportyBuddiesRepository;
         private readonly IMapper _mapper;
-        const int maxPageSize = 20;
+        const int MaxPageSize = 20;
 
         public UsersController(ISportyBuddiesRepository sportyBuddiesRepository, IMapper mapper)
         {
@@ -23,12 +24,13 @@ namespace SportyBuddiesAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<UserWithoutSportsDto>>> GetUsers(string? name, string? searchQuery,
             int pageNumber = 1, int pageSize = 10)
         {
-            if (pageSize > maxPageSize)
+            if (pageSize > MaxPageSize)
             {
-                pageSize = maxPageSize;
+                pageSize = MaxPageSize;
             }
 
             var (users, paginationMetaData) =
@@ -40,7 +42,7 @@ namespace SportyBuddiesAPI.Controllers
         }
 
         [HttpGet("{userId}", Name = "GetUser")]
-        public async Task<IActionResult> GetUser(int userId, bool includeSports = false)
+        public async Task<IActionResult> GetUser(string userId, bool includeSports = false)
         {
             var user = await _sportyBuddiesRepository.GetUserAsync(userId, includeSports);
             if (user == null)
