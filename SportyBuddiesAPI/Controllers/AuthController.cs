@@ -1,6 +1,5 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SportyBuddiesAPI.Entities;
@@ -30,8 +29,13 @@ namespace SportyBuddiesAPI.Controllers
         [Authorize]
         public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
-            var user = await _userManager.GetUserAsync(User);
-            return Ok(_mapper.Map<UserDto>(user));
+            var userId=_userManager.GetUserId(User);
+            if (userId== null)
+            {
+                return Unauthorized();
+            }
+            var user = await _sportyBuddiesRepository.GetUserAsync(userId,true);
+            return Ok(_mapper.Map<UserCurrentDto>(user));
         }
     }
 }

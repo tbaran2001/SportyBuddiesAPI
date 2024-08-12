@@ -1,4 +1,5 @@
-﻿using SportyBuddiesAPI.DbContexts;
+﻿using Microsoft.AspNetCore.Identity;
+using SportyBuddiesAPI.DbContexts;
 using SportyBuddiesAPI.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,10 +8,19 @@ namespace SportyBuddiesAPI.Services;
 public class SportyBuddiesRepository : ISportyBuddiesRepository
 {
     private readonly SportyBuddiesContext _context;
+    private readonly UserManager<User> _userManager;
 
-    public SportyBuddiesRepository(SportyBuddiesContext context)
+
+    public SportyBuddiesRepository(SportyBuddiesContext context, UserManager<User> userManager)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
+        _userManager = userManager;
+    }
+
+    public async Task<User?> GetCurrentUserAsync()
+    {
+        throw new NotImplementedException();
+
     }
 
     public async Task<IEnumerable<User>> GetUsersAsync()
