@@ -10,6 +10,8 @@ public class UserProfile:Profile
         CreateMap<Entities.User, Models.UserDto>();
         CreateMap<Models.UserForCreationDto, Entities.User>();
         CreateMap<Entities.User, Models.UserCurrentDto>();
+        CreateMap<Models.UserForUpdateDto, Entities.User>();
+        CreateMap<Entities.User, Models.UserForUpdateDto>();
 
 
     }
