@@ -26,7 +26,7 @@ namespace SportyBuddiesAPI.Controllers
         [HttpGet]
         [Authorize]
         public async Task<ActionResult<IEnumerable<UserWithoutSportsDto>>> GetUsers(string? name, string? searchQuery,
-            int pageNumber = 1, int pageSize = 10)
+            int pageNumber = 1, int pageSize = 10, bool includeSports = true)
         {
             if (pageSize > MaxPageSize)
             {
@@ -34,15 +34,20 @@ namespace SportyBuddiesAPI.Controllers
             }
 
             var (users, paginationMetaData) =
-                await _sportyBuddiesRepository.GetUsersAsync(name, searchQuery, pageNumber, pageSize);
+                await _sportyBuddiesRepository.GetUsersAsync(name, searchQuery, pageNumber, pageSize, includeSports);
 
             Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(paginationMetaData));
+            
+            if (includeSports)
+            {
+                return Ok(_mapper.Map<IEnumerable<UserDto>>(users));
+            }
 
             return Ok(_mapper.Map<IEnumerable<UserWithoutSportsDto>>(users));
         }
 
         [HttpGet("{userId}", Name = "GetUser")]
-        public async Task<IActionResult> GetUser(string userId, bool includeSports = false)
+        public async Task<IActionResult> GetUser(string userId, bool includeSports = true)
         {
             var user = await _sportyBuddiesRepository.GetUserAsync(userId, includeSports);
             if (user == null)

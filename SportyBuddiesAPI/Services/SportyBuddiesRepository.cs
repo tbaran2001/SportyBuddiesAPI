@@ -17,19 +17,13 @@ public class SportyBuddiesRepository : ISportyBuddiesRepository
         _userManager = userManager;
     }
 
-    public async Task<User?> GetCurrentUserAsync()
-    {
-        throw new NotImplementedException();
-
-    }
-
     public async Task<IEnumerable<User>> GetUsersAsync()
     {
         return await _context.Users.ToListAsync();
     }
 
     public async Task<(IEnumerable<User>, PaginationMetaData)> GetUsersAsync(string? name, string? searchQuery,
-        int pageNumber, int pageSize)
+        int pageNumber, int pageSize, bool includeSports = true)
     {
         var collection = _context.Users as IQueryable<User>;
 
@@ -43,6 +37,11 @@ public class SportyBuddiesRepository : ISportyBuddiesRepository
         {
             searchQuery = searchQuery.Trim();
             collection = collection.Where(u => u.Name.Contains(searchQuery) || u.Description.Contains(searchQuery));
+        }
+        
+        if (includeSports)
+        {
+            collection = collection.Include(u => u.Sports);
         }
 
         var totalItemCount = await collection.CountAsync();
