@@ -174,6 +174,20 @@ public class SportyBuddiesRepository : ISportyBuddiesRepository
             .FirstOrDefaultAsync(m => m.User.Id == userId && m.MatchedUser.Id == matchedUserId);
     }
 
+    public async Task<Match?> GetRandomMatchAsync(string userId)
+    {
+        var matches = await _context.Matches
+            .Where(m => m.User.Id == userId && m.Swipe == null)
+            .Include(m => m.User)
+            .Include(m => m.MatchedUser)
+            .Include(m => m.MatchedUser.Sports)
+            .ToListAsync();
+        
+        var randomMatch = matches.MinBy(m => Guid.NewGuid());
+        
+        return randomMatch;
+    }
+
     public async Task<IEnumerable<Match>> GetUserMatchesAsync(string userId)
     {
         return await _context.Matches

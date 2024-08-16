@@ -90,20 +90,6 @@ namespace SportyBuddiesAPI.Controllers
             return Ok(_mapper.Map<IEnumerable<SportDto>>(sports));
         }
         
-        [HttpGet("matches")]
-        [Authorize]
-        public async Task<ActionResult<IEnumerable<MatchDto>>> GetUserMatches()
-        {
-            var userId = _userManager.GetUserId(User);
-            if (userId == null)
-            {
-                return Unauthorized();
-            }
-
-            var matches = await _sportyBuddiesRepository.GetUserMatchesAsync(userId);
-            return Ok(_mapper.Map<IEnumerable<MatchDto>>(matches));
-        }
-        
         [HttpPost("sports/{sportId}")]
         [Authorize]
         public async Task<ActionResult> AddSportToUser(int sportId)
@@ -125,6 +111,7 @@ namespace SportyBuddiesAPI.Controllers
             }
 
             await _sportyBuddiesRepository.AddSportToUserAsync(userId, sportId);
+            await _sportyBuddiesRepository.UpdateUserMatchesAsync(userId);
             await _sportyBuddiesRepository.SaveChangesAsync();
 
             return NoContent();
@@ -151,9 +138,71 @@ namespace SportyBuddiesAPI.Controllers
             }
 
             await _sportyBuddiesRepository.RemoveSportFromUserAsync(userId, sportId);
+            await _sportyBuddiesRepository.UpdateUserMatchesAsync(userId);
             await _sportyBuddiesRepository.SaveChangesAsync();
 
             return NoContent();
         }
+        
+        [HttpGet("matches")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<MatchDto>>> GetUserMatches()
+        {
+            var userId = _userManager.GetUserId(User);
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            var matches = await _sportyBuddiesRepository.GetUserMatchesAsync(userId);
+            return Ok(_mapper.Map<IEnumerable<MatchDto>>(matches));
+        }
+        
+        [HttpGet("matches/random")]
+        [Authorize]
+        public async Task<ActionResult<MatchDto>> GetRandomMatch()
+        {
+            var userId = _userManager.GetUserId(User);
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            var match = await _sportyBuddiesRepository.GetRandomMatchAsync(userId);
+            if (match == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(_mapper.Map<MatchDto>(match));
+        }
+        
+        [HttpPut("matches/{matchId}")]
+        [Authorize]
+        public async Task<ActionResult> UpdateMatch(int matchId, MatchForUpdateDto matchForUpdateDto)
+        {
+            var userId = _userManager.GetUserId(User);
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            var match = await _sportyBuddiesRepository.GetMatchAsync(matchId);
+            if (match == null)
+            {
+                return NotFound();
+            }
+
+            if (match.User.Id != userId)
+            {
+                return Unauthorized();
+            }
+
+            _mapper.Map(matchForUpdateDto, match);
+            await _sportyBuddiesRepository.SaveChangesAsync();
+
+            return NoContent();
+        }
+        
     }
 }

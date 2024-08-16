@@ -22,6 +22,7 @@ public interface ISportyBuddiesRepository
     Task<IEnumerable<Match>> GetMatchesAsync();
     Task<Match?> GetMatchAsync(int matchId);
     Task<Match?> GetMatchAsync(string userId, string matchedUserId);
+    Task<Match?> GetRandomMatchAsync(string userId);
     Task<IEnumerable<Match>> GetUserMatchesAsync(string userId);
     Task<bool> MatchExistsAsync(string userId, string matchedUserId);
     Task UpdateUserMatchesAsync(string userId);
