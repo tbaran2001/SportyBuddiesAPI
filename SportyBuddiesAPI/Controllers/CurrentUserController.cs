@@ -13,6 +13,7 @@ namespace SportyBuddiesAPI.Controllers
     [ApiController]
     public class CurrentUserController : ControllerBase
     {
+        //test
         private readonly ISportyBuddiesRepository _sportyBuddiesRepository;
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
