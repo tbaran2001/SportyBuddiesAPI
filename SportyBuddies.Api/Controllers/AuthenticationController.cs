@@ -18,22 +18,22 @@ namespace SportyBuddies.Api.Controllers
         [HttpPost("register")]
         public IActionResult Register(RegisterRequest request)
         {
-            var result =
+            var authResult =
                 _authenticationService.Register(request.FirstName, request.LastName, request.Email, request.Password);
 
-            var response = new AuthenticationResponse(result.Id, result.FirstName, result.LastName, result.Email,
-                result.Token);
+            var response = new AuthenticationResponse(authResult.User.Id, authResult.User.FirstName, authResult.User.LastName, authResult.User.Email,
+                authResult.Token);
 
-            return Ok(result);
+            return Ok(authResult);
         }
 
         [HttpPost("login")]
         public IActionResult Login(LoginRequest request)
         {
-            var result = _authenticationService.Login(request.Email, request.Password);
+            var authResult = _authenticationService.Login(request.Email, request.Password);
 
-            var response = new AuthenticationResponse(result.Id, result.FirstName, result.LastName, result.Email,
-                result.Token);
+            var response = new AuthenticationResponse(authResult.User.Id, authResult.User.FirstName, authResult.User.LastName, authResult.User.Email,
+                authResult.Token);
 
             return Ok(response);
         }

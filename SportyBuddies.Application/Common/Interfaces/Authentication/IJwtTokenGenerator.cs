@@ -1,6 +1,8 @@
-﻿namespace SportyBuddies.Application.Common.Interfaces.Authentication;
+﻿using SportyBuddies.Domain.Entities;
+
+namespace SportyBuddies.Application.Common.Interfaces.Authentication;
 
 public interface IJwtTokenGenerator
 {
-    string GenerateToken(Guid userId, string firstName, string lastName);
+    string GenerateToken(User user);
 }
