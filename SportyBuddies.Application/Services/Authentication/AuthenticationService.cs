@@ -1,7 +1,8 @@
-﻿using SportyBuddies.Application.Common.Interfaces;
-using SportyBuddies.Application.Common.Interfaces.Authentication;
+﻿using SportyBuddies.Application.Common.Interfaces.Authentication;
 using SportyBuddies.Application.Common.Interfaces.Persistence;
 using SportyBuddies.Domain.Entities;
+using ErrorOr;
+using SportyBuddies.Domain.Common.Errors;
 
 namespace SportyBuddies.Application.Services.Authentication;
 
@@ -16,11 +17,11 @@ public class AuthenticationService : IAuthenticationService
         _userRepository = userRepository;
     }
 
-    public AuthenticationResult Register(string firstName, string lastName, string email, string password)
+    public ErrorOr<AuthenticationResult> Register(string firstName, string lastName, string email, string password)
     {
         if (_userRepository.GetUserByEmail(email) != null)
         {
-            throw new Exception("User with this email already exists");
+            return Errors.User.DuplcateEmail;
         }
 
         var user = new User
@@ -38,16 +39,16 @@ public class AuthenticationService : IAuthenticationService
         return new AuthenticationResult(user, token);
     }
 
-    public AuthenticationResult Login(string email, string password)
+    public ErrorOr<AuthenticationResult> Login(string email, string password)
     {
         if (_userRepository.GetUserByEmail(email) is not User user)
         {
-            throw new Exception("User with this email does not exist");
+            return Errors.Authentication.InvalidCredentials;
         }
 
         if (user.Password != password)
         {
-            throw new Exception("Invalid password");
+            return Errors.Authentication.InvalidCredentials;
         }
 
         var token = _jwtTokenGenerator.GenerateToken(user);

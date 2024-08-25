@@ -1,12 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using SportyBuddies.Application.Services.Authentication;
 using SportyBuddies.Contracts.Authentication;
+using ErrorOr;
+using SportyBuddies.Domain.Common.Errors;
 
 namespace SportyBuddies.Api.Controllers
 {
     [Route("auth")]
-    [ApiController]
-    public class AuthenticationController : ControllerBase
+    public class AuthenticationController : ApiController
     {
         private readonly IAuthenticationService _authenticationService;
 
@@ -18,24 +19,35 @@ namespace SportyBuddies.Api.Controllers
         [HttpPost("register")]
         public IActionResult Register(RegisterRequest request)
         {
-            var authResult =
+            ErrorOr<AuthenticationResult> authResult =
                 _authenticationService.Register(request.FirstName, request.LastName, request.Email, request.Password);
 
-            var response = new AuthenticationResponse(authResult.User.Id, authResult.User.FirstName, authResult.User.LastName, authResult.User.Email,
-                authResult.Token);
-
-            return Ok(response);
+            return authResult.Match(
+                result => Ok(MapAuthResult(result)),
+                errors => Problem(errors));
         }
 
         [HttpPost("login")]
         public IActionResult Login(LoginRequest request)
         {
-            var authResult = _authenticationService.Login(request.Email, request.Password);
+            ErrorOr<AuthenticationResult> authResult = _authenticationService.Login(request.Email, request.Password);
 
-            var response = new AuthenticationResponse(authResult.User.Id, authResult.User.FirstName, authResult.User.LastName, authResult.User.Email,
+            if (authResult.IsError && authResult.FirstError == Errors.Authentication.InvalidCredentials)
+            {
+                return Problem(statusCode: StatusCodes.Status401Unauthorized, title: authResult.FirstError.Description);
+            }
+
+            return authResult.Match(
+                result => Ok(MapAuthResult(result)),
+                errors => Problem(errors));
+        }
+
+        private static AuthenticationResponse MapAuthResult(AuthenticationResult authResult)
+        {
+            var response = new AuthenticationResponse(authResult.User.Id, authResult.User.FirstName,
+                authResult.User.LastName, authResult.User.Email,
                 authResult.Token);
-
-            return Ok(response);
+            return response;
         }
     }
 }

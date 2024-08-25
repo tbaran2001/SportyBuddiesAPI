@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc.Infrastructure;
-using SportyBuddies.Api.Errors;
-using SportyBuddies.Api.Filters;
+using SportyBuddies.Api.Common.Errors;
 using SportyBuddies.Application;
 using SportyBuddies.Infrastructure;
 
@@ -11,14 +10,13 @@ builder.Services
     .AddApplication()
     .AddInfrastructure(builder.Configuration);
 
-//builder.Services.AddControllers(options=>options.Filters.Add<ErrorHandlingFilterAttribute>());
 builder.Services.AddControllers();
+builder.Services.AddSingleton<ProblemDetailsFactory, SportyBuddiesProblemDetailsFactory>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton<ProblemDetailsFactory, SportyBuddiesProblemDetailsFactory>();
 
 var app = builder.Build();
 
@@ -29,7 +27,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-//app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseExceptionHandler("/error");
 app.UseHttpsRedirection();
 app.MapControllers();

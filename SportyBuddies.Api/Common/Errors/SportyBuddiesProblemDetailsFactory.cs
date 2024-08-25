@@ -1,10 +1,12 @@
 ﻿using System.Diagnostics;
+using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Options;
+using SportyBuddies.Api.Common.Http;
 
-namespace SportyBuddies.Api.Errors;
+namespace SportyBuddies.Api.Common.Errors;
 
 public class SportyBuddiesProblemDetailsFactory : ProblemDetailsFactory
 {
@@ -39,6 +41,11 @@ public class SportyBuddiesProblemDetailsFactory : ProblemDetailsFactory
         ModelStateDictionary modelStateDictionary, int? statusCode = null, string? title = null, string? type = null,
         string? detail = null, string? instance = null)
     {
+        if (modelStateDictionary == null)
+        {
+            throw new ArgumentNullException(nameof(modelStateDictionary));
+        }
+
         statusCode ??= 400;
 
         var problemDetails = new ValidationProblemDetails(modelStateDictionary)
@@ -49,6 +56,11 @@ public class SportyBuddiesProblemDetailsFactory : ProblemDetailsFactory
             Detail = detail,
             Instance = instance,
         };
+
+        if (title != null)
+        {
+            problemDetails.Title = title;
+        }
 
         ApplyProblemDetailsDefaults(httpContext, problemDetails, statusCode.Value);
 
@@ -71,6 +83,11 @@ public class SportyBuddiesProblemDetailsFactory : ProblemDetailsFactory
             problemDetails.Extensions["traceId"] = traceId;
         }
 
-        problemDetails.Extensions.Add("customProperty", "customValue");
+        var errors = httpContext.Items[HttpContextItemKeys.Errors] as List<Error>;
+
+        if (errors is not null)
+        {
+            problemDetails.Extensions.Add("errorCodes", errors.Select(e => e.Code));
+        }
     }
 }
