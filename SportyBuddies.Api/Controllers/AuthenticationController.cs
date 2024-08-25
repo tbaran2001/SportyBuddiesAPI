@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
-using SportyBuddies.Application.Services.Authentication;
 using SportyBuddies.Contracts.Authentication;
 using ErrorOr;
+using MediatR;
+using SportyBuddies.Application.Authentication.Commands.Register;
+using SportyBuddies.Application.Authentication.Common;
+using SportyBuddies.Application.Authentication.Queries.Login;
 using SportyBuddies.Domain.Common.Errors;
 
 namespace SportyBuddies.Api.Controllers
@@ -9,18 +12,18 @@ namespace SportyBuddies.Api.Controllers
     [Route("auth")]
     public class AuthenticationController : ApiController
     {
-        private readonly IAuthenticationService _authenticationService;
+        private readonly ISender _mediator;
 
-        public AuthenticationController(IAuthenticationService authenticationService)
+        public AuthenticationController(ISender mediator)
         {
-            _authenticationService = authenticationService;
+            _mediator = mediator;
         }
 
         [HttpPost("register")]
-        public IActionResult Register(RegisterRequest request)
+        public async Task<IActionResult> Register(RegisterRequest request)
         {
-            ErrorOr<AuthenticationResult> authResult =
-                _authenticationService.Register(request.FirstName, request.LastName, request.Email, request.Password);
+            var command = new RegisterCommand(request.FirstName, request.LastName, request.Email, request.Password);
+            ErrorOr<AuthenticationResult> authResult = await _mediator.Send(command);
 
             return authResult.Match(
                 result => Ok(MapAuthResult(result)),
@@ -28,9 +31,10 @@ namespace SportyBuddies.Api.Controllers
         }
 
         [HttpPost("login")]
-        public IActionResult Login(LoginRequest request)
+        public async Task<IActionResult> Login(LoginRequest request)
         {
-            ErrorOr<AuthenticationResult> authResult = _authenticationService.Login(request.Email, request.Password);
+            var query = new LoginQuery(request.Email, request.Password);
+            var authResult = await _mediator.Send(query);
 
             if (authResult.IsError && authResult.FirstError == Errors.Authentication.InvalidCredentials)
             {
@@ -44,10 +48,8 @@ namespace SportyBuddies.Api.Controllers
 
         private static AuthenticationResponse MapAuthResult(AuthenticationResult authResult)
         {
-            var response = new AuthenticationResponse(authResult.User.Id, authResult.User.FirstName,
-                authResult.User.LastName, authResult.User.Email,
-                authResult.Token);
-            return response;
+            return new AuthenticationResponse(authResult.User.Id, authResult.User.FirstName, authResult.User.LastName,
+                authResult.User.Email, authResult.Token);
         }
     }
 }
