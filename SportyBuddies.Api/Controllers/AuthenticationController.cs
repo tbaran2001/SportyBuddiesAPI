@@ -24,7 +24,7 @@ namespace SportyBuddies.Api.Controllers
             var response = new AuthenticationResponse(authResult.User.Id, authResult.User.FirstName, authResult.User.LastName, authResult.User.Email,
                 authResult.Token);
 
-            return Ok(authResult);
+            return Ok(response);
         }
 
         [HttpPost("login")]
