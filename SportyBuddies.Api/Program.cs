@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using SportyBuddies.Api;
 using SportyBuddies.Api.Common.Errors;
 using SportyBuddies.Application;
 using SportyBuddies.Infrastructure;
@@ -7,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services
+    .AddPresentation()
     .AddApplication()
     .AddInfrastructure(builder.Configuration);
 
