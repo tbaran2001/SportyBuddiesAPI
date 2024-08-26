@@ -3,6 +3,7 @@ using SportyBuddies.Contracts.Authentication;
 using ErrorOr;
 using MapsterMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using SportyBuddies.Application.Authentication.Commands.Register;
 using SportyBuddies.Application.Authentication.Common;
 using SportyBuddies.Application.Authentication.Queries.Login;
@@ -11,6 +12,7 @@ using SportyBuddies.Domain.Common.Errors;
 namespace SportyBuddies.Api.Controllers
 {
     [Route("auth")]
+    [AllowAnonymous]
     public class AuthenticationController : ApiController
     {
         private readonly ISender _mediator;

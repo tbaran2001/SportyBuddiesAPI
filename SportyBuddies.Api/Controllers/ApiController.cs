@@ -1,12 +1,13 @@
 using ErrorOr;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SportyBuddies.Api.Common.Http;
 
 namespace SportyBuddies.Api.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ApiController : ControllerBase
     {
         protected IActionResult Problem(List<Error> errors)
@@ -15,7 +16,7 @@ namespace SportyBuddies.Api.Controllers
             {
                 return Problem();
             }
-            
+
             if (errors.All(error => error.Type == ErrorType.Validation))
             {
                 return ValidationProblem(errors);

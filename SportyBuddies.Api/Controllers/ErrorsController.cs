@@ -9,6 +9,7 @@ namespace SportyBuddies.Api.Controllers
     public class ErrorsController : ControllerBase
     {
         [Route("/error")]
+        [HttpGet]
         public IActionResult Error()
         {
             Exception? exception = HttpContext.Features.Get<IExceptionHandlerFeature>()?.Error;
