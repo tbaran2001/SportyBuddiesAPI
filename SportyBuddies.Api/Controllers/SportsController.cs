@@ -1,6 +1,6 @@
-using Microsoft.AspNetCore.Http;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using SportyBuddies.Application.Services;
+using SportyBuddies.Application.Sports.Commands;
 using SportyBuddies.Contracts.Sports;
 
 namespace SportyBuddies.Api.Controllers
@@ -9,18 +9,20 @@ namespace SportyBuddies.Api.Controllers
     [ApiController]
     public class SportsController : ControllerBase
     {
-        private readonly ISportsService _sportsService;
+        private readonly ISender _mediator;
 
-        public SportsController(ISportsService sportsService)
+        public SportsController(ISender mediator)
         {
-            _sportsService = sportsService;
+            _mediator = mediator;
         }
 
         [HttpPost]
-        public IActionResult CreateSport(CreateSportRequest request)
+        public async Task<IActionResult> CreateSport(CreateSportRequest request)
         {
-            var sportId = _sportsService.CreateSport(request.SportType.ToString(), request.Name, request.Description,
+            var command = new CreateSportCommand(request.SportType.ToString(), request.Name, request.Description,
                 request.AdminId);
+
+            var sportId = await _mediator.Send(command);
 
             var response = new SportResponse(sportId, request.SportType, request.Name, request.Description);
 
