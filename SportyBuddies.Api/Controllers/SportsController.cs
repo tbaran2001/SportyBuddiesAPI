@@ -1,8 +1,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SportyBuddies.Application.Sports.Commands;
+using SportyBuddies.Application.Sports.Queries;
 using SportyBuddies.Contracts.Sports;
-using ErrorOr;
 
 namespace SportyBuddies.Api.Controllers
 {
@@ -27,6 +27,18 @@ namespace SportyBuddies.Api.Controllers
 
             return createSportResult.Match(
                 sport => Ok(new SportResponse(sport.Id, request.SportType, request.Name, request.Description)),
+                error => Problem());
+        }
+
+        [HttpGet("{sportId:guid}")]
+        public async Task<IActionResult> GetSport(Guid sportId)
+        {
+            var query = new GetSportQuery(sportId);
+
+            var sport = await _mediator.Send(query);
+
+            return sport.Match<IActionResult>(
+                sport => Ok(new SportResponse(sport.Id, Enum.Parse<SportType>(sport.SportType), sport.Name, sport.Description)),
                 error => Problem());
         }
     }

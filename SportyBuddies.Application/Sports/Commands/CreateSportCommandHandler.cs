@@ -1,5 +1,5 @@
-﻿using ErrorOr;
-using MediatR;
+﻿using MediatR;
+using ErrorOr;
 using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Domain.Sports;
 
@@ -20,7 +20,10 @@ public class CreateSportCommandHandler : IRequestHandler<CreateSportCommand, Err
     {
         var sport = new Sport
         {
-            Id = Guid.NewGuid()
+            Id = Guid.NewGuid(),
+            SportType = request.SportType,
+            Name = request.Name,
+            Description = request.Description,
         };
         
         await _sportsRepository.AddSportAsync(sport);
