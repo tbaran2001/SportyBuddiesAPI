@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SportyBuddies.Application.Sports.Commands;
 using SportyBuddies.Contracts.Sports;
+using ErrorOr;
 
 namespace SportyBuddies.Api.Controllers
 {
@@ -22,11 +23,11 @@ namespace SportyBuddies.Api.Controllers
             var command = new CreateSportCommand(request.SportType.ToString(), request.Name, request.Description,
                 request.AdminId);
 
-            var sportId = await _mediator.Send(command);
+            var createSportResult = await _mediator.Send(command);
 
-            var response = new SportResponse(sportId, request.SportType, request.Name, request.Description);
-
-            return Ok(response);
+            return createSportResult.Match(
+                sport => Ok(new SportResponse(sport.Id, request.SportType, request.Name, request.Description)),
+                error => Problem());
         }
     }
 }
