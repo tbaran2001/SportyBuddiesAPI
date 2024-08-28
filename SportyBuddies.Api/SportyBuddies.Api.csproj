@@ -12,6 +12,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\SportyBuddies.Application\SportyBuddies.Application.csproj" />
+      <ProjectReference Include="..\SportyBuddies.Contracts\SportyBuddies.Contracts.csproj" />
     </ItemGroup>
 
     <ItemGroup>

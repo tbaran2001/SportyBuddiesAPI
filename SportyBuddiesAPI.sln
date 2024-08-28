@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportyBuddies.Domain", "Spo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportyBuddies.Infrastructure", "SportyBuddies.Infrastructure\SportyBuddies.Infrastructure.csproj", "{EE5EF695-7747-4B6C-9777-E21044F182CA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportyBuddies.Contracts", "SportyBuddies.Contracts\SportyBuddies.Contracts.csproj", "{CA6EF049-4F99-40AE-8CBB-D681190C7814}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{EE5EF695-7747-4B6C-9777-E21044F182CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE5EF695-7747-4B6C-9777-E21044F182CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE5EF695-7747-4B6C-9777-E21044F182CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA6EF049-4F99-40AE-8CBB-D681190C7814}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA6EF049-4F99-40AE-8CBB-D681190C7814}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA6EF049-4F99-40AE-8CBB-D681190C7814}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA6EF049-4F99-40AE-8CBB-D681190C7814}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
