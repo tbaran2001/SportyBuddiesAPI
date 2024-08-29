@@ -20,13 +20,11 @@ namespace SportyBuddies.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateSport(CreateSportRequest request)
         {
-            var command = new CreateSportCommand(request.SportType.ToString(), request.Name, request.Description,
-                request.AdminId);
-
+            var command = new CreateSportCommand(request.Name, request.Description);
             var createSportResult = await _mediator.Send(command);
 
             return createSportResult.Match(
-                sport => Ok(new SportResponse(sport.Id, request.SportType, request.Name, request.Description)),
+                sport => Ok(new SportResponse(sport.Id, request.Name, request.Description)),
                 error => Problem());
         }
 
@@ -38,7 +36,7 @@ namespace SportyBuddies.Api.Controllers
             var sport = await _mediator.Send(query);
 
             return sport.Match<IActionResult>(
-                sport => Ok(new SportResponse(sport.Id, Enum.Parse<SportType>(sport.SportType), sport.Name, sport.Description)),
+                sport => Ok(new SportResponse(sport.Id, sport.Name, sport.Description)),
                 error => Problem());
         }
     }

@@ -11,7 +11,7 @@ using SportyBuddies.Infrastructure.Common.Persistence;
 namespace SportyBuddies.Infrastructure.Migrations
 {
     [DbContext(typeof(SportyBuddiesDbContext))]
-    [Migration("20240828185021_Initial")]
+    [Migration("20240829070700_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -31,10 +31,6 @@ namespace SportyBuddies.Infrastructure.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("SportType")
                         .IsRequired()
                         .HasColumnType("TEXT");
 

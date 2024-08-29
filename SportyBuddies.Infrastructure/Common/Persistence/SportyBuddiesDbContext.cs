@@ -4,13 +4,13 @@ using SportyBuddies.Domain.Sports;
 
 namespace SportyBuddies.Infrastructure.Common.Persistence;
 
-public class SportyBuddiesDbContext : DbContext,IUnitOfWork
+public class SportyBuddiesDbContext : DbContext, IUnitOfWork
 {
-    public DbSet<Sport> Sports { get; set; } = null!;
-
     public SportyBuddiesDbContext(DbContextOptions options) : base(options)
     {
     }
+
+    public DbSet<Sport> Sports { get; set; }
 
     public async Task CommitChangesAsync()
     {
