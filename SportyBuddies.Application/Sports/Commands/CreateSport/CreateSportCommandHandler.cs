@@ -3,7 +3,7 @@ using MediatR;
 using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Domain.Sports;
 
-namespace SportyBuddies.Application.Sports.Commands;
+namespace SportyBuddies.Application.Sports.Commands.CreateSport;
 
 public class CreateSportCommandHandler : IRequestHandler<CreateSportCommand, ErrorOr<Sport>>
 {

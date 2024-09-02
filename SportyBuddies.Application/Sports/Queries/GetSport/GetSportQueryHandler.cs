@@ -1,9 +1,9 @@
-﻿using MediatR;
-using ErrorOr;
-using SportyBuddies.Domain.Sports;
+﻿using ErrorOr;
+using MediatR;
 using SportyBuddies.Application.Common.Interfaces;
+using SportyBuddies.Domain.Sports;
 
-namespace SportyBuddies.Application.Sports.Queries;
+namespace SportyBuddies.Application.Sports.Queries.GetSport;
 
 public class GetSportQueryHandler : IRequestHandler<GetSportQuery, ErrorOr<Sport>>
 {

@@ -22,4 +22,11 @@ public class SportsRepository : ISportsRepository
     {
         return await _dbContext.Sports.FindAsync(sportId);
     }
+
+    public Task RemoveSportAsync(Sport sport)
+    {
+        _dbContext.Sports.Remove(sport);
+
+        return Task.CompletedTask;
+    }
 }
