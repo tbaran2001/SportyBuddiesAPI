@@ -1,11 +1,11 @@
-﻿using ErrorOr;
-using MediatR;
+﻿using MediatR;
 using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Domain.Sports;
+using SportyBuddies.Domain.Users;
 
 namespace SportyBuddies.Application.Sports.Commands.CreateSport;
 
-public class CreateSportCommandHandler : IRequestHandler<CreateSportCommand, ErrorOr<Sport>>
+public class CreateSportCommandHandler : IRequestHandler<CreateSportCommand, Sport>
 {
     private readonly ISportsRepository _sportsRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -16,9 +16,9 @@ public class CreateSportCommandHandler : IRequestHandler<CreateSportCommand, Err
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<ErrorOr<Sport>> Handle(CreateSportCommand request, CancellationToken cancellationToken)
+    public async Task<Sport> Handle(CreateSportCommand request, CancellationToken cancellationToken)
     {
-        var sport = new Sport(request.Name, request.Description);
+        var sport = new Sport(request.Name, request.Description, new List<User>());
 
         await _sportsRepository.AddSportAsync(sport);
         await _unitOfWork.CommitChangesAsync();

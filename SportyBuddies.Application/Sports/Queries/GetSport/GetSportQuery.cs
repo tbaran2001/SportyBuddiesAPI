@@ -1,7 +1,6 @@
-﻿using ErrorOr;
-using MediatR;
+﻿using MediatR;
 using SportyBuddies.Domain.Sports;
 
 namespace SportyBuddies.Application.Sports.Queries.GetSport;
 
-public record GetSportQuery(Guid SportId) : IRequest<ErrorOr<Sport>>;
+public record GetSportQuery(Guid SportId) : IRequest<Sport>;

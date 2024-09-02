@@ -1,6 +1,5 @@
-﻿using ErrorOr;
-using MediatR;
+﻿using MediatR;
 
 namespace SportyBuddies.Application.Sports.Commands.DeleteSport;
 
-public record DeleteSportCommand(Guid SportId) : IRequest<ErrorOr<Deleted>>;
+public record DeleteSportCommand(Guid SportId) : IRequest;

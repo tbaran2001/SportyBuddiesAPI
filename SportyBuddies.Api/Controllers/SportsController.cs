@@ -24,9 +24,7 @@ namespace SportyBuddies.Api.Controllers
             var command = new CreateSportCommand(request.Name, request.Description);
             var createSportResult = await _mediator.Send(command);
 
-            return createSportResult.Match(
-                sport => Ok(new SportResponse(sport.Id, request.Name, request.Description)),
-                error => Problem());
+            return Ok(new SportResponse(createSportResult.Id, request.Name, request.Description));
         }
 
         [HttpGet("{sportId:guid}")]
@@ -36,9 +34,7 @@ namespace SportyBuddies.Api.Controllers
 
             var sport = await _mediator.Send(query);
 
-            return sport.Match<IActionResult>(
-                sport => Ok(new SportResponse(sport.Id, sport.Name, sport.Description)),
-                error => Problem());
+            return Ok(new SportResponse(sport.Id, sport.Name, sport.Description));
         }
 
         [HttpDelete("{sportId:guid}")]
@@ -46,11 +42,9 @@ namespace SportyBuddies.Api.Controllers
         {
             var command = new DeleteSportCommand(sportId);
 
-            var deleteSportResult = await _mediator.Send(command);
+            await _mediator.Send(command);
 
-            return deleteSportResult.Match<IActionResult>(
-                _ => NoContent(),
-                _ => Problem());
+            return NoContent();
         }
     }
 }
