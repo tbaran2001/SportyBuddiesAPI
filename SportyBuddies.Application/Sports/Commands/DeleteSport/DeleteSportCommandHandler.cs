@@ -18,7 +18,6 @@ public class DeleteSportCommandHandler : IRequestHandler<DeleteSportCommand>
     {
         var sport = await _sportsRepository.GetByIdAsync(command.SportId);
 
-
         await _sportsRepository.RemoveSportAsync(sport);
         await _unitOfWork.CommitChangesAsync();
     }

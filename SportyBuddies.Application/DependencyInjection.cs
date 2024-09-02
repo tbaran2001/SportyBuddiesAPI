@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace SportyBuddies.Application;
 
@@ -10,6 +11,9 @@ public static class DependencyInjection
         {
             options.RegisterServicesFromAssemblyContaining(typeof(DependencyInjection));
         });
+
+
+        services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
         return services;
     }

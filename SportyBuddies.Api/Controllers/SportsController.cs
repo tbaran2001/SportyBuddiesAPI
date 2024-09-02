@@ -1,3 +1,4 @@
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SportyBuddies.Application.Sports.Commands.CreateSport;
@@ -11,20 +12,22 @@ namespace SportyBuddies.Api.Controllers
     [ApiController]
     public class SportsController : ControllerBase
     {
+        private readonly IMapper _mapper;
         private readonly ISender _mediator;
 
-        public SportsController(ISender mediator)
+        public SportsController(ISender mediator, IMapper mapper)
         {
             _mediator = mediator;
+            _mapper = mapper;
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateSport(CreateSportRequest request)
         {
-            var command = new CreateSportCommand(request.Name, request.Description);
+            var command = _mapper.Map<CreateSportCommand>(request);
             var createSportResult = await _mediator.Send(command);
 
-            return Ok(new SportResponse(createSportResult.Id, request.Name, request.Description));
+            return Ok(_mapper.Map<SportResponse>(createSportResult));
         }
 
         [HttpGet("{sportId:guid}")]
@@ -34,7 +37,7 @@ namespace SportyBuddies.Api.Controllers
 
             var sport = await _mediator.Send(query);
 
-            return Ok(new SportResponse(sport.Id, sport.Name, sport.Description));
+            return Ok(_mapper.Map<SportResponse>(sport));
         }
 
         [HttpDelete("{sportId:guid}")]
