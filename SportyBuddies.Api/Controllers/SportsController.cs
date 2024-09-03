@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SportyBuddies.Application.Sports.Commands.CreateSport;
 using SportyBuddies.Application.Sports.Commands.DeleteSport;
 using SportyBuddies.Application.Sports.Queries.GetSport;
+using SportyBuddies.Application.Sports.Queries.GetSports;
 using SportyBuddies.Contracts.Sports;
 
 namespace SportyBuddies.Api.Controllers
@@ -21,13 +22,14 @@ namespace SportyBuddies.Api.Controllers
             _mapper = mapper;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateSport(CreateSportRequest request)
+        [HttpGet]
+        public async Task<IActionResult> GetSports()
         {
-            var command = _mapper.Map<CreateSportCommand>(request);
-            var createSportResult = await _mediator.Send(command);
+            var query = new GetSportsQuery();
 
-            return Ok(_mapper.Map<SportResponse>(createSportResult));
+            var sports = await _mediator.Send(query);
+
+            return Ok(_mapper.Map<IEnumerable<SportResponse>>(sports));
         }
 
         [HttpGet("{sportId:guid}")]
@@ -38,6 +40,15 @@ namespace SportyBuddies.Api.Controllers
             var sport = await _mediator.Send(query);
 
             return Ok(_mapper.Map<SportResponse>(sport));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateSport(CreateSportRequest request)
+        {
+            var command = _mapper.Map<CreateSportCommand>(request);
+            var createSportResult = await _mediator.Send(command);
+
+            return Ok(_mapper.Map<SportResponse>(createSportResult));
         }
 
         [HttpDelete("{sportId:guid}")]

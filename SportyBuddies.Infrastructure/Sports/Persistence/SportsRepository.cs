@@ -1,4 +1,5 @@
-﻿using SportyBuddies.Application.Common.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Domain.Sports;
 using SportyBuddies.Infrastructure.Common.Persistence;
 
@@ -23,7 +24,12 @@ public class SportsRepository : ISportsRepository
         return await _dbContext.Sports.FindAsync(sportId);
     }
 
-    public Task RemoveSportAsync(Sport sport)
+    public async Task<IEnumerable<Sport>> GetAllAsync()
+    {
+        return await _dbContext.Sports.ToListAsync();
+    }
+
+    public Task RemoveSport(Sport sport)
     {
         _dbContext.Sports.Remove(sport);
 

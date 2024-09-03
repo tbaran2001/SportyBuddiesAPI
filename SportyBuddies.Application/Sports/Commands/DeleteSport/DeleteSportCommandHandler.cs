@@ -21,7 +21,7 @@ public class DeleteSportCommandHandler : IRequestHandler<DeleteSportCommand>
 
         if (sport == null) throw new NotFoundException(nameof(sport), command.SportId.ToString());
 
-        await _sportsRepository.RemoveSportAsync(sport);
+        await _sportsRepository.RemoveSport(sport);
         await _unitOfWork.CommitChangesAsync();
     }
 }

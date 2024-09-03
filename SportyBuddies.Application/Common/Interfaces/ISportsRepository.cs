@@ -6,5 +6,6 @@ public interface ISportsRepository
 {
     Task AddSportAsync(Sport sport);
     Task<Sport?> GetByIdAsync(Guid sportId);
-    Task RemoveSportAsync(Sport sport);
+    Task RemoveSport(Sport sport);
+    Task<IEnumerable<Sport>> GetAllAsync();
 }
