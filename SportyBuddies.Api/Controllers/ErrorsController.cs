@@ -39,8 +39,16 @@ public class ErrorsController : ControllerBase
             case ValidationException validationException:
                 foreach (var validationError in validationException.Errors)
                     problem.Extensions.Add(validationError.Key, validationError.Value);
-
                 problem.Status = (int)HttpStatusCode.BadRequest;
+                break;
+            case UnauthorizedException unauthorizedException:
+                problem.Status = (int)HttpStatusCode.Unauthorized;
+                break;
+            case ConflictException conflictException:
+                problem.Status = (int)HttpStatusCode.Conflict;
+                break;
+            case ForbiddenException forbiddenException:
+                problem.Status = (int)HttpStatusCode.Forbidden;
                 break;
             default:
                 problem.Status = (int)HttpStatusCode.InternalServerError;
