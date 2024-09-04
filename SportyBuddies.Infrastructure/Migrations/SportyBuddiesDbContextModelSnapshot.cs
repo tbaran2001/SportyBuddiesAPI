@@ -44,7 +44,7 @@ namespace SportyBuddies.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Matches");
+                    b.ToTable("Matches", (string)null);
                 });
 
             modelBuilder.Entity("SportyBuddies.Domain.Sports.Sport", b =>
@@ -63,7 +63,7 @@ namespace SportyBuddies.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sports");
+                    b.ToTable("Sports", (string)null);
                 });
 
             modelBuilder.Entity("SportyBuddies.Domain.Users.User", b =>
@@ -85,7 +85,7 @@ namespace SportyBuddies.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("UserSport", b =>
@@ -100,7 +100,7 @@ namespace SportyBuddies.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserSport");
+                    b.ToTable("UserSport", (string)null);
                 });
 
             modelBuilder.Entity("SportyBuddies.Domain.Matches.Match", b =>

@@ -4,6 +4,11 @@ namespace SportyBuddies.Domain.Sports;
 
 public class Sport
 {
+    public Guid Id { get; private set; }
+    public string Name { get; private set; }
+    public string Description { get; private set; }
+    public ICollection<User> Users { get; private set; }
+    
     public Sport(string name, string description, ICollection<User> users, Guid? id = null)
     {
         Name = name;
@@ -15,9 +20,4 @@ public class Sport
     public Sport()
     {
     }
-
-    public Guid Id { get; private set; }
-    public string Name { get; private set; }
-    public string Description { get; private set; }
-    public ICollection<User> Users { get; private set; }
 }

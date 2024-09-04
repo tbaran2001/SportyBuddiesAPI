@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Infrastructure.Common.Persistence;
 using SportyBuddies.Infrastructure.Sports.Persistence;
+using SportyBuddies.Infrastructure.Users.Persistence;
 
 namespace SportyBuddies.Infrastructure;
 
@@ -16,6 +17,7 @@ public static class DependencyInjection
         
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         services.AddScoped<ISportsRepository, SportsRepository>();
+        services.AddScoped<IUsersRepository, UsersRepository>();
         
         services.AddScoped<IUnitOfWork>(serviceProvider =>
             serviceProvider.GetRequiredService<SportyBuddiesDbContext>());
