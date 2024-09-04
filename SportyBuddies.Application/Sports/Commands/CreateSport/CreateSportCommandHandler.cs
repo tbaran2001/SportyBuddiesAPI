@@ -28,7 +28,7 @@ public class CreateSportCommandHandler : IRequestHandler<CreateSportCommand, Spo
 
         var sport = _mapper.Map<Sport>(request);
 
-        await _sportsRepository.AddSportAsync(sport);
+        await _sportsRepository.AddAsync(sport);
         await _unitOfWork.CommitChangesAsync();
 
         return sport;
