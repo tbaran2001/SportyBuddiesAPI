@@ -21,6 +21,9 @@ public static class DependencyInjection
             .AddEntityFrameworkStores<SportyBuddiesIdentityDbContext>()
             .AddApiEndpoints();
         
+        services.AddScoped<UserManager<ApplicationUser>, CustomUserManager>();
+        services.AddScoped<IdentityEventsHandler>();
+        
         return services;
     }
 }
