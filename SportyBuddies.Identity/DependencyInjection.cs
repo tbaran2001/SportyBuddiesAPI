@@ -9,13 +9,17 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddIdentity(this IServiceCollection services)
     {
-        services.AddAuthorization();
+        services.AddAuthentication(IdentityConstants.ApplicationScheme)
+            .AddIdentityCookies();
+
+        services.AddAuthorizationBuilder();
         
         services.AddDbContext<SportyBuddiesIdentityDbContext>(options =>
             options.UseSqlite("Data Source = SportyBuddiesIdentity.db"));
 
-        services.AddIdentityApiEndpoints<ApplicationUser>()
-            .AddEntityFrameworkStores<SportyBuddiesIdentityDbContext>();
+        services.AddIdentityCore<ApplicationUser>()
+            .AddEntityFrameworkStores<SportyBuddiesIdentityDbContext>()
+            .AddApiEndpoints();
         
         return services;
     }
