@@ -1,4 +1,8 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
 using SportyBuddies.Application;
+using SportyBuddies.Identity;
+using SportyBuddies.Identity.Models;
 using SportyBuddies.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,11 +16,21 @@ builder.Services.AddSwaggerGen();
 
 builder.Services
     .AddApplication()
-    .AddInfrastructure();
+    .AddInfrastructure()
+    .AddIdentity();
+
+builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
+
+app.MapIdentityApi<ApplicationUser>();
+app.MapPost("/logout", async (ClaimsPrincipal user, SignInManager<ApplicationUser> signInManager) =>
+{
+    await signInManager.SignOutAsync();
+    return TypedResults.Ok();
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -28,6 +42,7 @@ if (app.Environment.IsDevelopment())
 app.UseExceptionHandler("/errors");
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

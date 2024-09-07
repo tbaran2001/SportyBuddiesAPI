@@ -8,7 +8,7 @@ namespace SportyBuddies.Infrastructure.Common.Persistence;
 
 public class SportyBuddiesDbContext : DbContext, IUnitOfWork
 {
-    public SportyBuddiesDbContext(DbContextOptions options) : base(options)
+    public SportyBuddiesDbContext(DbContextOptions<SportyBuddiesDbContext> options) : base(options)
     {
     }
 
