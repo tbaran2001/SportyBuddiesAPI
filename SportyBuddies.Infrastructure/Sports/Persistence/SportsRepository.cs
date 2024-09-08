@@ -15,4 +15,11 @@ public class SportsRepository : GenericRepository<Sport>,ISportsRepository
     {
         return await _dbContext.Sports.AnyAsync(x => x.Id == id);
     }
+
+    public async Task<IEnumerable<Sport>> GetUserSportsAsync(Guid userId)
+    {
+        return await _dbContext.Sports
+            .Where(x => x.Users.Any(u => u.Id == userId))
+            .ToListAsync();
+    }
 }

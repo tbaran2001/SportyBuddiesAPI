@@ -3,7 +3,13 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SportyBuddies.Application.Users.Commands.UpdateUser;
 using SportyBuddies.Application.Users.Queries.GetUser;
+using SportyBuddies.Application.UserSports.Commands;
+using SportyBuddies.Application.UserSports.Commands.AddUserSport;
+using SportyBuddies.Application.UserSports.Commands.RemoveUserSport;
+using SportyBuddies.Application.UserSports.Queries.GetUserSports;
+using SportyBuddies.Contracts.Sports;
 using SportyBuddies.Contracts.Users;
 using SportyBuddies.Identity.Models;
 
@@ -33,12 +39,76 @@ namespace SportyBuddies.Api.Controllers
             {
                 return Unauthorized();
             }
-            
+
             var query = new GetUserQuery(Guid.Parse(userId));
-            
+
             var user = await _mediator.Send(query);
-            
+
             return Ok(_mapper.Map<UserResponse>(user));
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateCurrentUser(UpdateUserRequest userRequest)
+        {
+            var userId = _userManager.GetUserId(User);
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            var command = new UpdateUserCommand(Guid.Parse(userId), userRequest.Name, userRequest.Description);
+
+            var user = await _mediator.Send(command);
+
+            return Ok(_mapper.Map<UserResponse>(user));
+        }
+        
+        [HttpGet("sports")]
+        public async Task<IActionResult> GetCurrentUserSports()
+        {
+            var userId = _userManager.GetUserId(User);
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            var query = new GetUserSportsQuery(Guid.Parse(userId));
+
+            var userSports = await _mediator.Send(query);
+
+            return Ok(_mapper.Map<IEnumerable<SportResponse>>(userSports));
+        }
+        
+        [HttpPost("sports/{sportId}")]
+        public async Task<IActionResult> AddSportToCurrentUser(Guid sportId)
+        {
+            var userId = _userManager.GetUserId(User);
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            var command = new AddUserSportCommand(Guid.Parse(userId), sportId);
+
+            await _mediator.Send(command);
+
+            return NoContent();
+        }
+        
+        [HttpDelete("sports/{sportId}")]
+        public async Task<IActionResult> RemoveSportFromCurrentUser(Guid sportId)
+        {
+            var userId = _userManager.GetUserId(User);
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            var command = new RemoveUserSportCommand(Guid.Parse(userId), sportId);
+
+            await _mediator.Send(command);
+
+            return NoContent();
         }
     }
 }

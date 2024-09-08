@@ -36,9 +36,4 @@ public class GenericRepository<T>:IGenericRepository<T> where T:class
     {
         _dbContext.Set<T>().Remove(entity);
     }
-
-    public async Task<bool> ExistsAsync(Guid id)
-    {
-        return await _dbContext.Set<T>().AnyAsync();
-    }
 }

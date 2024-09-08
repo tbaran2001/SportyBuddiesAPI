@@ -1,5 +1,6 @@
 using AutoMapper;
 using SportyBuddies.Application.Users.Commands.CreateUser;
+using SportyBuddies.Application.Users.Commands.UpdateUser;
 using SportyBuddies.Contracts.Users;
 using SportyBuddies.Domain.Users;
 
@@ -11,5 +12,6 @@ public class UserMappingProfile:Profile
     {
         CreateMap<CreateUserRequest, CreateUserCommand>();
         CreateMap<User, UserResponse>();
+        CreateMap<UpdateUserCommand, User>();
     }
 }
