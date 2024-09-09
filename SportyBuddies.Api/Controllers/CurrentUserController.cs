@@ -3,12 +3,13 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SportyBuddies.Application.Matches.Queries.GetUserMatches;
 using SportyBuddies.Application.Users.Commands.UpdateUser;
 using SportyBuddies.Application.Users.Queries.GetUser;
-using SportyBuddies.Application.UserSports.Commands;
 using SportyBuddies.Application.UserSports.Commands.AddUserSport;
 using SportyBuddies.Application.UserSports.Commands.RemoveUserSport;
 using SportyBuddies.Application.UserSports.Queries.GetUserSports;
+using SportyBuddies.Contracts.Matches;
 using SportyBuddies.Contracts.Sports;
 using SportyBuddies.Contracts.Users;
 using SportyBuddies.Identity.Models;
@@ -20,9 +21,9 @@ namespace SportyBuddies.Api.Controllers
     [Authorize]
     public class CurrentUserController : ControllerBase
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly ISender _mediator;
         private readonly IMapper _mapper;
+        private readonly ISender _mediator;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public CurrentUserController(UserManager<ApplicationUser> userManager, ISender mediator, IMapper mapper)
         {
@@ -62,7 +63,7 @@ namespace SportyBuddies.Api.Controllers
 
             return Ok(_mapper.Map<UserResponse>(user));
         }
-        
+
         [HttpGet("sports")]
         public async Task<IActionResult> GetCurrentUserSports()
         {
@@ -78,7 +79,7 @@ namespace SportyBuddies.Api.Controllers
 
             return Ok(_mapper.Map<IEnumerable<SportResponse>>(userSports));
         }
-        
+
         [HttpPost("sports/{sportId}")]
         public async Task<IActionResult> AddSportToCurrentUser(Guid sportId)
         {
@@ -94,7 +95,7 @@ namespace SportyBuddies.Api.Controllers
 
             return NoContent();
         }
-        
+
         [HttpDelete("sports/{sportId}")]
         public async Task<IActionResult> RemoveSportFromCurrentUser(Guid sportId)
         {
@@ -109,6 +110,19 @@ namespace SportyBuddies.Api.Controllers
             await _mediator.Send(command);
 
             return NoContent();
+        }
+
+        [HttpGet("matches")]
+        public async Task<IActionResult> GetCurrentUserMatches()
+        {
+            var userId = _userManager.GetUserId(User);
+            if (userId == null) return Unauthorized();
+
+            var query = new GetUserMatchesQuery(Guid.Parse(userId));
+
+            var matches = await _mediator.Send(query);
+
+            return Ok(_mapper.Map<IEnumerable<MatchResponse>>(matches));
         }
     }
 }
