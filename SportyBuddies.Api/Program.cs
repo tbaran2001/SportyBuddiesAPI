@@ -23,10 +23,19 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("React",
+        corsPolicyBuilder => corsPolicyBuilder.WithOrigins("http://localhost:3000")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials());
+});
+
 var app = builder.Build();
 
-app.MapIdentityApi<ApplicationUser>();
-app.MapPost("/logout", async (ClaimsPrincipal user, SignInManager<ApplicationUser> signInManager) =>
+app.MapGroup("/api").MapIdentityApi<ApplicationUser>();
+app.MapPost("/api/logout", async (ClaimsPrincipal user, SignInManager<ApplicationUser> signInManager) =>
 {
     await signInManager.SignOutAsync();
     return TypedResults.Ok();
@@ -41,6 +50,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseExceptionHandler("/errors");
 app.UseHttpsRedirection();
+
+app.UseCors("React");
 
 app.UseAuthentication();
 app.UseAuthorization();
