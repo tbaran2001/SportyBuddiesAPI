@@ -64,4 +64,12 @@ public class UserSportsRepository : IUserSportsRepository
 
         user.Sports.Remove(sport);
     }
+
+    public async Task<List<Guid>> GetUserSportsIdsAsync(Guid userId)
+    {
+        return await _dbContext.Sports
+            .Where(x => x.Users.Any(u => u.Id == userId))
+            .Select(x => x.Id)
+            .ToListAsync();
+    }
 }
