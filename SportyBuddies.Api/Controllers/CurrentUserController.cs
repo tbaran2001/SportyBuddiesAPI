@@ -3,6 +3,8 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SportyBuddies.Application.Matches.Commands.UpdateMatch;
+using SportyBuddies.Application.Matches.Queries.GetRandomMatch;
 using SportyBuddies.Application.Matches.Queries.GetUserMatches;
 using SportyBuddies.Application.Users.Commands.UpdateUser;
 using SportyBuddies.Application.Users.Queries.GetUser;
@@ -13,6 +15,7 @@ using SportyBuddies.Contracts.Matches;
 using SportyBuddies.Contracts.Sports;
 using SportyBuddies.Contracts.Users;
 using SportyBuddies.Identity.Models;
+using Swipe = SportyBuddies.Domain.Matches.Swipe;
 
 namespace SportyBuddies.Api.Controllers
 {
@@ -123,6 +126,32 @@ namespace SportyBuddies.Api.Controllers
             var matches = await _mediator.Send(query);
 
             return Ok(_mapper.Map<IEnumerable<MatchResponse>>(matches));
+        }
+
+        [HttpGet("matches/random")]
+        public async Task<IActionResult> GetRandomMatch()
+        {
+            var userId = _userManager.GetUserId(User);
+            if (userId == null) return Unauthorized();
+
+            var query = new GetRandomMatchQuery(Guid.Parse(userId));
+
+            var match = await _mediator.Send(query);
+
+            return Ok(_mapper.Map<MatchResponse>(match));
+        }
+
+        [HttpPut("matches/{matchId}")]
+        public async Task<IActionResult> UpdateMatch(Guid matchId, UpdateMatchRequest matchRequest)
+        {
+            var userId = _userManager.GetUserId(User);
+            if (userId == null) return Unauthorized();
+
+            var command = new UpdateMatchCommand(matchId, (Swipe)matchRequest.Swipe);
+
+            await _mediator.Send(command);
+
+            return NoContent();
         }
     }
 }

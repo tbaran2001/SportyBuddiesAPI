@@ -8,4 +8,5 @@ public interface IMatchesRepository : IGenericRepository<Match>
     Task<IEnumerable<Match>> GetUserExistingMatchesAsync(Guid userId);
     Task AddMatchesAsync(IEnumerable<Match> matches);
     void RemoveMatches(IEnumerable<Match> matches);
+    Task<Match?> GetRandomMatchAsync(Guid userId);
 }

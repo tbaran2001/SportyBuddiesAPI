@@ -36,4 +36,18 @@ public class MatchesRepository : GenericRepository<Match>, IMatchesRepository
     {
         _dbContext.Matches.RemoveRange(matches);
     }
+
+    public async Task<Match?> GetRandomMatchAsync(Guid userId)
+    {
+        var matches = await _dbContext.Matches
+            .Where(m => m.User.Id == userId && m.Swipe == null)
+            .Include(m => m.User)
+            .Include(m => m.MatchedUser)
+            .Include(m => m.MatchedUser.Sports)
+            .ToListAsync();
+
+        var randomMatch = matches.MinBy(m => Guid.NewGuid());
+
+        return randomMatch;
+    }
 }
