@@ -1,25 +1,29 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
+using SportyBuddies.Application.Common.DTOs;
 using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Application.Exceptions;
-using SportyBuddies.Domain.Sports;
 
 namespace SportyBuddies.Application.Sports.Queries.GetSport;
 
-public class GetSportQueryHandler : IRequestHandler<GetSportQuery, Sport>
+public class GetSportQueryHandler : IRequestHandler<GetSportQuery, SportDto>
 {
+    private readonly IMapper _mapper;
     private readonly ISportsRepository _sportsRepository;
 
-    public GetSportQueryHandler(ISportsRepository sportsRepository)
+
+    public GetSportQueryHandler(ISportsRepository sportsRepository, IMapper mapper)
     {
         _sportsRepository = sportsRepository;
+        _mapper = mapper;
     }
 
-    public async Task<Sport> Handle(GetSportQuery query, CancellationToken cancellationToken)
+    public async Task<SportDto> Handle(GetSportQuery query, CancellationToken cancellationToken)
     {
         var sport = await _sportsRepository.GetByIdAsync(query.SportId);
 
         if (sport == null) throw new NotFoundException(nameof(sport), query.SportId.ToString());
 
-        return sport;
+        return _mapper.Map<SportDto>(sport);
     }
 }

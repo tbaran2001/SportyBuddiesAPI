@@ -1,21 +1,25 @@
 using AutoMapper;
 using MediatR;
+using SportyBuddies.Application.Common.DTOs;
 using SportyBuddies.Application.Common.Interfaces;
-using SportyBuddies.Domain.Sports;
 
 namespace SportyBuddies.Application.UserSports.Queries.GetUserSports;
 
-public class GetUserSportsQueryHandler : IRequestHandler<GetUserSportsQuery, IEnumerable<Sport>>
+public class GetUserSportsQueryHandler : IRequestHandler<GetUserSportsQuery, IEnumerable<SportDto>>
 {
+    private readonly IMapper _mapper;
     private readonly IUserSportsRepository _userSportsRepository;
 
-    public GetUserSportsQueryHandler(IUserSportsRepository userSportsRepository)
+    public GetUserSportsQueryHandler(IUserSportsRepository userSportsRepository, IMapper mapper)
     {
         _userSportsRepository = userSportsRepository;
+        _mapper = mapper;
     }
 
-    public async Task<IEnumerable<Sport>> Handle(GetUserSportsQuery query, CancellationToken cancellationToken)
+    public async Task<IEnumerable<SportDto>> Handle(GetUserSportsQuery query, CancellationToken cancellationToken)
     {
-        return await _userSportsRepository.GetUserSportsAsync(query.UserId);
+        var sports = await _userSportsRepository.GetUserSportsAsync(query.UserId);
+
+        return _mapper.Map<IEnumerable<SportDto>>(sports);
     }
 }

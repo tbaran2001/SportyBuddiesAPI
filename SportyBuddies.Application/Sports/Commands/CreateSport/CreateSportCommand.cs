@@ -1,6 +1,6 @@
 ﻿using MediatR;
-using SportyBuddies.Domain.Sports;
+using SportyBuddies.Application.Common.DTOs;
 
 namespace SportyBuddies.Application.Sports.Commands.CreateSport;
 
-public record CreateSportCommand(string Name, string Description) : IRequest<Sport>;
+public record CreateSportCommand(string Name, string Description) : IRequest<SportDto>;

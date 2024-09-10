@@ -1,6 +1,6 @@
 using MediatR;
-using SportyBuddies.Domain.Users;
+using SportyBuddies.Application.Common.DTOs;
 
 namespace SportyBuddies.Application.Users.Commands.UpdateUser;
 
-public record UpdateUserCommand(Guid UserId, string Name, string Description) : IRequest<User>;
+public record UpdateUserCommand(Guid UserId, string Name, string Description) : IRequest<UserDto>;

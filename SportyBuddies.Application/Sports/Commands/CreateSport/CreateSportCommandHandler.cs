@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
 using MediatR;
+using SportyBuddies.Application.Common.DTOs;
 using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Application.Exceptions;
 using SportyBuddies.Domain.Sports;
 
 namespace SportyBuddies.Application.Sports.Commands.CreateSport;
 
-public class CreateSportCommandHandler : IRequestHandler<CreateSportCommand, Sport>
+public class CreateSportCommandHandler : IRequestHandler<CreateSportCommand, SportDto>
 {
     private readonly IMapper _mapper;
     private readonly ISportsRepository _sportsRepository;
@@ -19,7 +20,7 @@ public class CreateSportCommandHandler : IRequestHandler<CreateSportCommand, Spo
         _mapper = mapper;
     }
 
-    public async Task<Sport> Handle(CreateSportCommand request, CancellationToken cancellationToken)
+    public async Task<SportDto> Handle(CreateSportCommand request, CancellationToken cancellationToken)
     {
         var validator = new CreateSportCommandValidator();
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
@@ -31,6 +32,6 @@ public class CreateSportCommandHandler : IRequestHandler<CreateSportCommand, Spo
         await _sportsRepository.AddAsync(sport);
         await _unitOfWork.CommitChangesAsync();
 
-        return sport;
+        return _mapper.Map<SportDto>(sport);
     }
 }

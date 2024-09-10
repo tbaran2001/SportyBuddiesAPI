@@ -1,6 +1,6 @@
 using MediatR;
-using SportyBuddies.Domain.Matches;
+using SportyBuddies.Application.Common.DTOs;
 
 namespace SportyBuddies.Application.Matches.Queries.GetRandomMatch;
 
-public record GetRandomMatchQuery(Guid UserId) : IRequest<Match?>;
+public record GetRandomMatchQuery(Guid UserId) : IRequest<MatchDto?>;

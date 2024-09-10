@@ -1,6 +1,6 @@
 ﻿using MediatR;
-using SportyBuddies.Domain.Sports;
+using SportyBuddies.Application.Common.DTOs;
 
 namespace SportyBuddies.Application.Sports.Queries.GetSport;
 
-public record GetSportQuery(Guid SportId) : IRequest<Sport>;
+public record GetSportQuery(Guid SportId) : IRequest<SportDto>;
