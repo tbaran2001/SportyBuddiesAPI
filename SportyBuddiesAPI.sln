@@ -12,6 +12,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportyBuddies.Contracts", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportyBuddies.Identity", "SportyBuddies.Identity\SportyBuddies.Identity.csproj", "{D7A14E4E-F571-452F-B3F9-CE831578F7B0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{301057E0-3A83-443D-BA46-6BFE9BB8BD08}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportyBuddies.Application.UnitTests", "SportyBuddies.Application.UnitTests\SportyBuddies.Application.UnitTests.csproj", "{F285B70B-C2A0-42B5-9EC2-E7AE2ADD8B40}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +46,12 @@ Global
 		{D7A14E4E-F571-452F-B3F9-CE831578F7B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7A14E4E-F571-452F-B3F9-CE831578F7B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7A14E4E-F571-452F-B3F9-CE831578F7B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F285B70B-C2A0-42B5-9EC2-E7AE2ADD8B40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F285B70B-C2A0-42B5-9EC2-E7AE2ADD8B40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F285B70B-C2A0-42B5-9EC2-E7AE2ADD8B40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F285B70B-C2A0-42B5-9EC2-E7AE2ADD8B40}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F285B70B-C2A0-42B5-9EC2-E7AE2ADD8B40} = {301057E0-3A83-443D-BA46-6BFE9BB8BD08}
 	EndGlobalSection
 EndGlobal
