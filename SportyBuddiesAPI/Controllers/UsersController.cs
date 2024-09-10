@@ -24,7 +24,6 @@ namespace SportyBuddiesAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public async Task<ActionResult<IEnumerable<UserWithoutSportsDto>>> GetUsers(string? name, string? searchQuery,
             int pageNumber = 1, int pageSize = 10, bool includeSports = true)
         {
