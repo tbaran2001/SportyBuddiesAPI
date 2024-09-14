@@ -1,13 +1,13 @@
 using AutoMapper;
+using ErrorOr;
 using MediatR;
 using SportyBuddies.Application.Common.DTOs;
 using SportyBuddies.Application.Common.Interfaces;
-using SportyBuddies.Application.Exceptions;
 using SportyBuddies.Domain.Users;
 
 namespace SportyBuddies.Application.Users.Commands.CreateUser;
 
-public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserDto>
+public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, ErrorOr<UserDto>>
 {
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
@@ -20,12 +20,12 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserD
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<UserDto> Handle(CreateUserCommand command, CancellationToken cancellationToken)
+    public async Task<ErrorOr<UserDto>> Handle(CreateUserCommand command, CancellationToken cancellationToken)
     {
         var validator = new CreateUserCommandValidator();
         var validationResult = await validator.ValidateAsync(command, cancellationToken);
 
-        if (validationResult.IsValid == false) throw new ValidationException(validationResult.ToDictionary());
+        if (validationResult.IsValid == false) return Error.Validation();
 
         var user = _mapper.Map<User>(command);
 

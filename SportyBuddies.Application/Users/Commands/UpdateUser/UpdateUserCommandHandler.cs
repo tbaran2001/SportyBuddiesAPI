@@ -1,13 +1,12 @@
 using AutoMapper;
+using ErrorOr;
 using MediatR;
 using SportyBuddies.Application.Common.DTOs;
 using SportyBuddies.Application.Common.Interfaces;
-using SportyBuddies.Application.Exceptions;
-using SportyBuddies.Domain.Users;
 
 namespace SportyBuddies.Application.Users.Commands.UpdateUser;
 
-public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, UserDto>
+public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, ErrorOr<UserDto>>
 {
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
@@ -20,19 +19,18 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, UserD
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<UserDto> Handle(UpdateUserCommand command, CancellationToken cancellationToken)
+    public async Task<ErrorOr<UserDto>> Handle(UpdateUserCommand command, CancellationToken cancellationToken)
     {
         var validator = new UpdateUserCommandValidator();
         var validationResult = await validator.ValidateAsync(command, cancellationToken);
 
-        if (validationResult.IsValid == false) throw new ValidationException(validationResult.ToDictionary());
+        if (validationResult.IsValid == false) return Error.Validation();
 
         var user = await _usersRepository.GetByIdAsync(command.UserId);
 
-        if (user == null) throw new NotFoundException(nameof(User), command.UserId.ToString());
+        if (user == null) return Error.NotFound();
 
         _mapper.Map(command, user);
-
         await _unitOfWork.CommitChangesAsync();
 
         return _mapper.Map<UserDto>(user);

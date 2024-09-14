@@ -29,6 +29,6 @@ public class GetSportsQueryHandlerTests
         var result = await handler.Handle(new GetSportsQuery(), CancellationToken.None);
 
         result.ShouldBeOfType<List<SportDto>>();
-        result.Count().ShouldBe(3);
+        result.Value.Count().ShouldBe(3);
     }
 }

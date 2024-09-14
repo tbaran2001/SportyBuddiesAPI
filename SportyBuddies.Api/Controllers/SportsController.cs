@@ -27,9 +27,11 @@ namespace SportyBuddies.Api.Controllers
         {
             var query = new GetSportsQuery();
 
-            var sports = await _mediator.Send(query);
+            var sportsResult = await _mediator.Send(query);
 
-            return Ok(_mapper.Map<IEnumerable<SportResponse>>(sports));
+            return sportsResult.Match(
+                sports => Ok(_mapper.Map<IEnumerable<SportResponse>>(sports)),
+                _ => Problem());
         }
 
         [HttpGet("{sportId:guid}")]
@@ -37,9 +39,11 @@ namespace SportyBuddies.Api.Controllers
         {
             var query = new GetSportQuery(sportId);
 
-            var sport = await _mediator.Send(query);
+            var sportResult = await _mediator.Send(query);
 
-            return Ok(_mapper.Map<SportResponse>(sport));
+            return sportResult.Match(
+                sport => Ok(_mapper.Map<SportResponse>(sport)),
+                _ => Problem());
         }
 
         [HttpPost]
@@ -48,7 +52,9 @@ namespace SportyBuddies.Api.Controllers
             var command = _mapper.Map<CreateSportCommand>(request);
             var createSportResult = await _mediator.Send(command);
 
-            return Ok(_mapper.Map<SportResponse>(createSportResult));
+            return createSportResult.Match(
+                sport => Ok(_mapper.Map<SportResponse>(sport)),
+                _ => Problem());
         }
 
         [HttpDelete("{sportId:guid}")]
@@ -56,9 +62,11 @@ namespace SportyBuddies.Api.Controllers
         {
             var command = new DeleteSportCommand(sportId);
 
-            await _mediator.Send(command);
+            var deleteSportResult = await _mediator.Send(command);
 
-            return NoContent();
+            return deleteSportResult.Match<IActionResult>(
+                _ => NoContent(),
+                _ => Problem());
         }
     }
 }

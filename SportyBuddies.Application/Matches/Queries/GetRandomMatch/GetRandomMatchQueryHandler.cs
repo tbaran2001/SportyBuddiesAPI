@@ -1,11 +1,12 @@
 using AutoMapper;
+using ErrorOr;
 using MediatR;
 using SportyBuddies.Application.Common.DTOs;
 using SportyBuddies.Application.Common.Interfaces;
 
 namespace SportyBuddies.Application.Matches.Queries.GetRandomMatch;
 
-public class GetRandomMatchQueryHandler : IRequestHandler<GetRandomMatchQuery, MatchDto?>
+public class GetRandomMatchQueryHandler : IRequestHandler<GetRandomMatchQuery, ErrorOr<MatchDto?>>
 {
     private readonly IMapper _mapper;
     private readonly IMatchesRepository _matchesRepository;
@@ -16,7 +17,7 @@ public class GetRandomMatchQueryHandler : IRequestHandler<GetRandomMatchQuery, M
         _mapper = mapper;
     }
 
-    public async Task<MatchDto?> Handle(GetRandomMatchQuery query, CancellationToken cancellationToken)
+    public async Task<ErrorOr<MatchDto?>> Handle(GetRandomMatchQuery query, CancellationToken cancellationToken)
     {
         var match = await _matchesRepository.GetRandomMatchAsync(query.UserId);
         return _mapper.Map<MatchDto>(match);

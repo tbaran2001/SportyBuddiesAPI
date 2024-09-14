@@ -46,9 +46,11 @@ namespace SportyBuddies.Api.Controllers
 
             var query = new GetUserQuery(Guid.Parse(userId));
 
-            var user = await _mediator.Send(query);
+            var userResult = await _mediator.Send(query);
 
-            return Ok(_mapper.Map<UserResponse>(user));
+            return userResult.Match(
+                user => Ok(_mapper.Map<UserResponse>(user)),
+                _ => Problem());
         }
 
         [HttpPut]
@@ -62,9 +64,11 @@ namespace SportyBuddies.Api.Controllers
 
             var command = new UpdateUserCommand(Guid.Parse(userId), userRequest.Name, userRequest.Description);
 
-            var user = await _mediator.Send(command);
+            var userResult = await _mediator.Send(command);
 
-            return Ok(_mapper.Map<UserResponse>(user));
+            return userResult.Match(
+                user => Ok(_mapper.Map<UserResponse>(user)),
+                _ => Problem());
         }
 
         [HttpGet("sports")]
@@ -78,9 +82,11 @@ namespace SportyBuddies.Api.Controllers
 
             var query = new GetUserSportsQuery(Guid.Parse(userId));
 
-            var userSports = await _mediator.Send(query);
+            var userSportsResult = await _mediator.Send(query);
 
-            return Ok(_mapper.Map<IEnumerable<SportResponse>>(userSports));
+            return userSportsResult.Match(
+                userSports => Ok(_mapper.Map<IEnumerable<SportResponse>>(userSports)),
+                _ => Problem());
         }
 
         [HttpPost("sports/{sportId}")]
@@ -94,9 +100,11 @@ namespace SportyBuddies.Api.Controllers
 
             var command = new AddUserSportCommand(Guid.Parse(userId), sportId);
 
-            await _mediator.Send(command);
+            var userSportResult = await _mediator.Send(command);
 
-            return NoContent();
+            return userSportResult.Match<IActionResult>(
+                userSport => NoContent(),
+                _ => Problem());
         }
 
         [HttpDelete("sports/{sportId}")]
@@ -110,9 +118,11 @@ namespace SportyBuddies.Api.Controllers
 
             var command = new RemoveUserSportCommand(Guid.Parse(userId), sportId);
 
-            await _mediator.Send(command);
+            var userSportResult = await _mediator.Send(command);
 
-            return NoContent();
+            return userSportResult.Match<IActionResult>(
+                _ => NoContent(),
+                _ => Problem());
         }
 
         [HttpGet("matches")]
@@ -123,9 +133,11 @@ namespace SportyBuddies.Api.Controllers
 
             var query = new GetUserMatchesQuery(Guid.Parse(userId));
 
-            var matches = await _mediator.Send(query);
+            var matchesResult = await _mediator.Send(query);
 
-            return Ok(_mapper.Map<IEnumerable<MatchResponse>>(matches));
+            return matchesResult.Match(
+                matches => Ok(_mapper.Map<IEnumerable<MatchResponse>>(matches)),
+                _ => Problem());
         }
 
         [HttpGet("matches/random")]
@@ -136,9 +148,11 @@ namespace SportyBuddies.Api.Controllers
 
             var query = new GetRandomMatchQuery(Guid.Parse(userId));
 
-            var match = await _mediator.Send(query);
+            var matchResult = await _mediator.Send(query);
 
-            return Ok(_mapper.Map<MatchResponse>(match));
+            return matchResult.Match(
+                match => Ok(_mapper.Map<MatchResponse>(match)),
+                _ => Problem());
         }
 
         [HttpPut("matches/{matchId}")]
@@ -149,9 +163,11 @@ namespace SportyBuddies.Api.Controllers
 
             var command = new UpdateMatchCommand(matchId, (Swipe)matchRequest.Swipe);
 
-            await _mediator.Send(command);
+            var matchResult = await _mediator.Send(command);
 
-            return NoContent();
+            return matchResult.Match<IActionResult>(
+                match => NoContent(),
+                _ => Problem());
         }
     }
 }

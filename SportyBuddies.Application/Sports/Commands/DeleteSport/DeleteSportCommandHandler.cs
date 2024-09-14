@@ -1,10 +1,10 @@
-﻿using MediatR;
+﻿using ErrorOr;
+using MediatR;
 using SportyBuddies.Application.Common.Interfaces;
-using SportyBuddies.Application.Exceptions;
 
 namespace SportyBuddies.Application.Sports.Commands.DeleteSport;
 
-public class DeleteSportCommandHandler : IRequestHandler<DeleteSportCommand>
+public class DeleteSportCommandHandler : IRequestHandler<DeleteSportCommand, ErrorOr<Deleted>>
 {
     private readonly ISportsRepository _sportsRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -15,13 +15,15 @@ public class DeleteSportCommandHandler : IRequestHandler<DeleteSportCommand>
         _unitOfWork = unitOfWork;
     }
 
-    public async Task Handle(DeleteSportCommand command, CancellationToken cancellationToken)
+    public async Task<ErrorOr<Deleted>> Handle(DeleteSportCommand command, CancellationToken cancellationToken)
     {
         var sport = await _sportsRepository.GetByIdAsync(command.SportId);
 
-        if (sport == null) throw new NotFoundException(nameof(sport), command.SportId.ToString());
+        if (sport == null) return Error.NotFound();
 
         _sportsRepository.Remove(sport);
         await _unitOfWork.CommitChangesAsync();
+
+        return Result.Deleted;
     }
 }

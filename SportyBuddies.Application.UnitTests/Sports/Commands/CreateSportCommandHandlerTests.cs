@@ -59,7 +59,7 @@ public class CreateSportCommandHandlerTests
     {
         var result = await _handler.Handle(_createSportCommand, CancellationToken.None);
 
-        result.Name.ShouldBe(_createSportCommand.Name);
-        result.Description.ShouldBe(_createSportCommand.Description);
+        result.Value.Name.ShouldBe(_createSportCommand.Name);
+        result.Value.Description.ShouldBe(_createSportCommand.Description);
     }
 }

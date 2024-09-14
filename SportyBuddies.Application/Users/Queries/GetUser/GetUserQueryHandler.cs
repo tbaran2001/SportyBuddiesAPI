@@ -1,12 +1,12 @@
 using AutoMapper;
+using ErrorOr;
 using MediatR;
 using SportyBuddies.Application.Common.DTOs;
 using SportyBuddies.Application.Common.Interfaces;
-using SportyBuddies.Application.Exceptions;
 
 namespace SportyBuddies.Application.Users.Queries.GetUser;
 
-public class GetUserQueryHandler : IRequestHandler<GetUserQuery, UserDto>
+public class GetUserQueryHandler : IRequestHandler<GetUserQuery, ErrorOr<UserDto>>
 {
     private readonly IMapper _mapper;
     private readonly IUsersRepository _usersRepository;
@@ -18,11 +18,11 @@ public class GetUserQueryHandler : IRequestHandler<GetUserQuery, UserDto>
     }
 
 
-    public async Task<UserDto> Handle(GetUserQuery query, CancellationToken cancellationToken)
+    public async Task<ErrorOr<UserDto>> Handle(GetUserQuery query, CancellationToken cancellationToken)
     {
         var user = await _usersRepository.GetByIdAsync(query.UserId);
 
-        if (user == null) throw new NotFoundException(nameof(user), query.UserId.ToString());
+        if (user == null) Error.NotFound();
 
         return _mapper.Map<UserDto>(user);
     }
