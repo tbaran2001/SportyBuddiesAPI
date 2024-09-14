@@ -19,7 +19,7 @@ builder.Services
     .AddInfrastructure()
     .AddIdentity();
 
-builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddProblemDetails();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -33,6 +33,8 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+app.UseExceptionHandler();
 
 app.MapGroup("/api").MapIdentityApi<ApplicationUser>();
 app.MapPost("/api/logout", async (ClaimsPrincipal user, SignInManager<ApplicationUser> signInManager) =>
@@ -48,7 +50,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseExceptionHandler("/errors");
+//app.UseExceptionHandler("/errors");
 app.UseHttpsRedirection();
 
 app.UseCors("React");

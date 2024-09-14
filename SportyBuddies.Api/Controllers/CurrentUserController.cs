@@ -20,9 +20,8 @@ using Swipe = SportyBuddies.Domain.Matches.Swipe;
 namespace SportyBuddies.Api.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
     [Authorize]
-    public class CurrentUserController : ControllerBase
+    public class CurrentUserController : ApiController
     {
         private readonly IMapper _mapper;
         private readonly ISender _mediator;
@@ -50,7 +49,7 @@ namespace SportyBuddies.Api.Controllers
 
             return userResult.Match(
                 user => Ok(_mapper.Map<UserResponse>(user)),
-                _ => Problem());
+                Problem);
         }
 
         [HttpPut]
@@ -68,7 +67,7 @@ namespace SportyBuddies.Api.Controllers
 
             return userResult.Match(
                 user => Ok(_mapper.Map<UserResponse>(user)),
-                _ => Problem());
+                Problem);
         }
 
         [HttpGet("sports")]
@@ -86,7 +85,7 @@ namespace SportyBuddies.Api.Controllers
 
             return userSportsResult.Match(
                 userSports => Ok(_mapper.Map<IEnumerable<SportResponse>>(userSports)),
-                _ => Problem());
+                Problem);
         }
 
         [HttpPost("sports/{sportId}")]
@@ -104,7 +103,7 @@ namespace SportyBuddies.Api.Controllers
 
             return userSportResult.Match<IActionResult>(
                 userSport => NoContent(),
-                _ => Problem());
+                Problem);
         }
 
         [HttpDelete("sports/{sportId}")]
@@ -122,7 +121,7 @@ namespace SportyBuddies.Api.Controllers
 
             return userSportResult.Match<IActionResult>(
                 _ => NoContent(),
-                _ => Problem());
+                Problem);
         }
 
         [HttpGet("matches")]
@@ -137,7 +136,7 @@ namespace SportyBuddies.Api.Controllers
 
             return matchesResult.Match(
                 matches => Ok(_mapper.Map<IEnumerable<MatchResponse>>(matches)),
-                _ => Problem());
+                Problem);
         }
 
         [HttpGet("matches/random")]
@@ -152,7 +151,7 @@ namespace SportyBuddies.Api.Controllers
 
             return matchResult.Match(
                 match => Ok(_mapper.Map<MatchResponse>(match)),
-                _ => Problem());
+                Problem);
         }
 
         [HttpPut("matches/{matchId}")]
@@ -167,7 +166,7 @@ namespace SportyBuddies.Api.Controllers
 
             return matchResult.Match<IActionResult>(
                 match => NoContent(),
-                _ => Problem());
+                Problem);
         }
     }
 }

@@ -10,8 +10,7 @@ using SportyBuddies.Contracts.Sports;
 namespace SportyBuddies.Api.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
-    public class SportsController : ControllerBase
+    public class SportsController : ApiController
     {
         private readonly IMapper _mapper;
         private readonly ISender _mediator;
@@ -31,7 +30,7 @@ namespace SportyBuddies.Api.Controllers
 
             return sportsResult.Match(
                 sports => Ok(_mapper.Map<IEnumerable<SportResponse>>(sports)),
-                _ => Problem());
+                Problem);
         }
 
         [HttpGet("{sportId:guid}")]
@@ -43,7 +42,7 @@ namespace SportyBuddies.Api.Controllers
 
             return sportResult.Match(
                 sport => Ok(_mapper.Map<SportResponse>(sport)),
-                _ => Problem());
+                Problem);
         }
 
         [HttpPost]
@@ -53,8 +52,9 @@ namespace SportyBuddies.Api.Controllers
             var createSportResult = await _mediator.Send(command);
 
             return createSportResult.Match(
-                sport => Ok(_mapper.Map<SportResponse>(sport)),
-                _ => Problem());
+                sport => CreatedAtAction(nameof(GetSport), new { sportId = sport.Id },
+                    _mapper.Map<SportResponse>(sport)),
+                Problem);
         }
 
         [HttpDelete("{sportId:guid}")]
@@ -66,7 +66,7 @@ namespace SportyBuddies.Api.Controllers
 
             return deleteSportResult.Match<IActionResult>(
                 _ => NoContent(),
-                _ => Problem());
+                Problem);
         }
     }
 }

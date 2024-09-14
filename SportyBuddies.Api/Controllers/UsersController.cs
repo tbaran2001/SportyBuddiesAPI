@@ -10,8 +10,7 @@ using SportyBuddies.Contracts.Users;
 namespace SportyBuddies.Api.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
-    public class UsersController : ControllerBase
+    public class UsersController : ApiController
     {
         private readonly IMapper _mapper;
         private readonly ISender _mediator;
@@ -31,7 +30,7 @@ namespace SportyBuddies.Api.Controllers
 
             return usersResult.Match(
                 users => Ok(_mapper.Map<IEnumerable<UserResponse>>(users)),
-                _ => Problem());
+                Problem);
         }
 
         [HttpGet("{userId:guid}")]
@@ -43,7 +42,7 @@ namespace SportyBuddies.Api.Controllers
 
             return userResult.Match(
                 user => Ok(_mapper.Map<UserResponse>(user)),
-                _ => Problem());
+                Problem);
         }
 
         [HttpPost]
@@ -55,7 +54,7 @@ namespace SportyBuddies.Api.Controllers
 
             return createUserResult.Match(
                 user => Ok(_mapper.Map<UserResponse>(user)),
-                _ => Problem());
+                Problem);
         }
 
         [HttpDelete("{userId:guid}")]
@@ -67,7 +66,7 @@ namespace SportyBuddies.Api.Controllers
 
             return deleteUserResult.Match<IActionResult>(
                 _ => Ok(),
-                _ => Problem());
+                Problem);
         }
     }
 }
