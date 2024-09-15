@@ -19,7 +19,9 @@ public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Error
     {
         var user = await _sportsRepository.GetByIdAsync(command.UserId);
 
-        if (user == null) Error.NotFound();
+        if (user == null) return Error.NotFound();
+
+        user.Delete();
 
         _sportsRepository.Remove(user);
         await _unitOfWork.CommitChangesAsync();

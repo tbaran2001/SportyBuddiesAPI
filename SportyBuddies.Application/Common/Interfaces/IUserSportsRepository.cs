@@ -8,4 +8,5 @@ public interface IUserSportsRepository
     Task AddSportToUserAsync(Guid userId, Guid sportId);
     Task RemoveSportFromUserAsync(Guid userId, Guid sportId);
     Task<List<Guid>> GetUserSportsIdsAsync(Guid userId);
+    Task RemoveRangeAsync(IEnumerable<Sport> sports);
 }

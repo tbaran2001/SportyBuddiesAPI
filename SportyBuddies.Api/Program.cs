@@ -18,8 +18,8 @@ builder.Services
     .AddApplication()
     .AddInfrastructure()
     .AddIdentity();
-
 builder.Services.AddProblemDetails();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -35,6 +35,7 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 app.UseExceptionHandler();
+app.AddInfrastructureMiddleware();
 
 app.MapGroup("/api").MapIdentityApi<ApplicationUser>();
 app.MapPost("/api/logout", async (ClaimsPrincipal user, SignInManager<ApplicationUser> signInManager) =>

@@ -1,23 +1,22 @@
-﻿using SportyBuddies.Domain.Users;
+﻿using SportyBuddies.Domain.Common;
+using SportyBuddies.Domain.Users;
 
 namespace SportyBuddies.Domain.Sports;
 
-public class Sport
+public class Sport : Entity
 {
-    public Guid Id { get; private set; }
-    public string Name { get; private set; }
-    public string Description { get; private set; }
-    public ICollection<User> Users { get; private set; }
-    
-    public Sport(string name, string description, ICollection<User> users, Guid? id = null)
+    public Sport(string name, string description, ICollection<User> users, Guid? id = null) : base(id ?? Guid.NewGuid())
     {
         Name = name;
         Description = description;
         Users = users;
-        Id = id ?? Guid.NewGuid();
     }
 
     public Sport()
     {
     }
+
+    public string Name { get; private set; }
+    public string Description { get; private set; }
+    public ICollection<User> Users { get; private set; }
 }

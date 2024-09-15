@@ -72,4 +72,11 @@ public class UserSportsRepository : IUserSportsRepository
             .Select(x => x.Id)
             .ToListAsync();
     }
+
+    public Task RemoveRangeAsync(IEnumerable<Sport> sports)
+    {
+        _dbContext.Sports.RemoveRange(sports);
+
+        return Task.CompletedTask;
+    }
 }

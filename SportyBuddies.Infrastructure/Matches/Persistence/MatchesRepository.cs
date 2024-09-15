@@ -50,4 +50,11 @@ public class MatchesRepository : GenericRepository<Match>, IMatchesRepository
 
         return randomMatch;
     }
+
+    public Task RemoveRangeAsync(IEnumerable<Match> matches)
+    {
+        _dbContext.Matches.RemoveRange(matches);
+
+        return Task.CompletedTask;
+    }
 }
