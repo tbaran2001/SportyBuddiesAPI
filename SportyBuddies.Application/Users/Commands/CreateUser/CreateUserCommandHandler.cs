@@ -22,11 +22,6 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Error
 
     public async Task<ErrorOr<UserDto>> Handle(CreateUserCommand command, CancellationToken cancellationToken)
     {
-        var validator = new CreateUserCommandValidator();
-        var validationResult = await validator.ValidateAsync(command, cancellationToken);
-
-        if (validationResult.IsValid == false) return Error.Validation();
-
         var user = _mapper.Map<User>(command);
 
         await _usersRepository.AddAsync(user);

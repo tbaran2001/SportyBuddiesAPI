@@ -22,11 +22,6 @@ public class CreateSportCommandHandler : IRequestHandler<CreateSportCommand, Err
 
     public async Task<ErrorOr<SportDto>> Handle(CreateSportCommand request, CancellationToken cancellationToken)
     {
-        var validator = new CreateSportCommandValidator();
-        var validationResult = await validator.ValidateAsync(request, cancellationToken);
-
-        if (validationResult.IsValid == false) return Error.Validation();
-
         var sport = _mapper.Map<Sport>(request);
 
         await _sportsRepository.AddAsync(sport);

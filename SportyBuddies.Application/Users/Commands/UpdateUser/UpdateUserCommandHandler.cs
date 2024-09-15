@@ -21,11 +21,6 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Error
 
     public async Task<ErrorOr<UserDto>> Handle(UpdateUserCommand command, CancellationToken cancellationToken)
     {
-        var validator = new UpdateUserCommandValidator();
-        var validationResult = await validator.ValidateAsync(command, cancellationToken);
-
-        if (validationResult.IsValid == false) return Error.Validation();
-
         var user = await _usersRepository.GetByIdAsync(command.UserId);
 
         if (user == null) return Error.NotFound();
