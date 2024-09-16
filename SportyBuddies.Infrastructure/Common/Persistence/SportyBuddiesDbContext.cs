@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Domain.Common;
@@ -11,11 +12,13 @@ namespace SportyBuddies.Infrastructure.Common.Persistence;
 public class SportyBuddiesDbContext : DbContext, IUnitOfWork
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IPublisher _publisher;
 
     public SportyBuddiesDbContext(DbContextOptions<SportyBuddiesDbContext> options,
-        IHttpContextAccessor httpContextAccessor) : base(options)
+        IHttpContextAccessor httpContextAccessor, IPublisher publisher) : base(options)
     {
         _httpContextAccessor = httpContextAccessor;
+        _publisher = publisher;
     }
 
     public DbSet<Sport> Sports { get; set; }
@@ -30,9 +33,22 @@ public class SportyBuddiesDbContext : DbContext, IUnitOfWork
             .SelectMany(domainEvents => domainEvents)
             .ToList();
 
-        AddDomainEventsToOfflineProcessingQueue(domainEvents);
+        if (IsUserWaitingOnline())
+            AddDomainEventsToOfflineProcessingQueue(domainEvents);
+        else
+            await PublishDomainEvents(_publisher, domainEvents);
 
         await base.SaveChangesAsync();
+    }
+
+    private async Task PublishDomainEvents(IPublisher _publisher, List<IDomainEvent> domainEvents)
+    {
+        foreach (var domainEvent in domainEvents) await _publisher.Publish(domainEvent);
+    }
+
+    private bool IsUserWaitingOnline()
+    {
+        return _httpContextAccessor.HttpContext is not null;
     }
 
     private void AddDomainEventsToOfflineProcessingQueue(List<IDomainEvent> domainEvents)
