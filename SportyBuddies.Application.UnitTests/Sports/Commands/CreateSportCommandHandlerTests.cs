@@ -1,65 +1,54 @@
 ﻿using AutoMapper;
-using Moq;
-using Shouldly;
+using FluentAssertions;
+using NSubstitute;
 using SportyBuddies.Application.Common.DTOs;
 using SportyBuddies.Application.Common.Interfaces;
-using SportyBuddies.Application.Exceptions;
 using SportyBuddies.Application.Mappings;
 using SportyBuddies.Application.Sports.Commands.CreateSport;
-using SportyBuddies.Application.UnitTests.Mocks;
+using SportyBuddies.Domain.Sports;
 
 namespace SportyBuddies.Application.UnitTests.Sports.Commands;
 
 public class CreateSportCommandHandlerTests
 {
     private readonly CreateSportCommand _createSportCommand;
-    private readonly CreateSportCommandHandler _handler;
     private readonly IMapper _mapper;
-    private readonly Mock<ISportsRepository> _mockSportsRepository;
-    private readonly Mock<IUnitOfWork> _unitOfWork;
+    private readonly ISportsRepository _sportsRepository = Substitute.For<ISportsRepository>();
+    private readonly CreateSportCommandHandler _sut;
+    private readonly IUnitOfWork _unitOfWork = Substitute.For<IUnitOfWork>();
+    private readonly CreateSportCommandValidator _validator;
 
     public CreateSportCommandHandlerTests()
     {
-        _mockSportsRepository = RepositoryMocks.GetSportsRepository();
         var configurationProvider = new MapperConfiguration(cfg => { cfg.AddProfile<SportMappingProfile>(); });
         _mapper = configurationProvider.CreateMapper();
-        _unitOfWork = new Mock<IUnitOfWork>();
-
-        _createSportCommand = new CreateSportCommand("Volleyball", "Volleyball description");
-        _handler = new CreateSportCommandHandler(_mockSportsRepository.Object, _unitOfWork.Object, _mapper);
+        _sut = new CreateSportCommandHandler(_sportsRepository, _unitOfWork, _mapper);
+        _createSportCommand = new CreateSportCommand("dawd", "Football description");
+        _validator = new CreateSportCommandValidator();
     }
 
     [Fact]
-    public async Task Handle()
+    public async Task Handle_ShouldAddSportAndCommit_WhenRequestIsValid()
     {
-        var result = await _handler.Handle(_createSportCommand, CancellationToken.None);
+        var validationResult = await _validator.ValidateAsync(_createSportCommand);
+        validationResult.IsValid.Should().BeTrue();
 
-        var sports = await _mockSportsRepository.Object.GetAllAsync();
+        var result = await _sut.Handle(_createSportCommand, CancellationToken.None);
 
-        sports.Count().ShouldBe(4);
-        result.ShouldBeOfType<SportDto>();
-    }
+        _sportsRepository.GetAllAsync().Returns(new List<Sport>
+        {
+            _mapper.Map<Sport>(result.Value)
+        });
 
-    [Fact]
-    public async Task CreateSportValidationTest()
-    {
-        var createSportCommand = new CreateSportCommand("", "");
-        var exception = await Should.ThrowAsync<ValidationException>(async () =>
-            await _handler.Handle(createSportCommand, CancellationToken.None));
+        var sports = await _sportsRepository.GetAllAsync();
 
-        var sports = await _mockSportsRepository.Object.GetAllAsync();
+        sports.Should().HaveCount(1);
 
-        sports.Count().ShouldBe(3);
-        exception.ShouldNotBeNull();
-        exception.Errors.Count.ShouldBe(2);
-    }
+        await _sportsRepository.Received(1).AddAsync(Arg.Is<Sport>(x =>
+            x.Name == _createSportCommand.Name && x.Description == _createSportCommand.Description));
+        await _unitOfWork.Received(1).CommitChangesAsync();
 
-    [Fact]
-    public async Task CreateSportMappingTest()
-    {
-        var result = await _handler.Handle(_createSportCommand, CancellationToken.None);
-
-        result.Value.Name.ShouldBe(_createSportCommand.Name);
-        result.Value.Description.ShouldBe(_createSportCommand.Description);
+        result.IsError.Should().BeFalse();
+        result.Value.Should().BeOfType<SportDto>();
     }
 }

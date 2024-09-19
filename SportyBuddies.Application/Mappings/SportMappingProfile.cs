@@ -10,6 +10,6 @@ public class SportMappingProfile : Profile
     public SportMappingProfile()
     {
         CreateMap<CreateSportCommand, Sport>();
-        CreateMap<Sport, SportDto>();
+        CreateMap<Sport, SportDto>().ReverseMap();
     }
 }

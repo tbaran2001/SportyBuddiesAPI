@@ -1,9 +1,9 @@
 ﻿using ErrorOr;
+using FluentAssertions;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
 using NSubstitute;
-using Shouldly;
 using SportyBuddies.Application.Common.Behaviors;
 using SportyBuddies.Application.Common.DTOs;
 using SportyBuddies.Application.Sports.Commands.CreateSport;
@@ -46,8 +46,8 @@ public class ValidationBehaviorTests
         var result = await _validationBehavior.Handle(createSportRequest, _mockNextBehavior, CancellationToken.None);
 
         // Assert
-        result.IsError.ShouldBe(false);
-        result.Value.ShouldBe(sport);
+        result.IsError.Should().BeFalse();
+        result.Value.Should().Be(sport);
     }
 
     [Fact]
@@ -65,8 +65,8 @@ public class ValidationBehaviorTests
         var result = await _validationBehavior.Handle(createSportRequest, _mockNextBehavior, CancellationToken.None);
 
         // Assert
-        result.IsError.ShouldBe(true);
-        result.FirstError.Code.ShouldBe("foo");
-        result.FirstError.Description.ShouldBe("bad foo");
+        result.IsError.Should().BeTrue();
+        result.FirstError.Code.Should().Be("foo");
+        result.FirstError.Description.Should().Be("bad foo");
     }
 }
