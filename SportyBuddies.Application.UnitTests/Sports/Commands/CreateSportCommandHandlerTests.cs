@@ -16,34 +16,25 @@ public class CreateSportCommandHandlerTests
     private readonly ISportsRepository _sportsRepository = Substitute.For<ISportsRepository>();
     private readonly CreateSportCommandHandler _sut;
     private readonly IUnitOfWork _unitOfWork = Substitute.For<IUnitOfWork>();
-    private readonly CreateSportCommandValidator _validator;
 
     public CreateSportCommandHandlerTests()
     {
         var configurationProvider = new MapperConfiguration(cfg => { cfg.AddProfile<SportMappingProfile>(); });
+
         _mapper = configurationProvider.CreateMapper();
+        _createSportCommand = new CreateSportCommand("Football", "Football description");
         _sut = new CreateSportCommandHandler(_sportsRepository, _unitOfWork, _mapper);
-        _createSportCommand = new CreateSportCommand("dawd", "Football description");
-        _validator = new CreateSportCommandValidator();
     }
 
     [Fact]
     public async Task Handle_ShouldAddSportAndCommit_WhenRequestIsValid()
     {
-        var validationResult = await _validator.ValidateAsync(_createSportCommand);
-        validationResult.IsValid.Should().BeTrue();
+        // Arrange
 
+        // Act
         var result = await _sut.Handle(_createSportCommand, CancellationToken.None);
 
-        _sportsRepository.GetAllAsync().Returns(new List<Sport>
-        {
-            _mapper.Map<Sport>(result.Value)
-        });
-
-        var sports = await _sportsRepository.GetAllAsync();
-
-        sports.Should().HaveCount(1);
-
+        // Assert
         await _sportsRepository.Received(1).AddAsync(Arg.Is<Sport>(x =>
             x.Name == _createSportCommand.Name && x.Description == _createSportCommand.Description));
         await _unitOfWork.Received(1).CommitChangesAsync();
