@@ -26,13 +26,8 @@
     <ItemGroup>
       <Folder Include="Controllers\" />
     </ItemGroup>
-
     <ItemGroup>
-      <None Remove="SportyBuddies.Api.http" />
-      <None Remove="SportyBuddies.db-shm" />
-      <None Remove="SportyBuddies.db-wal" />
-      <None Remove="SportyBuddiesIdentity.db-shm" />
-      <None Remove="SportyBuddiesIdentity.db-wal" />
+        <InternalsVisibleTo Include="SportyBuddies.Api.IntegrationTests"/>
     </ItemGroup>
 
 </Project>

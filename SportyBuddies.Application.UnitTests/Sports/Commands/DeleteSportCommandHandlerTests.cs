@@ -24,6 +24,7 @@ public class DeleteSportCommandHandlerTests
     [Fact]
     public async Task Handle_ShouldRemoveSportAndCommit_WhenRequestIsValid()
     {
+        await Task.Delay(2000);
         // Arrange
         var sport = new Sport("Football", "Football description", new List<User>());
         _sportsRepository.GetByIdAsync(_createSportCommand.SportId).Returns(sport);

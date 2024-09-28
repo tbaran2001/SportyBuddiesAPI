@@ -3,7 +3,7 @@ using SportyBuddies.Application.Common.Interfaces;
 
 namespace SportyBuddies.Infrastructure.Common.Persistence;
 
-public class GenericRepository<T>:IGenericRepository<T> where T:class
+public class GenericRepository<T> : IGenericRepository<T> where T : class
 {
     protected readonly SportyBuddiesDbContext _dbContext;
 
@@ -19,7 +19,8 @@ public class GenericRepository<T>:IGenericRepository<T> where T:class
 
     public async Task<T?> GetByIdAsync(Guid id)
     {
-        return await _dbContext.Set<T>().FindAsync(id);
+        var entity = await _dbContext.Set<T>().FindAsync(id);
+        return entity;
     }
 
     public async Task AddAsync(T entity)

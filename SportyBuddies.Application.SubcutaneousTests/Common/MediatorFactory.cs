@@ -10,7 +10,7 @@ using SportyBuddies.Infrastructure.Common.Persistence;
 
 namespace SportyBuddies.Application.SubcutaneousTests.Common;
 
-public class MediatorFactory : WebApplicationFactory<IAssemblyMarker>, IAsyncLifetime
+public class MediatorFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetime
 {
     private SqliteTestDatabase _testDatabase = null!;
 

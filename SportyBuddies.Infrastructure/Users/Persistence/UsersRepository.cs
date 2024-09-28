@@ -5,7 +5,7 @@ using SportyBuddies.Infrastructure.Common.Persistence;
 
 namespace SportyBuddies.Infrastructure.Users.Persistence;
 
-public class UsersRepository:GenericRepository<User>,IUsersRepository
+public class UsersRepository : GenericRepository<User>, IUsersRepository
 {
     public UsersRepository(SportyBuddiesDbContext dbContext) : base(dbContext)
     {
@@ -15,6 +15,7 @@ public class UsersRepository:GenericRepository<User>,IUsersRepository
     {
         return await _dbContext.Users
             .Include(u => u.Sports)
+            .AsNoTracking()
             .FirstOrDefaultAsync(u => u.Id == userId);
     }
 

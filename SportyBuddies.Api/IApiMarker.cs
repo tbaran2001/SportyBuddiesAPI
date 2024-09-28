@@ -1,5 +1,5 @@
 ﻿namespace SportyBuddies.Api;
 
-public interface IAssemblyMarker
+public interface IApiMarker
 {
 }
