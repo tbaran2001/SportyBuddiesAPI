@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using System.Data.Common;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using SportyBuddies.Domain.Sports;
-using SportyBuddies.Domain.Users;
 using SportyBuddies.Infrastructure.Common.Persistence;
 
 namespace SportyBuddies.Api.IntegrationTests;
@@ -12,38 +13,36 @@ public class SportyBuddiesWebApplicationFactory<TStartup> : WebApplicationFactor
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.ConfigureServices(services =>
+        base.ConfigureWebHost(builder);
+
+        builder.ConfigureTestServices(services =>
         {
-            // Remove the existing DbContext
-            var descriptor = services.SingleOrDefault(
-                d => d.ServiceType == typeof(DbContextOptions<SportyBuddiesDbContext>));
+            var dbContextDescriptor =
+                services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<SportyBuddiesDbContext>));
 
-            if (descriptor != null) services.Remove(descriptor);
+            if (dbContextDescriptor != null)
+                services.Remove(dbContextDescriptor);
 
-            // Add an in-memory database for testing
-            services.AddDbContext<SportyBuddiesDbContext>(options => { options.UseSqlite("DataSource=:memory:"); });
+            var dbConnectionDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbConnection));
 
-            // Build the service provider
-            var sp = services.BuildServiceProvider();
+            if (dbConnectionDescriptor != null)
+                services.Remove(dbConnectionDescriptor);
 
-            // Create a scope to obtain a reference to the database context (SportyBuddiesDbContext)
-            using var scope = sp.CreateScope();
-            var scopedServices = scope.ServiceProvider;
-            var db = scopedServices.GetRequiredService<SportyBuddiesDbContext>();
+            services.AddSingleton<DbConnection>(container =>
+            {
+                var connection = new SqliteConnection("DataSource=:memory:");
+                connection.Open();
 
-            // Ensure the database is created
-            db.Database.OpenConnection();
-            db.Database.EnsureCreated();
+                return connection;
+            });
 
-            SeedDatabase(db);
+            services.AddDbContext<SportyBuddiesDbContext>((container, options) =>
+            {
+                var dbConnection = container.GetRequiredService<DbConnection>();
+                options.UseSqlite(dbConnection);
+            });
         });
-    }
 
-    private void SeedDatabase(SportyBuddiesDbContext dbContext)
-    {
-        // Add initial data to the database
-        dbContext.Sports.Add(new Sport("Football", "A sport", new List<User>()));
-
-        dbContext.SaveChanges();
+        builder.UseEnvironment("Development");
     }
 }
