@@ -9,8 +9,6 @@ public class MatchMappingProfile : Profile
 {
     public MatchMappingProfile()
     {
-        CreateMap<MatchDto, MatchResponse>();
         CreateMap<UpdateMatchRequest, UpdateMatchCommand>();
-        CreateMap<UpdateMatchCommand, MatchDto>();
     }
 }

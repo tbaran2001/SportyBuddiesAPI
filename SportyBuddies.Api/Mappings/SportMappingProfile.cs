@@ -10,6 +10,5 @@ public class SportMappingProfile : Profile
     public SportMappingProfile()
     {
         CreateMap<CreateSportRequest, CreateSportCommand>();
-        CreateMap<SportDto, SportResponse>();
     }
 }

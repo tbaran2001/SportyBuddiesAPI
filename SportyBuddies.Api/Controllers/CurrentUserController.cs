@@ -23,32 +23,27 @@ namespace SportyBuddies.Api.Controllers
     [Authorize]
     public class CurrentUserController : ApiController
     {
-        private readonly IMapper _mapper;
         private readonly ISender _mediator;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public CurrentUserController(UserManager<ApplicationUser> userManager, ISender mediator, IMapper mapper)
+        public CurrentUserController(UserManager<ApplicationUser> userManager, ISender mediator)
         {
             _userManager = userManager;
             _mediator = mediator;
-            _mapper = mapper;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetCurrentUser()
         {
             var userId = _userManager.GetUserId(User);
-            if (userId == null)
-            {
-                return Unauthorized();
-            }
+            if (userId == null) return Unauthorized();
 
             var query = new GetUserQuery(Guid.Parse(userId));
 
             var userResult = await _mediator.Send(query);
 
             return userResult.Match(
-                user => Ok(_mapper.Map<UserResponse>(user)),
+                Ok,
                 Problem);
         }
 
@@ -56,17 +51,14 @@ namespace SportyBuddies.Api.Controllers
         public async Task<IActionResult> UpdateCurrentUser(UpdateUserRequest userRequest)
         {
             var userId = _userManager.GetUserId(User);
-            if (userId == null)
-            {
-                return Unauthorized();
-            }
+            if (userId == null) return Unauthorized();
 
             var command = new UpdateUserCommand(Guid.Parse(userId), userRequest.Name, userRequest.Description);
 
             var userResult = await _mediator.Send(command);
 
             return userResult.Match(
-                user => Ok(_mapper.Map<UserResponse>(user)),
+                Ok,
                 Problem);
         }
 
@@ -74,17 +66,14 @@ namespace SportyBuddies.Api.Controllers
         public async Task<IActionResult> GetCurrentUserSports()
         {
             var userId = _userManager.GetUserId(User);
-            if (userId == null)
-            {
-                return Unauthorized();
-            }
+            if (userId == null) return Unauthorized();
 
             var query = new GetUserSportsQuery(Guid.Parse(userId));
 
             var userSportsResult = await _mediator.Send(query);
 
             return userSportsResult.Match(
-                userSports => Ok(_mapper.Map<IEnumerable<SportResponse>>(userSports)),
+                Ok,
                 Problem);
         }
 
@@ -92,17 +81,14 @@ namespace SportyBuddies.Api.Controllers
         public async Task<IActionResult> AddSportToCurrentUser(Guid sportId)
         {
             var userId = _userManager.GetUserId(User);
-            if (userId == null)
-            {
-                return Unauthorized();
-            }
+            if (userId == null) return Unauthorized();
 
             var command = new AddUserSportCommand(Guid.Parse(userId), sportId);
 
             var userSportResult = await _mediator.Send(command);
 
             return userSportResult.Match<IActionResult>(
-                userSport => NoContent(),
+                _ => NoContent(),
                 Problem);
         }
 
@@ -110,10 +96,7 @@ namespace SportyBuddies.Api.Controllers
         public async Task<IActionResult> RemoveSportFromCurrentUser(Guid sportId)
         {
             var userId = _userManager.GetUserId(User);
-            if (userId == null)
-            {
-                return Unauthorized();
-            }
+            if (userId == null) return Unauthorized();
 
             var command = new RemoveUserSportCommand(Guid.Parse(userId), sportId);
 
@@ -135,7 +118,7 @@ namespace SportyBuddies.Api.Controllers
             var matchesResult = await _mediator.Send(query);
 
             return matchesResult.Match(
-                matches => Ok(_mapper.Map<IEnumerable<MatchResponse>>(matches)),
+                Ok,
                 Problem);
         }
 
@@ -150,7 +133,7 @@ namespace SportyBuddies.Api.Controllers
             var matchResult = await _mediator.Send(query);
 
             return matchResult.Match(
-                match => Ok(_mapper.Map<MatchResponse>(match)),
+                Ok,
                 Problem);
         }
 
@@ -165,7 +148,7 @@ namespace SportyBuddies.Api.Controllers
             var matchResult = await _mediator.Send(command);
 
             return matchResult.Match<IActionResult>(
-                match => NoContent(),
+                _ => NoContent(),
                 Problem);
         }
     }

@@ -10,6 +10,5 @@ public class UserMappingProfile : Profile
     public UserMappingProfile()
     {
         CreateMap<CreateUserRequest, CreateUserCommand>();
-        CreateMap<UserDto, UserResponse>();
     }
 }

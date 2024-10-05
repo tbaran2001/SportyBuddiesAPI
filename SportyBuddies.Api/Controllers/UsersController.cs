@@ -29,7 +29,7 @@ namespace SportyBuddies.Api.Controllers
             var usersResult = await _mediator.Send(query);
 
             return usersResult.Match(
-                users => Ok(_mapper.Map<IEnumerable<UserResponse>>(users)),
+                Ok,
                 Problem);
         }
 
@@ -41,7 +41,7 @@ namespace SportyBuddies.Api.Controllers
             var userResult = await _mediator.Send(query);
 
             return userResult.Match(
-                user => Ok(_mapper.Map<UserResponse>(user)),
+                Ok,
                 Problem);
         }
 
@@ -53,7 +53,7 @@ namespace SportyBuddies.Api.Controllers
             var createUserResult = await _mediator.Send(command);
 
             return createUserResult.Match(
-                user => Ok(_mapper.Map<UserResponse>(user)),
+                Ok,
                 Problem);
         }
 
