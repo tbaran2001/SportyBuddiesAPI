@@ -10,23 +10,14 @@ using SportyBuddies.Contracts.Users;
 namespace SportyBuddies.Api.Controllers
 {
     [Route("api/[controller]")]
-    public class UsersController : ApiController
+    public class UsersController(IMapper mapper, ISender mediator) : ApiController
     {
-        private readonly IMapper _mapper;
-        private readonly ISender _mediator;
-
-        public UsersController(IMapper mapper, ISender mediator)
-        {
-            _mapper = mapper;
-            _mediator = mediator;
-        }
-
         [HttpGet]
         public async Task<IActionResult> GetUsers()
         {
             var query = new GetUsersQuery();
 
-            var usersResult = await _mediator.Send(query);
+            var usersResult = await mediator.Send(query);
 
             return usersResult.Match(
                 Ok,
@@ -38,7 +29,7 @@ namespace SportyBuddies.Api.Controllers
         {
             var query = new GetUserQuery(userId);
 
-            var userResult = await _mediator.Send(query);
+            var userResult = await mediator.Send(query);
 
             return userResult.Match(
                 Ok,
@@ -48,9 +39,9 @@ namespace SportyBuddies.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser(CreateUserRequest request)
         {
-            var command = _mapper.Map<CreateUserCommand>(request);
+            var command = mapper.Map<CreateUserCommand>(request);
 
-            var createUserResult = await _mediator.Send(command);
+            var createUserResult = await mediator.Send(command);
 
             return createUserResult.Match(
                 user => CreatedAtAction(nameof(GetUser), new { userId = user.Id }, user),
@@ -62,7 +53,7 @@ namespace SportyBuddies.Api.Controllers
         {
             var command = new DeleteUserCommand(userId);
 
-            var deleteUserResult = await _mediator.Send(command);
+            var deleteUserResult = await mediator.Send(command);
 
             return deleteUserResult.Match<IActionResult>(
                 _ => NoContent(),

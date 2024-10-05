@@ -1,9 +1,4 @@
 ﻿namespace SportyBuddies.Application.Exceptions;
 
 [Serializable]
-public class BadRequestException : Exception
-{
-    public BadRequestException(string? message) : base(message)
-    {
-    }
-}
+public class BadRequestException(string? message) : Exception(message);

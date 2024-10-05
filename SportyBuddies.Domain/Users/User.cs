@@ -26,6 +26,6 @@ public class User : Entity
 
     public void Delete()
     {
-        _domainEvents.Add(new UserDeletedEvent(Id));
+        DomainEvents.Add(new UserDeletedEvent(Id));
     }
 }

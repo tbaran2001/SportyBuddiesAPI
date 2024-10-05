@@ -4,25 +4,17 @@ using SportyBuddies.Domain.Users.Events;
 
 namespace SportyBuddies.Application.UserSports.Events;
 
-public class UserDeletedEventHandler : INotificationHandler<UserDeletedEvent>
+public class UserDeletedEventHandler(IUserSportsRepository userSportsRepository, IUnitOfWork unitOfWork)
+    : INotificationHandler<UserDeletedEvent>
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IUserSportsRepository _userSportsRepository;
-
-    public UserDeletedEventHandler(IUserSportsRepository userSportsRepository, IUnitOfWork unitOfWork)
-    {
-        _userSportsRepository = userSportsRepository;
-        _unitOfWork = unitOfWork;
-    }
-
     public async Task Handle(UserDeletedEvent notification, CancellationToken cancellationToken)
     {
-        var userSports = (await _userSportsRepository.GetUserSportsAsync(notification.UserId)).ToList();
+        var userSports = (await userSportsRepository.GetUserSportsAsync(notification.UserId)).ToList();
 
         if (!userSports.Any())
             return;
 
-        await _userSportsRepository.RemoveRangeAsync(userSports);
-        await _unitOfWork.CommitChangesAsync();
+        await userSportsRepository.RemoveRangeAsync(userSports);
+        await unitOfWork.CommitChangesAsync();
     }
 }

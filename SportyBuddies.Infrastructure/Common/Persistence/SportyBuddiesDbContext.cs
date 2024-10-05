@@ -9,18 +9,12 @@ using SportyBuddies.Domain.Users;
 
 namespace SportyBuddies.Infrastructure.Common.Persistence;
 
-public class SportyBuddiesDbContext : DbContext, IUnitOfWork
+public class SportyBuddiesDbContext(
+    DbContextOptions<SportyBuddiesDbContext> options,
+    IHttpContextAccessor httpContextAccessor,
+    IPublisher publisher)
+    : DbContext(options), IUnitOfWork
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IPublisher _publisher;
-
-    public SportyBuddiesDbContext(DbContextOptions<SportyBuddiesDbContext> options,
-        IHttpContextAccessor httpContextAccessor, IPublisher publisher) : base(options)
-    {
-        _httpContextAccessor = httpContextAccessor;
-        _publisher = publisher;
-    }
-
     public DbSet<Sport> Sports { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Match> Matches { get; set; }
@@ -36,7 +30,7 @@ public class SportyBuddiesDbContext : DbContext, IUnitOfWork
         if (IsUserWaitingOnline())
             AddDomainEventsToOfflineProcessingQueue(domainEvents);
         else
-            await PublishDomainEvents(_publisher, domainEvents);
+            await PublishDomainEvents(publisher, domainEvents);
 
         await base.SaveChangesAsync();
     }
@@ -48,20 +42,20 @@ public class SportyBuddiesDbContext : DbContext, IUnitOfWork
 
     private bool IsUserWaitingOnline()
     {
-        return _httpContextAccessor.HttpContext is not null;
+        return httpContextAccessor.HttpContext is not null;
     }
 
     private void AddDomainEventsToOfflineProcessingQueue(List<IDomainEvent> domainEvents)
     {
         var domainEventsQueue =
-            _httpContextAccessor.HttpContext!.Items.TryGetValue("DomainEventsQueue", out var value)
+            httpContextAccessor.HttpContext!.Items.TryGetValue("DomainEventsQueue", out var value)
             && value is Queue<IDomainEvent> existingDomainEvents
                 ? existingDomainEvents
                 : new Queue<IDomainEvent>();
 
         domainEvents.ForEach(domainEventsQueue.Enqueue);
 
-        _httpContextAccessor.HttpContext!.Items["DomainEventsQueue"] = domainEventsQueue;
+        httpContextAccessor.HttpContext!.Items["DomainEventsQueue"] = domainEventsQueue;
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

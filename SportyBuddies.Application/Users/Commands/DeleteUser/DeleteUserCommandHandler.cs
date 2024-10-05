@@ -4,27 +4,20 @@ using SportyBuddies.Application.Common.Interfaces;
 
 namespace SportyBuddies.Application.Users.Commands.DeleteUser;
 
-public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, ErrorOr<Deleted>>
+public class DeleteUserCommandHandler(IUsersRepository sportsRepository, IUnitOfWork unitOfWork)
+    : IRequestHandler<DeleteUserCommand, ErrorOr<Deleted>>
 {
-    private readonly IUsersRepository _sportsRepository;
-    private readonly IUnitOfWork _unitOfWork;
-
-    public DeleteUserCommandHandler(IUsersRepository sportsRepository, IUnitOfWork unitOfWork)
-    {
-        _sportsRepository = sportsRepository;
-        _unitOfWork = unitOfWork;
-    }
-
     public async Task<ErrorOr<Deleted>> Handle(DeleteUserCommand command, CancellationToken cancellationToken)
     {
-        var user = await _sportsRepository.GetByIdAsync(command.UserId);
+        var user = await sportsRepository.GetByIdAsync(command.UserId);
 
-        if (user == null) return Error.NotFound();
+        if (user == null) 
+            return Error.NotFound();
 
         user.Delete();
 
-        _sportsRepository.Remove(user);
-        await _unitOfWork.CommitChangesAsync();
+        sportsRepository.Remove(user);
+        await unitOfWork.CommitChangesAsync();
 
         return Result.Deleted;
     }

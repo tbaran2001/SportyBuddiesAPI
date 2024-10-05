@@ -7,18 +7,12 @@ using SportyBuddies.Infrastructure.Common.Persistence;
 
 namespace SportyBuddies.Api.IntegrationTests.Controllers.CurrentUserController;
 
-public class GetCurrentUserTests:IClassFixture<SportyBuddiesWebApplicationFactory<IApiMarker>>, IAsyncLifetime
+public class GetCurrentUserTests(SportyBuddiesWebApplicationFactory<IApiMarker> appFactory)
+    : IClassFixture<SportyBuddiesWebApplicationFactory<IApiMarker>>, IAsyncLifetime
 {
-    private readonly SportyBuddiesWebApplicationFactory<IApiMarker> _appFactory;
-    private readonly HttpClient _httpClient;
+    private readonly HttpClient _httpClient = appFactory.CreateClient();
     private SportyBuddiesDbContext _dbContext;
-    
-    public GetCurrentUserTests(SportyBuddiesWebApplicationFactory<IApiMarker> appFactory)
-    {
-        _appFactory = appFactory;
-        _httpClient = appFactory.CreateClient();
-    }
-    
+
     [Fact]
     public async Task GetCurrentUser_ReturnsUser_WhenUserIsAuthenticated()
     {
@@ -26,7 +20,7 @@ public class GetCurrentUserTests:IClassFixture<SportyBuddiesWebApplicationFactor
         await _dbContext.Users.AddAsync(user);
         await _dbContext.SaveChangesAsync();
         
-        await AuthHelper.AuthenticateUserAsync(_httpClient, _appFactory.Services, "John", "Password123!");
+        await AuthHelper.AuthenticateUserAsync(_httpClient, appFactory.Services, "John", "Password123!");
         
         var response = await _httpClient.GetAsync("/api/currentuser");
         
@@ -38,7 +32,7 @@ public class GetCurrentUserTests:IClassFixture<SportyBuddiesWebApplicationFactor
     
     public async Task InitializeAsync()
     {
-        _dbContext = await DatabaseHelper.InitializeDatabaseAsync(_appFactory);
+        _dbContext = await DatabaseHelper.InitializeDatabaseAsync(appFactory);
     }
     
     public async Task DisposeAsync()

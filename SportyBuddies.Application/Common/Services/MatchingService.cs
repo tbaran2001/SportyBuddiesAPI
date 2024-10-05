@@ -4,41 +4,34 @@ using SportyBuddies.Domain.Users;
 
 namespace SportyBuddies.Application.Common.Services;
 
-public class MatchingService : IMatchingService
+public class MatchingService(
+    IUserSportsRepository userSportsRepository,
+    IUsersRepository usersRepository,
+    IMatchesRepository matchesRepository,
+    IUnitOfWork unitOfWork)
+    : IMatchingService
 {
-    private readonly IUserSportsRepository _userSportsRepository;
-    private readonly IUsersRepository _usersRepository;
-    private readonly IMatchesRepository _matchesRepository;
-    private readonly IUnitOfWork _unitOfWork;
-
-    public MatchingService(IUserSportsRepository userSportsRepository, IUsersRepository usersRepository,
-        IMatchesRepository matchesRepository, IUnitOfWork unitOfWork)
-    {
-        _userSportsRepository = userSportsRepository;
-        _usersRepository = usersRepository;
-        _matchesRepository = matchesRepository;
-        _unitOfWork = unitOfWork;
-    }
+    private readonly IUserSportsRepository _userSportsRepository = userSportsRepository;
 
     public async Task FindMatchesAsync(Guid userId)
     {
-        var user = await _usersRepository.GetUserByIdWithSportsAsync(userId);
+        var user = await usersRepository.GetUserByIdWithSportsAsync(userId);
 
         if (user == null)
             return;
 
-        var allUsers = (await _usersRepository.GetAllUsersWithSportsAsync()).ToList();
-        var existingMatches = (await _matchesRepository.GetUserExistingMatchesAsync(userId)).ToList();
+        var allUsers = (await usersRepository.GetAllUsersWithSportsAsync()).ToList();
+        var existingMatches = (await matchesRepository.GetUserExistingMatchesAsync(userId)).ToList();
 
         var newMatches = new List<Match>();
         var matchesToRemove = new List<Match>();
 
         ProcessMatches(user, allUsers, existingMatches, newMatches, matchesToRemove);
 
-        await _matchesRepository.AddMatchesAsync(newMatches);
-        _matchesRepository.RemoveMatches(matchesToRemove);
+        await matchesRepository.AddMatchesAsync(newMatches);
+        matchesRepository.RemoveMatches(matchesToRemove);
 
-        await _unitOfWork.CommitChangesAsync();
+        await unitOfWork.CommitChangesAsync();
     }
 
     private void ProcessMatches(User user, List<User> allUsers, List<Match> existingMatches, List<Match> newMatches,

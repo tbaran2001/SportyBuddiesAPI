@@ -11,7 +11,8 @@ namespace SportyBuddies.Api.IntegrationTests.Helpers;
 
 public static class AuthHelper
 {
-    public static async Task<HttpClient> AuthenticateUserAsync(HttpClient client, IServiceProvider services, string userName, string password)
+    public static async Task AuthenticateUserAsync(HttpClient client, IServiceProvider services, string userName,
+        string password)
     {
         using var scope = services.CreateScope();
         var scopedServices = scope.ServiceProvider;
@@ -34,7 +35,5 @@ public static class AuthHelper
 
         var authCookie = httpContext.Response.Headers["Set-Cookie"].ToString();
         client.DefaultRequestHeaders.Add("Cookie", authCookie);
-
-        return client;
     }
 }

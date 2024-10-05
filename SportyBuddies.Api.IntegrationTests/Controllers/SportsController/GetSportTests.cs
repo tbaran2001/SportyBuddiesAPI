@@ -10,17 +10,11 @@ using System.Threading.Tasks;
 
 namespace SportyBuddies.Api.IntegrationTests.Controllers.SportsController;
 
-public class GetSportTests : IClassFixture<SportyBuddiesWebApplicationFactory<IApiMarker>>, IAsyncLifetime
+public class GetSportTests(SportyBuddiesWebApplicationFactory<IApiMarker> appFactory)
+    : IClassFixture<SportyBuddiesWebApplicationFactory<IApiMarker>>, IAsyncLifetime
 {
-    private readonly SportyBuddiesWebApplicationFactory<IApiMarker> _appFactory;
-    private readonly HttpClient _httpClient;
+    private readonly HttpClient _httpClient = appFactory.CreateClient();
     private SportyBuddiesDbContext _dbContext;
-
-    public GetSportTests(SportyBuddiesWebApplicationFactory<IApiMarker> appFactory)
-    {
-        _appFactory = appFactory;
-        _httpClient = appFactory.CreateClient();
-    }
 
     [Fact]
     public async Task GetSport_ReturnsNotFound_WhenSportDoesNotExist()
@@ -46,7 +40,7 @@ public class GetSportTests : IClassFixture<SportyBuddiesWebApplicationFactory<IA
     
     public async Task InitializeAsync()
     {
-        _dbContext = await DatabaseHelper.InitializeDatabaseAsync(_appFactory);
+        _dbContext = await DatabaseHelper.InitializeDatabaseAsync(appFactory);
     }
 
     public async Task DisposeAsync()

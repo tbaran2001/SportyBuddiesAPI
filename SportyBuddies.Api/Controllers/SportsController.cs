@@ -10,23 +10,14 @@ using SportyBuddies.Contracts.Sports;
 namespace SportyBuddies.Api.Controllers
 {
     [Route("api/[controller]")]
-    public class SportsController : ApiController
+    public class SportsController(ISender mediator, IMapper mapper) : ApiController
     {
-        private readonly IMapper _mapper;
-        private readonly ISender _mediator;
-
-        public SportsController(ISender mediator, IMapper mapper)
-        {
-            _mediator = mediator;
-            _mapper = mapper;
-        }
-
         [HttpGet]
         public async Task<IActionResult> GetSports()
         {
             var query = new GetSportsQuery();
 
-            var sportsResult = await _mediator.Send(query);
+            var sportsResult = await mediator.Send(query);
 
             return sportsResult.Match(
                 Ok,
@@ -38,7 +29,7 @@ namespace SportyBuddies.Api.Controllers
         {
             var query = new GetSportQuery(sportId);
 
-            var sportResult = await _mediator.Send(query);
+            var sportResult = await mediator.Send(query);
 
             return sportResult.Match(
                 Ok,
@@ -48,8 +39,8 @@ namespace SportyBuddies.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateSport(CreateSportRequest request)
         {
-            var command = _mapper.Map<CreateSportCommand>(request);
-            var createSportResult = await _mediator.Send(command);
+            var command = mapper.Map<CreateSportCommand>(request);
+            var createSportResult = await mediator.Send(command);
 
             return createSportResult.Match(
                 sport => CreatedAtAction(nameof(GetSport), new { sportId = sport.Id }, sport),
@@ -61,7 +52,7 @@ namespace SportyBuddies.Api.Controllers
         {
             var command = new DeleteSportCommand(sportId);
 
-            var deleteSportResult = await _mediator.Send(command);
+            var deleteSportResult = await mediator.Send(command);
 
             return deleteSportResult.Match<IActionResult>(
                 _ => NoContent(),

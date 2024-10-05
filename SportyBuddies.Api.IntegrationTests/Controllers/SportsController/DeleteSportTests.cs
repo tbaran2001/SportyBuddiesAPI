@@ -7,18 +7,12 @@ using SportyBuddies.Infrastructure.Common.Persistence;
 
 namespace SportyBuddies.Api.IntegrationTests.Controllers.SportsController;
 
-public class DeleteSportTests:IClassFixture<SportyBuddiesWebApplicationFactory<IApiMarker>>, IAsyncLifetime
+public class DeleteSportTests(SportyBuddiesWebApplicationFactory<IApiMarker> appFactory)
+    : IClassFixture<SportyBuddiesWebApplicationFactory<IApiMarker>>, IAsyncLifetime
 {
-    private readonly SportyBuddiesWebApplicationFactory<IApiMarker> _appFactory;
-    private readonly HttpClient _httpClient;
+    private readonly HttpClient _httpClient = appFactory.CreateClient();
     private SportyBuddiesDbContext _dbContext;
-    
-    public DeleteSportTests(SportyBuddiesWebApplicationFactory<IApiMarker> appFactory)
-    {
-        _appFactory = appFactory;
-        _httpClient = appFactory.CreateClient();
-    }
-    
+
     [Fact]
     public async Task DeleteSport_ReturnsNoContent_WhenSportIsDeleted()
     {
@@ -41,7 +35,7 @@ public class DeleteSportTests:IClassFixture<SportyBuddiesWebApplicationFactory<I
     
     public async Task InitializeAsync()
     {
-        _dbContext = await DatabaseHelper.InitializeDatabaseAsync(_appFactory);
+        _dbContext = await DatabaseHelper.InitializeDatabaseAsync(appFactory);
     }
     
     public async Task DisposeAsync()

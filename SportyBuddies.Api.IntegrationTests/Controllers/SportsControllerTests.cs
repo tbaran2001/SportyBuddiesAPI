@@ -7,21 +7,15 @@ using SportyBuddies.Infrastructure.Common.Persistence;
 
 namespace SportyBuddies.Api.IntegrationTests.Controllers;
 
-public class SportsControllerTests : IClassFixture<SportyBuddiesWebApplicationFactory<IApiMarker>>
+public class SportsControllerTests(SportyBuddiesWebApplicationFactory<IApiMarker> appFactory)
+    : IClassFixture<SportyBuddiesWebApplicationFactory<IApiMarker>>
 {
-    private readonly SportyBuddiesWebApplicationFactory<IApiMarker> _appFactory;
-    private readonly HttpClient _httpClient;
-
-    public SportsControllerTests(SportyBuddiesWebApplicationFactory<IApiMarker> appFactory)
-    {
-        _appFactory = appFactory;
-        _httpClient = appFactory.CreateClient();
-    }
+    private readonly HttpClient _httpClient = appFactory.CreateClient();
 
     [Fact]
     public async Task GetSport_ReturnsNotFound_WhenSportDoesNotExist()
     {
-        using var scope = _appFactory.Services.CreateScope();
+        using var scope = appFactory.Services.CreateScope();
         var scopedServices = scope.ServiceProvider;
         var db = scopedServices.GetRequiredService<SportyBuddiesDbContext>();
 
@@ -35,7 +29,7 @@ public class SportsControllerTests : IClassFixture<SportyBuddiesWebApplicationFa
     [Fact]
     public async Task GetSport_ReturnsSport_WhenSportExists()
     {
-        using var scope = _appFactory.Services.CreateScope();
+        using var scope = appFactory.Services.CreateScope();
         var scopedServices = scope.ServiceProvider;
         var db = scopedServices.GetRequiredService<SportyBuddiesDbContext>();
 

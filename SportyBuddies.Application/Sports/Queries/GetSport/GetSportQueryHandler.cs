@@ -11,7 +11,6 @@ public class GetSportQueryHandler : IRequestHandler<GetSportQuery, ErrorOr<Sport
     private readonly IMapper _mapper;
     private readonly ISportsRepository _sportsRepository;
 
-
     public GetSportQueryHandler(ISportsRepository sportsRepository, IMapper mapper)
     {
         _sportsRepository = sportsRepository;
@@ -22,7 +21,8 @@ public class GetSportQueryHandler : IRequestHandler<GetSportQuery, ErrorOr<Sport
     {
         var sport = await _sportsRepository.GetByIdAsync(query.SportId);
 
-        if (sport == null) return Error.NotFound();
+        if (sport == null) 
+            return Error.NotFound();
 
         return _mapper.Map<SportDto>(sport);
     }

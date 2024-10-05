@@ -2,7 +2,7 @@
 
 public abstract class Entity
 {
-    protected readonly List<IDomainEvent> _domainEvents = [];
+    protected readonly List<IDomainEvent> DomainEvents = [];
 
     protected Entity(Guid id)
     {
@@ -17,9 +17,9 @@ public abstract class Entity
 
     public List<IDomainEvent> PopDomainEvents()
     {
-        var copy = _domainEvents.ToList();
+        var copy = DomainEvents.ToList();
 
-        _domainEvents.Clear();
+        DomainEvents.Clear();
 
         return copy;
     }

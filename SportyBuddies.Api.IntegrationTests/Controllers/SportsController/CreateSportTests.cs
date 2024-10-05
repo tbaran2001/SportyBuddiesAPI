@@ -7,18 +7,12 @@ using SportyBuddies.Infrastructure.Common.Persistence;
 
 namespace SportyBuddies.Api.IntegrationTests.Controllers.SportsController;
 
-public class CreateSportTests:IClassFixture<SportyBuddiesWebApplicationFactory<IApiMarker>>, IAsyncLifetime
+public class CreateSportTests(SportyBuddiesWebApplicationFactory<IApiMarker> appFactory)
+    : IClassFixture<SportyBuddiesWebApplicationFactory<IApiMarker>>, IAsyncLifetime
 {
-    private readonly SportyBuddiesWebApplicationFactory<IApiMarker> _appFactory;
-    private readonly HttpClient _httpClient;
+    private readonly HttpClient _httpClient = appFactory.CreateClient();
     private SportyBuddiesDbContext _dbContext;
-    
-    public CreateSportTests(SportyBuddiesWebApplicationFactory<IApiMarker> appFactory)
-    {
-        _appFactory = appFactory;
-        _httpClient = appFactory.CreateClient();
-    }
-    
+
     [Fact]
     public async Task CreateSport_ReturnsSport_WhenSportIsCreated()
     {
@@ -45,7 +39,7 @@ public class CreateSportTests:IClassFixture<SportyBuddiesWebApplicationFactory<I
     
     public async Task InitializeAsync()
     {
-        _dbContext = await DatabaseHelper.InitializeDatabaseAsync(_appFactory);
+        _dbContext = await DatabaseHelper.InitializeDatabaseAsync(appFactory);
     }
     
     public async Task DisposeAsync()

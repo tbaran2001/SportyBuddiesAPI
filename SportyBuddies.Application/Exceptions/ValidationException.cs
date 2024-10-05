@@ -1,11 +1,6 @@
 ﻿namespace SportyBuddies.Application.Exceptions;
 
-public class ValidationException : Exception
+public class ValidationException(IDictionary<string, string[]> errors) : Exception
 {
-    public ValidationException(IDictionary<string, string[]> errors)
-    {
-        Errors = errors;
-    }
-
-    public IDictionary<string, string[]> Errors { get; }
+    public IDictionary<string, string[]> Errors { get; } = errors;
 }

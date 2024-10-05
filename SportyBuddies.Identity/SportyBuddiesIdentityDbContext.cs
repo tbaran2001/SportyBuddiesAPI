@@ -5,9 +5,5 @@ using SportyBuddies.Identity.Models;
 
 namespace SportyBuddies.Identity;
 
-public class SportyBuddiesIdentityDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
-{
-    public SportyBuddiesIdentityDbContext(DbContextOptions<SportyBuddiesIdentityDbContext> options) : base(options)
-    {
-    }
-}
+public class SportyBuddiesIdentityDbContext(DbContextOptions<SportyBuddiesIdentityDbContext> options)
+    : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>(options);
