@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using SportyBuddies.Identity;
 using SportyBuddies.Infrastructure.Common.Persistence;
 
 namespace SportyBuddies.Api.IntegrationTests;
@@ -17,6 +18,8 @@ public class SportyBuddiesWebApplicationFactory<TStartup> : WebApplicationFactor
 
         builder.ConfigureTestServices(services =>
         {
+            services.AddHttpContextAccessor();
+            
             var dbContextDescriptor =
                 services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<SportyBuddiesDbContext>));
 
@@ -41,6 +44,32 @@ public class SportyBuddiesWebApplicationFactory<TStartup> : WebApplicationFactor
                 var dbConnection = container.GetRequiredService<DbConnection>();
                 options.UseSqlite(dbConnection);
             });
+
+            var dbIdentityContextDescriptor =
+                services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<SportyBuddiesIdentityDbContext>));
+            
+            if (dbIdentityContextDescriptor != null)
+                services.Remove(dbIdentityContextDescriptor);
+            
+            var dbIdentityConnectionDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbConnection));
+            
+            if (dbIdentityConnectionDescriptor != null)
+                services.Remove(dbIdentityConnectionDescriptor);
+
+            services.AddSingleton<DbConnection>(container =>
+            {
+                var connection = new SqliteConnection("DataSource=:memory:");
+                connection.Open();
+
+                return connection;
+            });
+
+            services.AddDbContext<SportyBuddiesIdentityDbContext>((container, options) =>
+            {
+                var dbConnection = container.GetRequiredService<DbConnection>();
+                options.UseSqlite(dbConnection);
+            });
+
         });
 
         builder.UseEnvironment("Development");
