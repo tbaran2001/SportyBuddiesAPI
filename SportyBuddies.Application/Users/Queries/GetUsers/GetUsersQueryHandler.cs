@@ -11,7 +11,7 @@ public class GetUsersQueryHandler(IUsersRepository usersRepository, IMapper mapp
 {
     public async Task<ErrorOr<List<UserDto>>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
     {
-        var users = await usersRepository.GetAllAsync();
+        var users = await usersRepository.GetAllUsersAsync();
 
         return mapper.Map<List<UserDto>>(users);
     }

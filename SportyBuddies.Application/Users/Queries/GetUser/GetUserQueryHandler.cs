@@ -11,7 +11,7 @@ public class GetUserQueryHandler(IUsersRepository usersRepository, IMapper mappe
 {
     public async Task<ErrorOr<UserDto>> Handle(GetUserQuery query, CancellationToken cancellationToken)
     {
-        var user = await usersRepository.GetByIdAsync(query.UserId);
+        var user = await usersRepository.GetUserByIdAsync(query.UserId);
 
         if (user == null) 
             return Error.NotFound();

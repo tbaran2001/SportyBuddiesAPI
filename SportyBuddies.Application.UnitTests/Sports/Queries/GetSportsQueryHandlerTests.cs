@@ -34,7 +34,7 @@ public class GetSportsQueryHandlerTests
             new("Football", "Football description", new List<User>()),
             new("Basketball", "Basketball description", new List<User>())
         };
-        _sportsRepository.GetAllAsync().Returns(sports);
+        _sportsRepository.GetAllSportsAsync().Returns(sports);
 
         // Act
         var result = await _sut.Handle(_getSportQuery, CancellationToken.None);

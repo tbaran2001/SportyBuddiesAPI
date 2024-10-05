@@ -5,15 +5,16 @@ using SportyBuddies.Infrastructure.Common.Persistence;
 
 namespace SportyBuddies.Infrastructure.Matches.Persistence;
 
-public class MatchesRepository : GenericRepository<Match>, IMatchesRepository
+public class MatchesRepository(SportyBuddiesDbContext dbContext) : IMatchesRepository
 {
-    public MatchesRepository(SportyBuddiesDbContext dbContext) : base(dbContext)
+    public async Task<Match?> GetMatchByIdAsync(Guid matchId)
     {
+        return await dbContext.Matches.FindAsync(matchId);
     }
 
     public async Task<IEnumerable<Match>> GetUserMatchesAsync(Guid userId)
     {
-        return await _dbContext.Matches
+        return await dbContext.Matches
             .Include(m => m.User)
             .Include(m => m.MatchedUser)
             .Where(m => m.User.Id == userId)
@@ -22,24 +23,24 @@ public class MatchesRepository : GenericRepository<Match>, IMatchesRepository
 
     public async Task<IEnumerable<Match>> GetUserExistingMatchesAsync(Guid userId)
     {
-        return await _dbContext.Matches
+        return await dbContext.Matches
             .Where(m => m.User.Id == userId || m.MatchedUser.Id == userId)
             .ToListAsync();
     }
 
     public async Task AddMatchesAsync(IEnumerable<Match> matches)
     {
-        await _dbContext.Matches.AddRangeAsync(matches);
+        await dbContext.Matches.AddRangeAsync(matches);
     }
 
     public void RemoveMatches(IEnumerable<Match> matches)
     {
-        _dbContext.Matches.RemoveRange(matches);
+        dbContext.Matches.RemoveRange(matches);
     }
 
     public async Task<Match?> GetRandomMatchAsync(Guid userId)
     {
-        var matches = await _dbContext.Matches
+        var matches = await dbContext.Matches
             .Where(m => m.User.Id == userId && m.Swipe == null)
             .Include(m => m.User)
             .Include(m => m.MatchedUser)
@@ -53,7 +54,7 @@ public class MatchesRepository : GenericRepository<Match>, IMatchesRepository
 
     public Task RemoveRangeAsync(IEnumerable<Match> matches)
     {
-        _dbContext.Matches.RemoveRange(matches);
+        dbContext.Matches.RemoveRange(matches);
 
         return Task.CompletedTask;
     }

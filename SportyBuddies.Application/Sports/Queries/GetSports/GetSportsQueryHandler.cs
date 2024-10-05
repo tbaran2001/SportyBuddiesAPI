@@ -11,7 +11,7 @@ public class GetSportsQueryHandler(ISportsRepository sportsRepository, IMapper m
 {
     public async Task<ErrorOr<List<SportDto>>> Handle(GetSportsQuery query, CancellationToken cancellationToken)
     {
-        var sports = await sportsRepository.GetAllAsync();
+        var sports = await sportsRepository.GetAllSportsAsync();
 
         return mapper.Map<List<SportDto>>(sports);
     }

@@ -35,7 +35,7 @@ public class CreateSportCommandHandlerTests
         var result = await _sut.Handle(_createSportCommand, CancellationToken.None);
 
         // Assert
-        await _sportsRepository.Received(1).AddAsync(Arg.Is<Sport>(x =>
+        await _sportsRepository.Received(1).AddSportAsync(Arg.Is<Sport>(x =>
             x.Name == _createSportCommand.Name && x.Description == _createSportCommand.Description));
         await _unitOfWork.Received(1).CommitChangesAsync();
 

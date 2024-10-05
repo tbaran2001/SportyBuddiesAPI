@@ -10,7 +10,7 @@ public class UpdateMatchCommandHandler(IMatchesRepository matchesRepository, IMa
 {
     public async Task<ErrorOr<Updated>> Handle(UpdateMatchCommand command, CancellationToken cancellationToken)
     {
-        var match = await matchesRepository.GetByIdAsync(command.MatchId);
+        var match = await matchesRepository.GetMatchByIdAsync(command.MatchId);
         if (match == null) 
             return Error.NotFound();
 

@@ -2,7 +2,10 @@
 
 namespace SportyBuddies.Application.Common.Interfaces;
 
-public interface ISportsRepository:IGenericRepository<Sport>
+public interface ISportsRepository
 {
-    Task<bool> SportExistsAsync(Guid id);
+    Task<IEnumerable<Sport>> GetAllSportsAsync();
+    Task<Sport?> GetSportByIdAsync(Guid sportId);
+    Task AddSportAsync(Sport sport);
+    void RemoveSport(Sport sport);
 }

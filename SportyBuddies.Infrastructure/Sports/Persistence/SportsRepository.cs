@@ -5,21 +5,25 @@ using SportyBuddies.Infrastructure.Common.Persistence;
 
 namespace SportyBuddies.Infrastructure.Sports.Persistence;
 
-public class SportsRepository : GenericRepository<Sport>,ISportsRepository
+public class SportsRepository(SportyBuddiesDbContext dbContext) : ISportsRepository
 {
-    public SportsRepository(SportyBuddiesDbContext dbContext):base(dbContext)
+    public async Task<IEnumerable<Sport>> GetAllSportsAsync()
     {
+        return await dbContext.Sports.ToListAsync();
     }
 
-    public async Task<bool> SportExistsAsync(Guid id)
+    public async Task<Sport?> GetSportByIdAsync(Guid sportId)
     {
-        return await _dbContext.Sports.AnyAsync(x => x.Id == id);
+        return await dbContext.Sports.FindAsync(sportId);
     }
 
-    public async Task<IEnumerable<Sport>> GetUserSportsAsync(Guid userId)
+    public async Task AddSportAsync(Sport sport)
     {
-        return await _dbContext.Sports
-            .Where(x => x.Users.Any(u => u.Id == userId))
-            .ToListAsync();
+        await dbContext.Sports.AddAsync(sport);
+    }
+
+    public void RemoveSport(Sport sport)
+    {
+        dbContext.Sports.Remove(sport);
     }
 }

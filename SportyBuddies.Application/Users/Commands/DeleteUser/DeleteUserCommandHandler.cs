@@ -9,14 +9,14 @@ public class DeleteUserCommandHandler(IUsersRepository sportsRepository, IUnitOf
 {
     public async Task<ErrorOr<Deleted>> Handle(DeleteUserCommand command, CancellationToken cancellationToken)
     {
-        var user = await sportsRepository.GetByIdAsync(command.UserId);
+        var user = await sportsRepository.GetUserByIdAsync(command.UserId);
 
         if (user == null) 
             return Error.NotFound();
 
         user.Delete();
 
-        sportsRepository.Remove(user);
+        sportsRepository.RemoveUser(user);
         await unitOfWork.CommitChangesAsync();
 
         return Result.Deleted;

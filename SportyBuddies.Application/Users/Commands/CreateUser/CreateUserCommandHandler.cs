@@ -14,7 +14,7 @@ public class CreateUserCommandHandler(IUsersRepository usersRepository, IMapper 
     {
         var user = mapper.Map<User>(command);
 
-        await usersRepository.AddAsync(user);
+        await usersRepository.AddUserAsync(user);
         await unitOfWork.CommitChangesAsync();
 
         return mapper.Map<UserDto>(user);

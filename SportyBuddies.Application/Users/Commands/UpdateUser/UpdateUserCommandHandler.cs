@@ -11,7 +11,7 @@ public class UpdateUserCommandHandler(IUsersRepository usersRepository, IMapper 
 {
     public async Task<ErrorOr<UserDto>> Handle(UpdateUserCommand command, CancellationToken cancellationToken)
     {
-        var user = await usersRepository.GetByIdAsync(command.UserId);
+        var user = await usersRepository.GetUserByIdAsync(command.UserId);
 
         if (user == null) 
             return Error.NotFound();

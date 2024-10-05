@@ -7,32 +7,25 @@ using SportyBuddies.Infrastructure.Common.Persistence;
 
 namespace SportyBuddies.Infrastructure.UserSports.Persistence;
 
-public class UserSportsRepository : IUserSportsRepository
+public class UserSportsRepository(SportyBuddiesDbContext dbContext) : IUserSportsRepository
 {
-    protected readonly SportyBuddiesDbContext _dbContext;
-
-    public UserSportsRepository(SportyBuddiesDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
-
     public async Task<IEnumerable<Sport>> GetUserSportsAsync(Guid userId)
     {
-        return await _dbContext.Sports
+        return await dbContext.Sports
             .Where(x => x.Users.Any(u => u.Id == userId))
             .ToListAsync();
     }
 
     public async Task AddSportToUserAsync(Guid userId, Guid sportId)
     {
-        var user = await _dbContext.Users
+        var user = await dbContext.Users
             .Include(x => x.Sports)
             .FirstOrDefaultAsync(x => x.Id == userId);
 
         if (user == null)
             throw new NotFoundException(nameof(User), userId.ToString());
 
-        var sport = await _dbContext.Sports
+        var sport = await dbContext.Sports
             .FirstOrDefaultAsync(x => x.Id == sportId);
 
         if (sport == null)
@@ -46,14 +39,14 @@ public class UserSportsRepository : IUserSportsRepository
 
     public async Task RemoveSportFromUserAsync(Guid userId, Guid sportId)
     {
-        var user = await _dbContext.Users
+        var user = await dbContext.Users
             .Include(x => x.Sports)
             .FirstOrDefaultAsync(x => x.Id == userId);
 
         if (user == null)
             throw new NotFoundException(nameof(User), userId.ToString());
 
-        var sport = await _dbContext.Sports
+        var sport = await dbContext.Sports
             .FirstOrDefaultAsync(x => x.Id == sportId);
 
         if (sport == null)
@@ -67,7 +60,7 @@ public class UserSportsRepository : IUserSportsRepository
 
     public async Task<List<Guid>> GetUserSportsIdsAsync(Guid userId)
     {
-        return await _dbContext.Sports
+        return await dbContext.Sports
             .Where(x => x.Users.Any(u => u.Id == userId))
             .Select(x => x.Id)
             .ToListAsync();
@@ -75,7 +68,7 @@ public class UserSportsRepository : IUserSportsRepository
 
     public Task RemoveRangeAsync(IEnumerable<Sport> sports)
     {
-        _dbContext.Sports.RemoveRange(sports);
+        dbContext.Sports.RemoveRange(sports);
 
         return Task.CompletedTask;
     }

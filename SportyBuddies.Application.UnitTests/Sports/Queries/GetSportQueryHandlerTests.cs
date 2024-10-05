@@ -31,7 +31,7 @@ public class GetSportQueryHandlerTests
     {
         // Arrange
         var sport = new Sport("Football", "Football description", new List<User>());
-        _sportsRepository.GetByIdAsync(_getSportQuery.SportId).Returns(sport);
+        _sportsRepository.GetSportByIdAsync(_getSportQuery.SportId).Returns(sport);
 
         // Act
         var result = await _sut.Handle(_getSportQuery, CancellationToken.None);
@@ -46,7 +46,7 @@ public class GetSportQueryHandlerTests
     public async Task Handle_ShouldReturnNotFound_WhenSportDoesNotExist()
     {
         // Arrange
-        _sportsRepository.GetByIdAsync(_getSportQuery.SportId).Returns((Sport)null!);
+        _sportsRepository.GetSportByIdAsync(_getSportQuery.SportId).Returns((Sport)null!);
 
         // Act
         var result = await _sut.Handle(_getSportQuery, CancellationToken.None);

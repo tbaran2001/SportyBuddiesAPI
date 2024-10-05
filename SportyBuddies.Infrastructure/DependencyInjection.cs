@@ -17,7 +17,6 @@ public static class DependencyInjection
         services.AddDbContext<SportyBuddiesDbContext>(options =>
             options.UseSqlite("Data Source = SportyBuddies.db"));
         
-        services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         services.AddScoped<ISportsRepository, SportsRepository>();
         services.AddScoped<IUsersRepository, UsersRepository>();
         services.AddScoped<IUserSportsRepository, UserSportsRepository>();

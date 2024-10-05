@@ -9,12 +9,12 @@ public class DeleteSportCommandHandler(ISportsRepository sportsRepository, IUnit
 {
     public async Task<ErrorOr<Deleted>> Handle(DeleteSportCommand command, CancellationToken cancellationToken)
     {
-        var sport = await sportsRepository.GetByIdAsync(command.SportId);
+        var sport = await sportsRepository.GetSportByIdAsync(command.SportId);
 
         if (sport == null)
             return Error.NotFound();
 
-        sportsRepository.Remove(sport);
+        sportsRepository.RemoveSport(sport);
         await unitOfWork.CommitChangesAsync();
 
         return Result.Deleted;

@@ -19,7 +19,7 @@ public class GetSportQueryHandler : IRequestHandler<GetSportQuery, ErrorOr<Sport
 
     public async Task<ErrorOr<SportDto>> Handle(GetSportQuery query, CancellationToken cancellationToken)
     {
-        var sport = await _sportsRepository.GetByIdAsync(query.SportId);
+        var sport = await _sportsRepository.GetSportByIdAsync(query.SportId);
 
         if (sport == null) 
             return Error.NotFound();

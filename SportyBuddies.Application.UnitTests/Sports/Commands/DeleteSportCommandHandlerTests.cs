@@ -27,13 +27,13 @@ public class DeleteSportCommandHandlerTests
         await Task.Delay(2000);
         // Arrange
         var sport = new Sport("Football", "Football description", new List<User>());
-        _sportsRepository.GetByIdAsync(_createSportCommand.SportId).Returns(sport);
+        _sportsRepository.GetSportByIdAsync(_createSportCommand.SportId).Returns(sport);
 
         // Act
         var result = await _sut.Handle(_createSportCommand, CancellationToken.None);
 
         // Assert
-        _sportsRepository.Received(1).Remove(sport);
+        _sportsRepository.Received(1).RemoveSport(sport);
         await _unitOfWork.Received(1).CommitChangesAsync();
 
         result.IsError.Should().BeFalse();
@@ -44,7 +44,7 @@ public class DeleteSportCommandHandlerTests
     public async Task Handle_ShouldReturnNotFound_WhenSportDoesNotExist()
     {
         // Arrange
-        _sportsRepository.GetByIdAsync(_createSportCommand.SportId).Returns((Sport)null!);
+        _sportsRepository.GetSportByIdAsync(_createSportCommand.SportId).Returns((Sport)null!);
 
         // Act
         var result = await _sut.Handle(_createSportCommand, CancellationToken.None);

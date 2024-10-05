@@ -14,7 +14,7 @@ public class CreateSportCommandHandler(ISportsRepository sportsRepository, IUnit
     {
         var sport = mapper.Map<Sport>(request);
 
-        await sportsRepository.AddAsync(sport);
+        await sportsRepository.AddSportAsync(sport);
         await unitOfWork.CommitChangesAsync();
 
         return mapper.Map<SportDto>(sport);
