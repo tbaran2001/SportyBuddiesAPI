@@ -13,20 +13,20 @@ namespace SportyBuddies.Application.UnitTests.Common.Behaviors;
 
 public class ValidationBehaviorTests
 {
-    private readonly RequestHandlerDelegate<ErrorOr<SportDto>> _mockNextBehavior;
+    private readonly RequestHandlerDelegate<ErrorOr<SportResponse>> _mockNextBehavior;
     private readonly IValidator<CreateSportCommand> _mockValidator;
-    private readonly ValidationBehavior<CreateSportCommand, ErrorOr<SportDto>> _validationBehavior;
+    private readonly ValidationBehavior<CreateSportCommand, ErrorOr<SportResponse>> _validationBehavior;
 
     public ValidationBehaviorTests()
     {
         // Create a next behavior (mock)
-        _mockNextBehavior = Substitute.For<RequestHandlerDelegate<ErrorOr<SportDto>>>();
+        _mockNextBehavior = Substitute.For<RequestHandlerDelegate<ErrorOr<SportResponse>>>();
 
         // Create validator (mock)
         _mockValidator = Substitute.For<IValidator<CreateSportCommand>>();
 
         // Create validation behavior (SUT)
-        _validationBehavior = new ValidationBehavior<CreateSportCommand, ErrorOr<SportDto>>(_mockValidator);
+        _validationBehavior = new ValidationBehavior<CreateSportCommand, ErrorOr<SportResponse>>(_mockValidator);
     }
 
     [Fact]

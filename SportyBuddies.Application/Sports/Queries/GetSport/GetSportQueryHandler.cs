@@ -6,7 +6,7 @@ using SportyBuddies.Application.Common.Interfaces;
 
 namespace SportyBuddies.Application.Sports.Queries.GetSport;
 
-public class GetSportQueryHandler : IRequestHandler<GetSportQuery, ErrorOr<SportDto>>
+public class GetSportQueryHandler : IRequestHandler<GetSportQuery, ErrorOr<SportResponse>>
 {
     private readonly IMapper _mapper;
     private readonly ISportsRepository _sportsRepository;
@@ -17,13 +17,13 @@ public class GetSportQueryHandler : IRequestHandler<GetSportQuery, ErrorOr<Sport
         _mapper = mapper;
     }
 
-    public async Task<ErrorOr<SportDto>> Handle(GetSportQuery query, CancellationToken cancellationToken)
+    public async Task<ErrorOr<SportResponse>> Handle(GetSportQuery query, CancellationToken cancellationToken)
     {
         var sport = await _sportsRepository.GetSportByIdAsync(query.SportId);
 
         if (sport == null) 
             return Error.NotFound();
 
-        return _mapper.Map<SportDto>(sport);
+        return _mapper.Map<SportResponse>(sport);
     }
 }

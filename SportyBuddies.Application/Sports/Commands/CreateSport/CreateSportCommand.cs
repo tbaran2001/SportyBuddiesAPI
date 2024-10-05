@@ -4,4 +4,4 @@ using SportyBuddies.Application.Common.DTOs;
 
 namespace SportyBuddies.Application.Sports.Commands.CreateSport;
 
-public record CreateSportCommand(string Name, string Description) : IRequest<ErrorOr<SportDto>>;
+public record CreateSportCommand(string Name, string Description) : IRequest<ErrorOr<SportResponse>>;

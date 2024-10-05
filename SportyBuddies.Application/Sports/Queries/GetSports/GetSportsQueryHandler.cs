@@ -7,12 +7,12 @@ using SportyBuddies.Application.Common.Interfaces;
 namespace SportyBuddies.Application.Sports.Queries.GetSports;
 
 public class GetSportsQueryHandler(ISportsRepository sportsRepository, IMapper mapper)
-    : IRequestHandler<GetSportsQuery, ErrorOr<List<SportDto>>>
+    : IRequestHandler<GetSportsQuery, ErrorOr<List<SportResponse>>>
 {
-    public async Task<ErrorOr<List<SportDto>>> Handle(GetSportsQuery query, CancellationToken cancellationToken)
+    public async Task<ErrorOr<List<SportResponse>>> Handle(GetSportsQuery query, CancellationToken cancellationToken)
     {
         var sports = await sportsRepository.GetAllSportsAsync();
 
-        return mapper.Map<List<SportDto>>(sports);
+        return mapper.Map<List<SportResponse>>(sports);
     }
 }

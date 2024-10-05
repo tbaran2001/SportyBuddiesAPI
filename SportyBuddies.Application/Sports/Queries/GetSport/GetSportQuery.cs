@@ -4,4 +4,4 @@ using SportyBuddies.Application.Common.DTOs;
 
 namespace SportyBuddies.Application.Sports.Queries.GetSport;
 
-public record GetSportQuery(Guid SportId) : IRequest<ErrorOr<SportDto>>;
+public record GetSportQuery(Guid SportId) : IRequest<ErrorOr<SportResponse>>;

@@ -40,6 +40,6 @@ public class CreateSportCommandHandlerTests
         await _unitOfWork.Received(1).CommitChangesAsync();
 
         result.IsError.Should().BeFalse();
-        result.Value.Should().BeOfType<SportDto>();
+        result.Value.Should().BeOfType<SportResponse>();
     }
 }

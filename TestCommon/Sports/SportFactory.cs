@@ -5,12 +5,12 @@ namespace TestCommon.Sports;
 
 public static class SportFactory
 {
-    public static SportDto CreateSport(
+    public static SportResponse CreateSport(
         string name = Constants.Sport.Name,
         string description = Constants.Sport.Description,
         Guid? id = null)
     {
-        return new SportDto(
+        return new SportResponse(
             id ?? Constants.Sport.Id,
             name,
             description);

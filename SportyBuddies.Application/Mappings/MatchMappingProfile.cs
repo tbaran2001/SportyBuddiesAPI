@@ -9,7 +9,7 @@ public class MatchMappingProfile : Profile
 {
     public MatchMappingProfile()
     {
-        CreateMap<Match, MatchDto>();
+        CreateMap<Match, MatchResponse>();
         CreateMap<UpdateMatchCommand, Match>();
     }
 }
