@@ -22,7 +22,7 @@ public class GetUserQueryHandler : IRequestHandler<GetUserQuery, ErrorOr<UserDto
     {
         var user = await _usersRepository.GetByIdAsync(query.UserId);
 
-        if (user == null) Error.NotFound();
+        if (user == null) return Error.NotFound();
 
         return _mapper.Map<UserDto>(user);
     }

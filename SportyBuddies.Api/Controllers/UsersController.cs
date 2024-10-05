@@ -53,7 +53,7 @@ namespace SportyBuddies.Api.Controllers
             var createUserResult = await _mediator.Send(command);
 
             return createUserResult.Match(
-                Ok,
+                user => CreatedAtAction(nameof(GetUser), new { userId = user.Id }, user),
                 Problem);
         }
 
@@ -65,7 +65,7 @@ namespace SportyBuddies.Api.Controllers
             var deleteUserResult = await _mediator.Send(command);
 
             return deleteUserResult.Match<IActionResult>(
-                _ => Ok(),
+                _ => NoContent(),
                 Problem);
         }
     }
