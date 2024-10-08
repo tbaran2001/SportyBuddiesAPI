@@ -5,14 +5,11 @@ using SportyBuddies.Domain.Users;
 namespace SportyBuddies.Application.Common.Services;
 
 public class MatchingService(
-    IUserSportsRepository userSportsRepository,
     IUsersRepository usersRepository,
     IMatchesRepository matchesRepository,
     IUnitOfWork unitOfWork)
     : IMatchingService
 {
-    private readonly IUserSportsRepository _userSportsRepository = userSportsRepository;
-
     public async Task FindMatchesAsync(Guid userId)
     {
         var user = await usersRepository.GetUserByIdWithSportsAsync(userId);

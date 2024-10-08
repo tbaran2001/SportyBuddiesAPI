@@ -6,17 +6,28 @@ using SportyBuddies.Application.Common.Services;
 namespace SportyBuddies.Application.UserSports.Commands.RemoveUserSport;
 
 public class RemoveUserSportCommandHandler(
-    IUserSportsRepository userSportsRepository,
+    IUsersRepository usersRepository,
+    ISportsRepository sportsRepository,
     IUnitOfWork unitOfWork,
     IMatchingService matchingService)
     : IRequestHandler<RemoveUserSportCommand, ErrorOr<Success>>
 {
     public async Task<ErrorOr<Success>> Handle(RemoveUserSportCommand command, CancellationToken cancellationToken)
     {
-        await userSportsRepository.RemoveSportFromUserAsync(command.UserId, command.SportId);
+        var user = await usersRepository.GetUserByIdWithSportsAsync(command.UserId);
+        if (user is null)
+            return Error.NotFound(description: "User not found");
+        
+        var sport = await sportsRepository.GetSportByIdAsync(command.SportId);
+        if (sport is null)
+            return Error.NotFound(description: "Sport not found");
+        
+        var removeSportResult = user.RemoveSport(sport);
+        
+        if (removeSportResult.IsError)
+            return removeSportResult.Errors;
 
         await matchingService.FindMatchesAsync(command.UserId);
-
         await unitOfWork.CommitChangesAsync();
 
         return Result.Success;
