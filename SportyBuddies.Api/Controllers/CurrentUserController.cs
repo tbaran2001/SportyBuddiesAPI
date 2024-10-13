@@ -1,4 +1,3 @@
-using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -12,10 +11,12 @@ using SportyBuddies.Application.UserSports.Commands.AddUserSport;
 using SportyBuddies.Application.UserSports.Commands.RemoveUserSport;
 using SportyBuddies.Application.UserSports.Queries.GetUserSports;
 using SportyBuddies.Contracts.Matches;
-using SportyBuddies.Contracts.Sports;
 using SportyBuddies.Contracts.Users;
+using SportyBuddies.Domain.MatchAggregate.ValueObjects;
+using SportyBuddies.Domain.SportAggregate.ValueObjects;
+using SportyBuddies.Domain.UserAggregate.ValueObjects;
 using SportyBuddies.Identity.Models;
-using Swipe = SportyBuddies.Domain.Matches.Swipe;
+using Swipe = SportyBuddies.Domain.MatchAggregate.Swipe;
 
 namespace SportyBuddies.Api.Controllers
 {
@@ -29,7 +30,7 @@ namespace SportyBuddies.Api.Controllers
             var userId = userManager.GetUserId(User);
             if (userId == null) return Unauthorized();
 
-            var query = new GetUserQuery(Guid.Parse(userId));
+            var query = new GetUserQuery(UserId.Create(Guid.Parse(userId)));
 
             var userResult = await mediator.Send(query);
 
@@ -44,7 +45,8 @@ namespace SportyBuddies.Api.Controllers
             var userId = userManager.GetUserId(User);
             if (userId == null) return Unauthorized();
 
-            var command = new UpdateUserCommand(Guid.Parse(userId), userRequest.Name, userRequest.Description);
+            var command = new UpdateUserCommand(UserId.Create(Guid.Parse(userId)), userRequest.Name,
+                userRequest.Description);
 
             var userResult = await mediator.Send(command);
 
@@ -59,7 +61,7 @@ namespace SportyBuddies.Api.Controllers
             var userId = userManager.GetUserId(User);
             if (userId == null) return Unauthorized();
 
-            var query = new GetUserSportsQuery(Guid.Parse(userId));
+            var query = new GetUserSportsQuery(UserId.Create(Guid.Parse(userId)));
 
             var userSportsResult = await mediator.Send(query);
 
@@ -74,7 +76,7 @@ namespace SportyBuddies.Api.Controllers
             var userId = userManager.GetUserId(User);
             if (userId == null) return Unauthorized();
 
-            var command = new AddUserSportCommand(Guid.Parse(userId), sportId);
+            var command = new AddUserSportCommand(UserId.Create(Guid.Parse(userId)), SportId.Create(sportId));
 
             var userSportResult = await mediator.Send(command);
 
@@ -89,7 +91,7 @@ namespace SportyBuddies.Api.Controllers
             var userId = userManager.GetUserId(User);
             if (userId == null) return Unauthorized();
 
-            var command = new RemoveUserSportCommand(Guid.Parse(userId), sportId);
+            var command = new RemoveUserSportCommand(UserId.Create(Guid.Parse(userId)), SportId.Create(sportId));
 
             var userSportResult = await mediator.Send(command);
 
@@ -104,7 +106,7 @@ namespace SportyBuddies.Api.Controllers
             var userId = userManager.GetUserId(User);
             if (userId == null) return Unauthorized();
 
-            var query = new GetUserMatchesQuery(Guid.Parse(userId));
+            var query = new GetUserMatchesQuery(UserId.Create(Guid.Parse(userId)));
 
             var matchesResult = await mediator.Send(query);
 
@@ -119,7 +121,7 @@ namespace SportyBuddies.Api.Controllers
             var userId = userManager.GetUserId(User);
             if (userId == null) return Unauthorized();
 
-            var query = new GetRandomMatchQuery(Guid.Parse(userId));
+            var query = new GetRandomMatchQuery(UserId.Create(Guid.Parse(userId)));
 
             var matchResult = await mediator.Send(query);
 
@@ -134,7 +136,7 @@ namespace SportyBuddies.Api.Controllers
             var userId = userManager.GetUserId(User);
             if (userId == null) return Unauthorized();
 
-            var command = new UpdateMatchCommand(matchId, (Swipe)matchRequest.Swipe);
+            var command = new UpdateMatchCommand(MatchId.Create(matchId), (Swipe)matchRequest.Swipe);
 
             var matchResult = await mediator.Send(command);
 

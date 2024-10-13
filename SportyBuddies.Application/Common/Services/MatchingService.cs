@@ -1,6 +1,7 @@
 using SportyBuddies.Application.Common.Interfaces;
-using SportyBuddies.Domain.Matches;
-using SportyBuddies.Domain.Users;
+using SportyBuddies.Domain.MatchAggregate;
+using SportyBuddies.Domain.UserAggregate;
+using SportyBuddies.Domain.UserAggregate.ValueObjects;
 
 namespace SportyBuddies.Application.Common.Services;
 
@@ -10,7 +11,7 @@ public class MatchingService(
     IUnitOfWork unitOfWork)
     : IMatchingService
 {
-    public async Task FindMatchesAsync(Guid userId)
+    public async Task FindMatchesAsync(UserId userId)
     {
         var user = await usersRepository.GetUserByIdWithSportsAsync(userId);
 
@@ -50,27 +51,27 @@ public class MatchingService(
 
     private bool HasCommonSports(User user, User matchedUser)
     {
-        return user.Sports.Intersect(matchedUser.Sports).Any();
+        return user.SportIds.Intersect(matchedUser.SportIds).Any();
     }
 
     private void AddNewMatches(User user, User matchedUser, IEnumerable<Match> existingMatches, List<Match> newMatches,
         DateTime now)
     {
         if (existingMatches.Any(m =>
-                (m.User.Id == user.Id && m.MatchedUser.Id == matchedUser.Id) ||
-                (m.User.Id == matchedUser.Id && m.MatchedUser.Id == user.Id)))
+                (m.UserId == user.Id && m.MatchedUserId == matchedUser.Id) ||
+                (m.UserId == matchedUser.Id && m.MatchedUserId == user.Id)))
             return;
 
-        newMatches.Add(new Match(user, matchedUser, now, null, null));
-        newMatches.Add(new Match(matchedUser, user, now, null, null));
+        newMatches.Add(Match.Create(user.Id, matchedUser.Id, now, null, null));
+        newMatches.Add(Match.Create(matchedUser.Id, user.Id, now, null, null));
     }
 
     private void RemoveExistingMatches(User user, User matchedUser, IEnumerable<Match> existingMatches,
         List<Match> matchesToRemove)
     {
         var toRemove = existingMatches.Where(m =>
-                (m.User.Id == user.Id && m.MatchedUser.Id == matchedUser.Id) ||
-                (m.User.Id == matchedUser.Id && m.MatchedUser.Id == user.Id))
+                (m.UserId == user.Id && m.MatchedUserId == matchedUser.Id) ||
+                (m.UserId == matchedUser.Id && m.MatchedUserId == user.Id))
             .ToList();
 
         if (toRemove.Count != 0)

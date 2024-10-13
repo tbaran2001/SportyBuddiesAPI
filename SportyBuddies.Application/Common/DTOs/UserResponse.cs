@@ -1,3 +1,3 @@
 ﻿namespace SportyBuddies.Application.Common.DTOs;
 
-public record UserResponse(Guid Id, string Name, string Description, DateTime LastActive, ICollection<SportResponse> Sports);
+public record UserResponse(Guid Id, string Name, string Description, DateTime LastActive);

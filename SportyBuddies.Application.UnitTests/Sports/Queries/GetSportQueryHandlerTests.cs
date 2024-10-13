@@ -5,8 +5,8 @@ using NSubstitute;
 using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Application.Mappings;
 using SportyBuddies.Application.Sports.Queries.GetSport;
-using SportyBuddies.Domain.Sports;
-using SportyBuddies.Domain.Users;
+using SportyBuddies.Domain.SportAggregate;
+using SportyBuddies.Domain.SportAggregate.ValueObjects;
 
 namespace SportyBuddies.Application.UnitTests.Sports.Queries;
 
@@ -22,7 +22,7 @@ public class GetSportQueryHandlerTests
         var configurationProvider = new MapperConfiguration(cfg => { cfg.AddProfile<SportMappingProfile>(); });
 
         _mapper = configurationProvider.CreateMapper();
-        _getSportQuery = new GetSportQuery(Guid.NewGuid());
+        _getSportQuery = new GetSportQuery(SportId.CreateUnique());
         _sut = new GetSportQueryHandler(_sportsRepository, _mapper);
     }
 
@@ -30,7 +30,7 @@ public class GetSportQueryHandlerTests
     public async Task Handle_ShouldReturnSport_WhenRequestIsValid()
     {
         // Arrange
-        var sport = new Sport("Football", "Football description", new List<User>());
+        var sport = Sport.Create("Football", "Football description");
         _sportsRepository.GetSportByIdAsync(_getSportQuery.SportId).Returns(sport);
 
         // Act

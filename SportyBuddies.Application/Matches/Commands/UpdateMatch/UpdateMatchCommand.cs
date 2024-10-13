@@ -1,12 +1,13 @@
 using ErrorOr;
 using MediatR;
-using SportyBuddies.Domain.Matches;
+using SportyBuddies.Domain.MatchAggregate;
+using SportyBuddies.Domain.MatchAggregate.ValueObjects;
 
 namespace SportyBuddies.Application.Matches.Commands.UpdateMatch;
 
-public record UpdateMatchCommand(Guid MatchId, Swipe Swipe, DateTime SwipeDateTime) : IRequest<ErrorOr<Updated>>
+public record UpdateMatchCommand(MatchId MatchId, Swipe Swipe, DateTime SwipeDateTime) : IRequest<ErrorOr<Updated>>
 {
-    public UpdateMatchCommand(Guid MatchId, Swipe Swipe) : this(MatchId, Swipe, DateTime.Now)
+    public UpdateMatchCommand(MatchId MatchId, Swipe Swipe) : this(MatchId, Swipe, DateTime.Now)
     {
     }
 }

@@ -5,7 +5,7 @@ using SportyBuddies.Application.Common.DTOs;
 using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Application.Mappings;
 using SportyBuddies.Application.Sports.Commands.CreateSport;
-using SportyBuddies.Domain.Sports;
+using SportyBuddies.Domain.SportAggregate;
 
 namespace SportyBuddies.Application.UnitTests.Sports.Commands;
 

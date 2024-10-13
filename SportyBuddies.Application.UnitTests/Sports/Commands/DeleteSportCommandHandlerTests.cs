@@ -3,8 +3,8 @@ using FluentAssertions;
 using NSubstitute;
 using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Application.Sports.Commands.DeleteSport;
-using SportyBuddies.Domain.Sports;
-using SportyBuddies.Domain.Users;
+using SportyBuddies.Domain.SportAggregate;
+using SportyBuddies.Domain.SportAggregate.ValueObjects;
 
 namespace SportyBuddies.Application.UnitTests.Sports.Commands;
 
@@ -17,7 +17,7 @@ public class DeleteSportCommandHandlerTests
 
     public DeleteSportCommandHandlerTests()
     {
-        _createSportCommand = new DeleteSportCommand(Guid.NewGuid());
+        _createSportCommand = new DeleteSportCommand(SportId.CreateUnique());
         _sut = new DeleteSportCommandHandler(_sportsRepository, _unitOfWork);
     }
 
@@ -26,7 +26,7 @@ public class DeleteSportCommandHandlerTests
     {
         await Task.Delay(2000);
         // Arrange
-        var sport = new Sport("Football", "Football description", new List<User>());
+        var sport = Sport.Create("Football", "Football description");
         _sportsRepository.GetSportByIdAsync(_createSportCommand.SportId).Returns(sport);
 
         // Act

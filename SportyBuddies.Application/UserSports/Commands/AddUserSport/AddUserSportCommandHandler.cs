@@ -22,7 +22,7 @@ public class AddUserSportCommandHandler(
         if (sport is null)
             return Error.NotFound(description: "Sport not found");
 
-        var addSportResult = user.AddSport(sport);
+        var addSportResult = user.AddSport(sport.Id);
 
         if (addSportResult.IsError)
             return addSportResult.Errors;

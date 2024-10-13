@@ -17,17 +17,18 @@ namespace SportyBuddies.Infrastructure.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.2");
 
-            modelBuilder.Entity("SportyBuddies.Domain.Matches.Match", b =>
+            modelBuilder.Entity("SportyBuddies.Domain.MatchAggregate.Match", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnOrder(0);
 
                     b.Property<DateTime>("MatchDateTime")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("MatchedUserId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnOrder(2);
 
                     b.Property<int?>("Swipe")
                         .HasColumnType("INTEGER");
@@ -36,21 +37,17 @@ namespace SportyBuddies.Infrastructure.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnOrder(1);
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MatchedUserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Matches", (string)null);
+                    b.ToTable("Matches");
                 });
 
-            modelBuilder.Entity("SportyBuddies.Domain.Sports.Sport", b =>
+            modelBuilder.Entity("SportyBuddies.Domain.SportAggregate.Sport", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -63,13 +60,12 @@ namespace SportyBuddies.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sports", (string)null);
+                    b.ToTable("Sports");
                 });
 
-            modelBuilder.Entity("SportyBuddies.Domain.Users.User", b =>
+            modelBuilder.Entity("SportyBuddies.Domain.UserAggregate.User", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -85,56 +81,35 @@ namespace SportyBuddies.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("UserSport", b =>
+            modelBuilder.Entity("SportyBuddies.Domain.UserAggregate.User", b =>
                 {
-                    b.Property<Guid>("SportId")
-                        .HasColumnType("TEXT");
+                    b.OwnsMany("SportyBuddies.Domain.SportAggregate.ValueObjects.SportId", "SportIds", b1 =>
+                        {
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("INTEGER");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
+                            b1.Property<Guid>("UserId")
+                                .HasColumnType("TEXT");
 
-                    b.HasKey("SportId", "UserId");
+                            b1.Property<Guid>("Value")
+                                .HasColumnType("TEXT")
+                                .HasColumnName("SportId");
 
-                    b.HasIndex("UserId");
+                            b1.HasKey("Id");
 
-                    b.ToTable("UserSport", (string)null);
-                });
+                            b1.HasIndex("UserId");
 
-            modelBuilder.Entity("SportyBuddies.Domain.Matches.Match", b =>
-                {
-                    b.HasOne("SportyBuddies.Domain.Users.User", "MatchedUser")
-                        .WithMany()
-                        .HasForeignKey("MatchedUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            b1.ToTable("UserSportIds", (string)null);
 
-                    b.HasOne("SportyBuddies.Domain.Users.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            b1.WithOwner()
+                                .HasForeignKey("UserId");
+                        });
 
-                    b.Navigation("MatchedUser");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("UserSport", b =>
-                {
-                    b.HasOne("SportyBuddies.Domain.Sports.Sport", null)
-                        .WithMany()
-                        .HasForeignKey("SportId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SportyBuddies.Domain.Users.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("SportIds");
                 });
 #pragma warning restore 612, 618
         }

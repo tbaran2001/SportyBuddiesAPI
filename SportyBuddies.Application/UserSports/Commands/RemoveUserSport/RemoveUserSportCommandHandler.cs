@@ -17,13 +17,13 @@ public class RemoveUserSportCommandHandler(
         var user = await usersRepository.GetUserByIdWithSportsAsync(command.UserId);
         if (user is null)
             return Error.NotFound(description: "User not found");
-        
+
         var sport = await sportsRepository.GetSportByIdAsync(command.SportId);
         if (sport is null)
             return Error.NotFound(description: "Sport not found");
-        
-        var removeSportResult = user.RemoveSport(sport);
-        
+
+        var removeSportResult = user.RemoveSport(sport.Id);
+
         if (removeSportResult.IsError)
             return removeSportResult.Errors;
 

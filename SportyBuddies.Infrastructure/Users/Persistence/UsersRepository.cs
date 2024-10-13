@@ -1,13 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using SportyBuddies.Application.Common.Interfaces;
-using SportyBuddies.Domain.Users;
+using SportyBuddies.Domain.UserAggregate;
+using SportyBuddies.Domain.UserAggregate.ValueObjects;
 using SportyBuddies.Infrastructure.Common.Persistence;
 
 namespace SportyBuddies.Infrastructure.Users.Persistence;
 
 public class UsersRepository(SportyBuddiesDbContext dbContext) : IUsersRepository
 {
-    public async Task<User?> GetUserByIdAsync(Guid userId)
+    public async Task<User?> GetUserByIdAsync(UserId userId)
     {
         return await dbContext.Users.FindAsync(userId);
     }
@@ -27,17 +28,17 @@ public class UsersRepository(SportyBuddiesDbContext dbContext) : IUsersRepositor
         dbContext.Users.Remove(user);
     }
 
-    public async Task<User?> GetUserByIdWithSportsAsync(Guid userId)
+    public async Task<User?> GetUserByIdWithSportsAsync(UserId userId)
     {
         return await dbContext.Users
-            .Include(u => u.Sports)
+            .Include(u => u.SportIds)
             .FirstOrDefaultAsync(u => u.Id == userId);
     }
 
     public async Task<IEnumerable<User>> GetAllUsersWithSportsAsync()
     {
         return await dbContext.Users
-            .Include(u => u.Sports)
+            .Include(u => u.SportIds)
             .ToListAsync();
     }
 }

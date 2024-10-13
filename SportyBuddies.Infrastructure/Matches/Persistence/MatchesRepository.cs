@@ -1,30 +1,32 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SportyBuddies.Application.Common.Interfaces;
-using SportyBuddies.Domain.Matches;
+using SportyBuddies.Domain.MatchAggregate;
+using SportyBuddies.Domain.MatchAggregate.ValueObjects;
+using SportyBuddies.Domain.UserAggregate.ValueObjects;
 using SportyBuddies.Infrastructure.Common.Persistence;
 
 namespace SportyBuddies.Infrastructure.Matches.Persistence;
 
 public class MatchesRepository(SportyBuddiesDbContext dbContext) : IMatchesRepository
 {
-    public async Task<Match?> GetMatchByIdAsync(Guid matchId)
+    public async Task<Match?> GetMatchByIdAsync(MatchId matchId)
     {
         return await dbContext.Matches.FindAsync(matchId);
     }
 
-    public async Task<IEnumerable<Match>> GetUserMatchesAsync(Guid userId)
+    public async Task<IEnumerable<Match>> GetUserMatchesAsync(UserId userId)
     {
         return await dbContext.Matches
-            .Include(m => m.User)
-            .Include(m => m.MatchedUser)
-            .Where(m => m.User.Id == userId)
+            .Include(m => m.UserId)
+            .Include(m => m.MatchedUserId)
+            .Where(m => m.UserId == userId)
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<Match>> GetUserExistingMatchesAsync(Guid userId)
+    public async Task<IEnumerable<Match>> GetUserExistingMatchesAsync(UserId userId)
     {
         return await dbContext.Matches
-            .Where(m => m.User.Id == userId || m.MatchedUser.Id == userId)
+            .Where(m => m.UserId == userId || m.MatchedUserId == userId)
             .ToListAsync();
     }
 
@@ -38,13 +40,12 @@ public class MatchesRepository(SportyBuddiesDbContext dbContext) : IMatchesRepos
         dbContext.Matches.RemoveRange(matches);
     }
 
-    public async Task<Match?> GetRandomMatchAsync(Guid userId)
+    public async Task<Match?> GetRandomMatchAsync(UserId userId)
     {
         var matches = await dbContext.Matches
-            .Where(m => m.User.Id == userId && m.Swipe == null)
-            .Include(m => m.User)
-            .Include(m => m.MatchedUser)
-            .Include(m => m.MatchedUser.Sports)
+            .Where(m => m.UserId == userId && m.Swipe == null)
+            .Include(m => m.UserId)
+            .Include(m => m.MatchedUserId)
             .ToListAsync();
 
         var randomMatch = matches.MinBy(m => Guid.NewGuid());

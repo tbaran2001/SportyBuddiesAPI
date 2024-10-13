@@ -1,4 +1,4 @@
-﻿namespace SportyBuddies.Domain.Matches;
+﻿namespace SportyBuddies.Domain.MatchAggregate;
 
 public enum Swipe
 {

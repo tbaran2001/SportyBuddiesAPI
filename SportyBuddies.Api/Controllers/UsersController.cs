@@ -6,6 +6,7 @@ using SportyBuddies.Application.Users.Commands.DeleteUser;
 using SportyBuddies.Application.Users.Queries.GetUser;
 using SportyBuddies.Application.Users.Queries.GetUsers;
 using SportyBuddies.Contracts.Users;
+using SportyBuddies.Domain.UserAggregate.ValueObjects;
 
 namespace SportyBuddies.Api.Controllers
 {
@@ -27,7 +28,7 @@ namespace SportyBuddies.Api.Controllers
         [HttpGet("{userId:guid}")]
         public async Task<IActionResult> GetUser(Guid userId)
         {
-            var query = new GetUserQuery(userId);
+            var query = new GetUserQuery(UserId.Create(userId));
 
             var userResult = await mediator.Send(query);
 
@@ -51,7 +52,7 @@ namespace SportyBuddies.Api.Controllers
         [HttpDelete("{userId:guid}")]
         public async Task<IActionResult> DeleteUser(Guid userId)
         {
-            var command = new DeleteUserCommand(userId);
+            var command = new DeleteUserCommand(UserId.Create(userId));
 
             var deleteUserResult = await mediator.Send(command);
 

@@ -3,9 +3,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Domain.Common;
-using SportyBuddies.Domain.Matches;
-using SportyBuddies.Domain.Sports;
-using SportyBuddies.Domain.Users;
+using SportyBuddies.Domain.MatchAggregate;
+using SportyBuddies.Domain.SportAggregate;
+using SportyBuddies.Domain.UserAggregate;
+using SportyBuddies.Domain.UserAggregate.ValueObjects;
 
 namespace SportyBuddies.Infrastructure.Common.Persistence;
 
@@ -21,7 +22,7 @@ public class SportyBuddiesDbContext(
 
     public async Task CommitChangesAsync()
     {
-        var domainEvents = ChangeTracker
+        /*var domainEvents = ChangeTracker
             .Entries<Entity>()
             .Select(entry => entry.Entity.PopDomainEvents())
             .SelectMany(domainEvents => domainEvents)
@@ -30,7 +31,7 @@ public class SportyBuddiesDbContext(
         if (IsUserWaitingOnline())
             AddDomainEventsToOfflineProcessingQueue(domainEvents);
         else
-            await PublishDomainEvents(publisher, domainEvents);
+            await PublishDomainEvents(publisher, domainEvents);*/
 
         await base.SaveChangesAsync();
     }
@@ -60,20 +61,9 @@ public class SportyBuddiesDbContext(
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<User>()
-            .HasMany(u => u.Sports)
-            .WithMany(s => s.Users)
-            .UsingEntity<Dictionary<string, object>>(
-                "UserSport",
-                j => j
-                    .HasOne<Sport>()
-                    .WithMany()
-                    .HasForeignKey("SportId"),
-                j => j
-                    .HasOne<User>()
-                    .WithMany()
-                    .HasForeignKey("UserId")
-            );
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(SportyBuddiesDbContext).Assembly);
+
+        modelBuilder.Ignore<UserId>();
 
         base.OnModelCreating(modelBuilder);
     }
