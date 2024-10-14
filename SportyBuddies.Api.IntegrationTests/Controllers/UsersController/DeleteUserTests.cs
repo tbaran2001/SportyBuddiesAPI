@@ -1,12 +1,13 @@
 using System.Net;
 using FluentAssertions;
 using SportyBuddies.Api.IntegrationTests.Helpers;
-using SportyBuddies.Domain.UserAggregate;
+using SportyBuddies.Domain.Sports;
+using SportyBuddies.Domain.Users;
 using SportyBuddies.Infrastructure.Common.Persistence;
 
 namespace SportyBuddies.Api.IntegrationTests.Controllers.UsersController;
 
-public class DeleteUserTests : IClassFixture<SportyBuddiesWebApplicationFactory<IApiMarker>>, IAsyncLifetime
+public class DeleteUserTests:IClassFixture<SportyBuddiesWebApplicationFactory<IApiMarker>>, IAsyncLifetime
 {
     private readonly SportyBuddiesWebApplicationFactory<IApiMarker> _appFactory;
     private readonly HttpClient _httpClient;
@@ -18,25 +19,14 @@ public class DeleteUserTests : IClassFixture<SportyBuddiesWebApplicationFactory<
         _httpClient = appFactory.CreateClient();
     }
 
-    public async Task InitializeAsync()
-    {
-        _dbContext = await DatabaseHelper.InitializeDatabaseAsync(_appFactory);
-    }
-
-    public async Task DisposeAsync()
-    {
-        _dbContext.Users.RemoveRange(_dbContext.Users);
-        await _dbContext.SaveChangesAsync();
-    }
-
     [Fact]
     public async Task DeleteUser_ReturnsNoContent_WhenUserIsDeleted()
     {
-        var user = User.Create("John", "Doe", DateTime.Now);
+        var user = new User("John", "Doe", DateTime.Now, new List<Sport>());
         await _dbContext.Users.AddAsync(user);
         await _dbContext.SaveChangesAsync();
 
-        var response = await _httpClient.DeleteAsync($"/api/users/{user.Id.Value}");
+        var response = await _httpClient.DeleteAsync($"/api/users/{user.Id}");
 
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
     }
@@ -47,5 +37,16 @@ public class DeleteUserTests : IClassFixture<SportyBuddiesWebApplicationFactory<
         var response = await _httpClient.DeleteAsync($"/api/users/{Guid.NewGuid()}");
 
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
+
+    public async Task InitializeAsync()
+    {
+        _dbContext = await DatabaseHelper.InitializeDatabaseAsync(_appFactory);
+    }
+
+    public async Task DisposeAsync()
+    {
+        _dbContext.Users.RemoveRange(_dbContext.Users);
+        await _dbContext.SaveChangesAsync();
     }
 }

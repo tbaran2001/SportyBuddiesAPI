@@ -4,6 +4,8 @@ using FluentAssertions;
 using Newtonsoft.Json;
 using SportyBuddies.Api.IntegrationTests.Helpers;
 using SportyBuddies.Contracts.Users;
+using SportyBuddies.Domain.Sports;
+using SportyBuddies.Domain.Users;
 using SportyBuddies.Infrastructure.Common.Persistence;
 
 namespace SportyBuddies.Api.IntegrationTests.Controllers.UsersController;
@@ -20,17 +22,6 @@ public class CreateUserTests : IClassFixture<SportyBuddiesWebApplicationFactory<
         _httpClient = appFactory.CreateClient();
     }
 
-    public async Task InitializeAsync()
-    {
-        _dbContext = await DatabaseHelper.InitializeDatabaseAsync(_appFactory);
-    }
-
-    public async Task DisposeAsync()
-    {
-        _dbContext.Users.RemoveRange(_dbContext.Users);
-        await _dbContext.SaveChangesAsync();
-    }
-
     [Fact]
     public async Task CreateUser_ReturnsUser_WhenUserIsCreated()
     {
@@ -40,11 +31,11 @@ public class CreateUserTests : IClassFixture<SportyBuddiesWebApplicationFactory<
 
         response.StatusCode.Should().Be(HttpStatusCode.Created);
         response.Headers.Location.Should().NotBeNull();
-
+        
         var responseContent = await response.Content.ReadAsStringAsync();
         responseContent.Should().Contain("John");
     }
-
+    
     [Fact]
     public async Task CreateUser_ReturnsBadRequest_WhenFirstNameIsMissing()
     {
@@ -53,5 +44,16 @@ public class CreateUserTests : IClassFixture<SportyBuddiesWebApplicationFactory<
         var response = await _httpClient.PostAsync("/api/users", content);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    public async Task InitializeAsync()
+    {
+        _dbContext = await DatabaseHelper.InitializeDatabaseAsync(_appFactory);
+    }
+
+    public async Task DisposeAsync()
+    {
+        _dbContext.Users.RemoveRange(_dbContext.Users);
+        await _dbContext.SaveChangesAsync();
     }
 }

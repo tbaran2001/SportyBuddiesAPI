@@ -1,4 +1,4 @@
-﻿using SportyBuddies.Domain.MatchAggregate;
+﻿using SportyBuddies.Domain.Matches;
 
 namespace SportyBuddies.Application.Common.DTOs;
 

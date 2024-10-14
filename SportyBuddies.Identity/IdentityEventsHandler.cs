@@ -1,4 +1,5 @@
-using SportyBuddies.Domain.UserAggregate;
+using SportyBuddies.Domain.Sports;
+using SportyBuddies.Domain.Users;
 using SportyBuddies.Identity.Models;
 using SportyBuddies.Infrastructure.Common.Persistence;
 
@@ -12,10 +13,10 @@ public class IdentityEventsHandler
     {
         _context = context;
     }
-
+    
     public async Task OnUserCreatedAsync(ApplicationUser user)
     {
-        var userEntity = User.CreateWithId(user.Id, user.UserName, user.UserName, DateTime.Now);
+        var userEntity = new User(user.UserName, user.UserName, DateTime.Now, new List<Sport>(), user.Id);
         await _context.Users.AddAsync(userEntity);
         await _context.SaveChangesAsync();
     }

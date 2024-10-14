@@ -3,7 +3,7 @@ using ErrorOr;
 using MediatR;
 using SportyBuddies.Application.Common.DTOs;
 using SportyBuddies.Application.Common.Interfaces;
-using SportyBuddies.Domain.UserAggregate;
+using SportyBuddies.Domain.Users;
 
 namespace SportyBuddies.Application.Users.Commands.CreateUser;
 
@@ -12,7 +12,7 @@ public class CreateUserCommandHandler(IUsersRepository usersRepository, IMapper 
 {
     public async Task<ErrorOr<UserResponse>> Handle(CreateUserCommand command, CancellationToken cancellationToken)
     {
-        var user = User.Create(command.Name, command.Description, DateTime.UtcNow);
+        var user = mapper.Map<User>(command);
 
         await usersRepository.AddUserAsync(user);
         await unitOfWork.CommitChangesAsync();

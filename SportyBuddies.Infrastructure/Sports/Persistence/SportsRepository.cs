@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SportyBuddies.Application.Common.Interfaces;
-using SportyBuddies.Domain.SportAggregate;
-using SportyBuddies.Domain.SportAggregate.ValueObjects;
+using SportyBuddies.Domain.Sports;
 using SportyBuddies.Infrastructure.Common.Persistence;
 
 namespace SportyBuddies.Infrastructure.Sports.Persistence;
@@ -13,7 +12,7 @@ public class SportsRepository(SportyBuddiesDbContext dbContext) : ISportsReposit
         return await dbContext.Sports.ToListAsync();
     }
 
-    public async Task<Sport?> GetSportByIdAsync(SportId sportId)
+    public async Task<Sport?> GetSportByIdAsync(Guid sportId)
     {
         return await dbContext.Sports.FindAsync(sportId);
     }

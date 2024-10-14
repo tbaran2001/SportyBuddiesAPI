@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SportyBuddies.Infrastructure.Common.Persistence;
 
@@ -10,9 +11,11 @@ using SportyBuddies.Infrastructure.Common.Persistence;
 namespace SportyBuddies.Infrastructure.Migrations
 {
     [DbContext(typeof(SportyBuddiesDbContext))]
-    partial class SportyBuddiesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240902091050_UserAndMatch")]
+    partial class UserAndMatch
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.2");
@@ -44,7 +47,7 @@ namespace SportyBuddies.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Matches", (string)null);
+                    b.ToTable("Matches");
                 });
 
             modelBuilder.Entity("SportyBuddies.Domain.Sports.Sport", b =>
@@ -63,7 +66,7 @@ namespace SportyBuddies.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sports", (string)null);
+                    b.ToTable("Sports");
                 });
 
             modelBuilder.Entity("SportyBuddies.Domain.Users.User", b =>
@@ -85,7 +88,7 @@ namespace SportyBuddies.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("UserSport", b =>
@@ -100,7 +103,7 @@ namespace SportyBuddies.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserSport", (string)null);
+                    b.ToTable("UserSport");
                 });
 
             modelBuilder.Entity("SportyBuddies.Domain.Matches.Match", b =>

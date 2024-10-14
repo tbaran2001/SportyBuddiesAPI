@@ -3,7 +3,7 @@ using ErrorOr;
 using MediatR;
 using SportyBuddies.Application.Common.DTOs;
 using SportyBuddies.Application.Common.Interfaces;
-using SportyBuddies.Domain.SportAggregate;
+using SportyBuddies.Domain.Sports;
 
 namespace SportyBuddies.Application.Sports.Commands.CreateSport;
 
@@ -12,7 +12,7 @@ public class CreateSportCommandHandler(ISportsRepository sportsRepository, IUnit
 {
     public async Task<ErrorOr<SportResponse>> Handle(CreateSportCommand request, CancellationToken cancellationToken)
     {
-        var sport = Sport.Create(name: request.Name, description: request.Description);
+        var sport = mapper.Map<Sport>(request);
 
         await sportsRepository.AddSportAsync(sport);
         await unitOfWork.CommitChangesAsync();

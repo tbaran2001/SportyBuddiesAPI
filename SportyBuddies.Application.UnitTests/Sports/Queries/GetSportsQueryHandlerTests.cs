@@ -4,7 +4,8 @@ using NSubstitute;
 using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Application.Mappings;
 using SportyBuddies.Application.Sports.Queries.GetSports;
-using SportyBuddies.Domain.SportAggregate;
+using SportyBuddies.Domain.Sports;
+using SportyBuddies.Domain.Users;
 
 namespace SportyBuddies.Application.UnitTests.Sports.Queries;
 
@@ -30,8 +31,8 @@ public class GetSportsQueryHandlerTests
         // Arrange
         var sports = new List<Sport>
         {
-            Sport.Create("Football", "Football description"),
-            Sport.Create("Basketball", "Basketball description")
+            new("Football", "Football description", new List<User>()),
+            new("Basketball", "Basketball description", new List<User>())
         };
         _sportsRepository.GetAllSportsAsync().Returns(sports);
 

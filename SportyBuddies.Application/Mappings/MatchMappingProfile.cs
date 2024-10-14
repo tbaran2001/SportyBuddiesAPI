@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using SportyBuddies.Application.Common.DTOs;
 using SportyBuddies.Application.Matches.Commands.UpdateMatch;
-using SportyBuddies.Domain.MatchAggregate;
-using SportyBuddies.Domain.MatchAggregate.ValueObjects;
+using SportyBuddies.Domain.Matches;
 
 namespace SportyBuddies.Application.Mappings;
 
@@ -12,7 +11,5 @@ public class MatchMappingProfile : Profile
     {
         CreateMap<Match, MatchResponse>();
         CreateMap<UpdateMatchCommand, Match>();
-
-        CreateMap<MatchId, Guid>().ConvertUsing(src => src.Value);
     }
 }

@@ -6,7 +6,6 @@ using SportyBuddies.Application.Sports.Commands.DeleteSport;
 using SportyBuddies.Application.Sports.Queries.GetSport;
 using SportyBuddies.Application.Sports.Queries.GetSports;
 using SportyBuddies.Contracts.Sports;
-using SportyBuddies.Domain.SportAggregate.ValueObjects;
 
 namespace SportyBuddies.Api.Controllers
 {
@@ -28,7 +27,7 @@ namespace SportyBuddies.Api.Controllers
         [HttpGet("{sportId:guid}")]
         public async Task<IActionResult> GetSport(Guid sportId)
         {
-            var query = new GetSportQuery(SportId.Create(sportId));
+            var query = new GetSportQuery(sportId);
 
             var sportResult = await mediator.Send(query);
 
@@ -51,7 +50,7 @@ namespace SportyBuddies.Api.Controllers
         [HttpDelete("{sportId:guid}")]
         public async Task<IActionResult> DeleteSport(Guid sportId)
         {
-            var command = new DeleteSportCommand(SportId.Create(sportId));
+            var command = new DeleteSportCommand(sportId);
 
             var deleteSportResult = await mediator.Send(command);
 

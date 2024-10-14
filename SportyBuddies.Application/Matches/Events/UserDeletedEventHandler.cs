@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using SportyBuddies.Application.Common.Interfaces;
-using SportyBuddies.Domain.UserAggregate.Events;
+using SportyBuddies.Domain.Users.Events;
 
 namespace SportyBuddies.Application.Matches.Events;
 
