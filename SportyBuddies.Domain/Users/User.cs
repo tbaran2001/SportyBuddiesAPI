@@ -1,7 +1,7 @@
-﻿using SportyBuddies.Domain.Common;
+﻿using ErrorOr;
+using SportyBuddies.Domain.Common;
 using SportyBuddies.Domain.Sports;
 using SportyBuddies.Domain.Users.Events;
-using ErrorOr;
 
 namespace SportyBuddies.Domain.Users;
 
@@ -27,7 +27,7 @@ public class User : Entity
 
     public void Delete()
     {
-        DomainEvents.Add(new UserDeletedEvent(Id));
+        AddDomainEvent(new UserDeletedEvent(Id));
     }
 
     public ErrorOr<Success> AddSport(Sport sport)
@@ -38,7 +38,7 @@ public class User : Entity
         Sports.Add(sport);
         return Result.Success;
     }
-    
+
     public ErrorOr<Success> RemoveSport(Sport sport)
     {
         if (!Sports.Contains(sport))
@@ -47,7 +47,7 @@ public class User : Entity
         Sports.Remove(sport);
         return Result.Success;
     }
-    
+
     public void RemoveAllSports()
     {
         Sports.Clear();
