@@ -1,4 +1,5 @@
 using SportyBuddies.Application.Common.Interfaces;
+using SportyBuddies.Domain.Buddies;
 using SportyBuddies.Domain.Matches;
 using SportyBuddies.Domain.Users;
 
@@ -7,6 +8,7 @@ namespace SportyBuddies.Application.Common.Services;
 public class MatchingService(
     IUsersRepository usersRepository,
     IMatchesRepository matchesRepository,
+    IBuddiesRepository buddiesRepository,
     IUnitOfWork unitOfWork)
     : IMatchingService
 {
@@ -29,6 +31,30 @@ public class MatchingService(
         matchesRepository.RemoveMatches(matchesToRemove);
 
         await unitOfWork.CommitChangesAsync();
+    }
+
+    public async Task CreateBuddyRelationshipAsync(Guid matchId)
+    {
+        var userMatch = await matchesRepository.GetMatchWithUsersByIdAsync(matchId);
+        if (userMatch == null)
+            return;
+
+        var matchedUserMatch =
+            await matchesRepository.GetMatchByUserAndMatchedUserAsync(userMatch.MatchedUser.Id, userMatch.User.Id);
+        if (matchedUserMatch == null)
+            return;
+
+        if (userMatch.Swipe == Swipe.Right && matchedUserMatch?.Swipe == Swipe.Right)
+        {
+            var now = DateTime.Now;
+            var userBuddy = new Buddy(userMatch.User, userMatch.MatchedUser, now);
+            var matchedUserBuddy = new Buddy(userMatch.MatchedUser, userMatch.User, now);
+
+            await buddiesRepository.AddBuddyAsync(userBuddy);
+            await buddiesRepository.AddBuddyAsync(matchedUserBuddy);
+
+            await unitOfWork.CommitChangesAsync();
+        }
     }
 
     private void ProcessMatches(User user, List<User> allUsers, List<Match> existingMatches, List<Match> newMatches,

@@ -1,8 +1,8 @@
-using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SportyBuddies.Application.Buddies.Queries.GetUserBuddies;
 using SportyBuddies.Application.Matches.Commands.UpdateMatch;
 using SportyBuddies.Application.Matches.Queries.GetRandomMatch;
 using SportyBuddies.Application.Matches.Queries.GetUserMatches;
@@ -12,7 +12,6 @@ using SportyBuddies.Application.UserSports.Commands.AddUserSport;
 using SportyBuddies.Application.UserSports.Commands.RemoveUserSport;
 using SportyBuddies.Application.UserSports.Queries.GetUserSports;
 using SportyBuddies.Contracts.Matches;
-using SportyBuddies.Contracts.Sports;
 using SportyBuddies.Contracts.Users;
 using SportyBuddies.Identity.Models;
 using Swipe = SportyBuddies.Domain.Matches.Swipe;
@@ -140,6 +139,21 @@ namespace SportyBuddies.Api.Controllers
 
             return matchResult.Match<IActionResult>(
                 _ => NoContent(),
+                Problem);
+        }
+
+        [HttpGet("buddies")]
+        public async Task<IActionResult> GetCurrentUserBuddies()
+        {
+            var userId = userManager.GetUserId(User);
+            if (userId == null) return Unauthorized();
+
+            var query = new GetUserBuddiesQuery(Guid.Parse(userId));
+
+            var buddiesResult = await mediator.Send(query);
+
+            return buddiesResult.Match(
+                Ok,
                 Problem);
         }
     }

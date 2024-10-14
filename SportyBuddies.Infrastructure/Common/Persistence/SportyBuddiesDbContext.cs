@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using SportyBuddies.Application.Common.Interfaces;
+using SportyBuddies.Domain.Buddies;
 using SportyBuddies.Domain.Common;
 using SportyBuddies.Domain.Matches;
 using SportyBuddies.Domain.Sports;
@@ -18,6 +19,7 @@ public class SportyBuddiesDbContext(
     public DbSet<Sport> Sports { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Match> Matches { get; set; }
+    public DbSet<Buddy> Buddies { get; set; }
 
     public async Task CommitChangesAsync()
     {

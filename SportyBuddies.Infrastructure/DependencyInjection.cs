@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SportyBuddies.Application.Common.Interfaces;
+using SportyBuddies.Infrastructure.Buddies;
 using SportyBuddies.Infrastructure.Common.Persistence;
 using SportyBuddies.Infrastructure.Matches.Persistence;
 using SportyBuddies.Infrastructure.Sports.Persistence;
@@ -14,11 +15,12 @@ public static class DependencyInjection
     {
         services.AddDbContext<SportyBuddiesDbContext>(options =>
             options.UseSqlite("Data Source = SportyBuddies.db"));
-        
+
         services.AddScoped<ISportsRepository, SportsRepository>();
         services.AddScoped<IUsersRepository, UsersRepository>();
         services.AddScoped<IMatchesRepository, MatchesRepository>();
-        
+        services.AddScoped<IBuddiesRepository, BuddiesRepository>();
+
         services.AddScoped<IUnitOfWork>(serviceProvider =>
             serviceProvider.GetRequiredService<SportyBuddiesDbContext>());
 
