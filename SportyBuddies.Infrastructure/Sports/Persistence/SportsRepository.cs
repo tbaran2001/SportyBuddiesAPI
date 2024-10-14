@@ -27,4 +27,9 @@ public class SportsRepository(SportyBuddiesDbContext dbContext) : ISportsReposit
     {
         dbContext.Sports.Remove(sport);
     }
+
+    public async Task<IEnumerable<Sport>> GetSportsByIdsAsync(IEnumerable<SportId> sportIds)
+    {
+        return await dbContext.Sports.Where(s => sportIds.Contains(s.Id)).ToListAsync();
+    }
 }

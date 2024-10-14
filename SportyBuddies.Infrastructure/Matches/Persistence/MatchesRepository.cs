@@ -17,8 +17,6 @@ public class MatchesRepository(SportyBuddiesDbContext dbContext) : IMatchesRepos
     public async Task<IEnumerable<Match>> GetUserMatchesAsync(UserId userId)
     {
         return await dbContext.Matches
-            .Include(m => m.UserId)
-            .Include(m => m.MatchedUserId)
             .Where(m => m.UserId == userId)
             .ToListAsync();
     }
@@ -44,8 +42,6 @@ public class MatchesRepository(SportyBuddiesDbContext dbContext) : IMatchesRepos
     {
         var matches = await dbContext.Matches
             .Where(m => m.UserId == userId && m.Swipe == null)
-            .Include(m => m.UserId)
-            .Include(m => m.MatchedUserId)
             .ToListAsync();
 
         var randomMatch = matches.MinBy(m => Guid.NewGuid());
