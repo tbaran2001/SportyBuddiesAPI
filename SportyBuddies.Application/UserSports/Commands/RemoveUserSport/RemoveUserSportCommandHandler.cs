@@ -14,7 +14,7 @@ public class RemoveUserSportCommandHandler(
 {
     public async Task<ErrorOr<Success>> Handle(RemoveUserSportCommand command, CancellationToken cancellationToken)
     {
-        var user = await usersRepository.GetUserByIdAsync(command.UserId);
+        var user = await usersRepository.GetUserByIdWithSportsAsync(command.UserId);
         if (user is null)
             return Error.NotFound(description: "User not found");
 

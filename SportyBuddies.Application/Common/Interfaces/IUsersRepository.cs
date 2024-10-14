@@ -1,4 +1,3 @@
-using SportyBuddies.Application.Common.DTOs;
 using SportyBuddies.Domain.UserAggregate;
 using SportyBuddies.Domain.UserAggregate.ValueObjects;
 
@@ -11,6 +10,5 @@ public interface IUsersRepository
     Task AddUserAsync(User user);
     void RemoveUser(User user);
     Task<User?> GetUserByIdWithSportsAsync(UserId userId);
-    Task<UserWithSportsResponse?> GetUserByIdWithSportsResponseAsync(UserId userId);
     Task<IEnumerable<User>> GetAllUsersWithSportsAsync();
 }

@@ -9,5 +9,4 @@ public interface ISportsRepository
     Task<Sport?> GetSportByIdAsync(SportId sportId);
     Task AddSportAsync(Sport sport);
     void RemoveSport(Sport sport);
-    Task<IEnumerable<Sport>> GetSportsByIdsAsync(IEnumerable<SportId> sportIds);
 }
