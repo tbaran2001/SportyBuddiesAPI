@@ -5,6 +5,7 @@ using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Domain.Buddies;
 using SportyBuddies.Domain.Common;
 using SportyBuddies.Domain.Matches;
+using SportyBuddies.Domain.Messages;
 using SportyBuddies.Domain.Sports;
 using SportyBuddies.Domain.Users;
 
@@ -20,6 +21,7 @@ public class SportyBuddiesDbContext(
     public DbSet<User> Users { get; set; }
     public DbSet<Match> Matches { get; set; }
     public DbSet<Buddy> Buddies { get; set; }
+    public DbSet<Message> Messages { get; set; }
 
     public async Task CommitChangesAsync()
     {

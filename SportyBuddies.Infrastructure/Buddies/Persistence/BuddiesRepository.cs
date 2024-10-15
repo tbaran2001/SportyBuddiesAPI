@@ -3,7 +3,7 @@ using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Domain.Buddies;
 using SportyBuddies.Infrastructure.Common.Persistence;
 
-namespace SportyBuddies.Infrastructure.Buddies;
+namespace SportyBuddies.Infrastructure.Buddies.Persistence;
 
 public class BuddiesRepository(SportyBuddiesDbContext dbContext) : IBuddiesRepository
 {

@@ -6,12 +6,14 @@ using SportyBuddies.Application.Buddies.Queries.GetUserBuddies;
 using SportyBuddies.Application.Matches.Commands.UpdateMatch;
 using SportyBuddies.Application.Matches.Queries.GetRandomMatch;
 using SportyBuddies.Application.Matches.Queries.GetUserMatches;
+using SportyBuddies.Application.Messages.Commands.SendMessage;
 using SportyBuddies.Application.Users.Commands.UpdateUser;
 using SportyBuddies.Application.Users.Queries.GetUser;
 using SportyBuddies.Application.UserSports.Commands.AddUserSport;
 using SportyBuddies.Application.UserSports.Commands.RemoveUserSport;
 using SportyBuddies.Application.UserSports.Queries.GetUserSports;
 using SportyBuddies.Contracts.Matches;
+using SportyBuddies.Contracts.Messages;
 using SportyBuddies.Contracts.Users;
 using SportyBuddies.Identity.Models;
 using Swipe = SportyBuddies.Domain.Matches.Swipe;
@@ -154,6 +156,21 @@ namespace SportyBuddies.Api.Controllers
 
             return buddiesResult.Match(
                 Ok,
+                Problem);
+        }
+
+        [HttpPost("messages/{recipientId}")]
+        public async Task<IActionResult> SendMessage(Guid recipientId, SendMessageRequest messageRequest)
+        {
+            var userId = userManager.GetUserId(User);
+            if (userId == null) return Unauthorized();
+
+            var command = new SendMessageCommand(Guid.Parse(userId), recipientId, messageRequest.Content);
+
+            var messageResult = await mediator.Send(command);
+
+            return messageResult.Match<IActionResult>(
+                _ => NoContent(),
                 Problem);
         }
     }
