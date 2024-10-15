@@ -1,4 +1,5 @@
-﻿using SportyBuddies.Application.Common.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Domain.Messages;
 using SportyBuddies.Infrastructure.Common.Persistence;
 
@@ -9,5 +10,14 @@ public class MessagesRepository(SportyBuddiesDbContext dbContext) : IMessagesRep
     public async Task AddMessageAsync(Message message)
     {
         await dbContext.Messages.AddAsync(message);
+    }
+
+    public async Task<IEnumerable<Message>> GetUserMessagesAsync(Guid userId)
+    {
+        return await dbContext.Messages
+            .Where(m => m.Sender.Id == userId || m.Recipient.Id == userId)
+            .Include(m => m.Sender)
+            .Include(m => m.Recipient)
+            .ToListAsync();
     }
 }

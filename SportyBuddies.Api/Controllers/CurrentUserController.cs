@@ -7,6 +7,7 @@ using SportyBuddies.Application.Matches.Commands.UpdateMatch;
 using SportyBuddies.Application.Matches.Queries.GetRandomMatch;
 using SportyBuddies.Application.Matches.Queries.GetUserMatches;
 using SportyBuddies.Application.Messages.Commands.SendMessage;
+using SportyBuddies.Application.Messages.Queries.GetUserMessages;
 using SportyBuddies.Application.Users.Commands.UpdateUser;
 using SportyBuddies.Application.Users.Queries.GetUser;
 using SportyBuddies.Application.UserSports.Commands.AddUserSport;
@@ -171,6 +172,21 @@ namespace SportyBuddies.Api.Controllers
 
             return messageResult.Match<IActionResult>(
                 _ => NoContent(),
+                Problem);
+        }
+
+        [HttpGet("messages")]
+        public async Task<IActionResult> GetUserMessages()
+        {
+            var userId = userManager.GetUserId(User);
+            if (userId == null) return Unauthorized();
+
+            var query = new GetUserMessagesQuery(Guid.Parse(userId));
+
+            var messagesResult = await mediator.Send(query);
+
+            return messagesResult.Match(
+                Ok,
                 Problem);
         }
     }
