@@ -7,6 +7,7 @@ using SportyBuddies.Application.Matches.Commands.UpdateMatch;
 using SportyBuddies.Application.Matches.Queries.GetRandomMatch;
 using SportyBuddies.Application.Matches.Queries.GetUserMatches;
 using SportyBuddies.Application.Messages.Commands.SendMessage;
+using SportyBuddies.Application.Messages.Queries.GetLastUserMessages;
 using SportyBuddies.Application.Messages.Queries.GetUserMessages;
 using SportyBuddies.Application.Messages.Queries.GetUserMessagesWithBuddy;
 using SportyBuddies.Application.Users.Commands.UpdateUser;
@@ -198,6 +199,21 @@ namespace SportyBuddies.Api.Controllers
             if (userId == null) return Unauthorized();
 
             var query = new GetUserMessagesWithBuddyQuery(Guid.Parse(userId), buddyId);
+
+            var messagesResult = await mediator.Send(query);
+
+            return messagesResult.Match(
+                Ok,
+                Problem);
+        }
+
+        [HttpGet("messages/last")]
+        public async Task<IActionResult> GetLastUserMessages()
+        {
+            var userId = userManager.GetUserId(User);
+            if (userId == null) return Unauthorized();
+
+            var query = new GetLastUserMessagesQuery(Guid.Parse(userId));
 
             var messagesResult = await mediator.Send(query);
 

@@ -30,4 +30,15 @@ public class MessagesRepository(SportyBuddiesDbContext dbContext) : IMessagesRep
             .Include(m => m.Recipient)
             .ToListAsync();
     }
+
+    public async Task<IEnumerable<Message>> GetLastUserMessagesAsync(Guid userId)
+    {
+        return await dbContext.Messages
+            .Where(m => m.Sender.Id == userId || m.Recipient.Id == userId)
+            .Include(m => m.Sender)
+            .Include(m => m.Recipient)
+            .GroupBy(m => m.Sender.Id == userId ? m.Recipient.Id : m.Sender.Id)
+            .Select(g => g.OrderByDescending(m => m.TimeSent).First())
+            .ToListAsync();
+    }
 }
