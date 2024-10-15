@@ -20,4 +20,14 @@ public class MessagesRepository(SportyBuddiesDbContext dbContext) : IMessagesRep
             .Include(m => m.Recipient)
             .ToListAsync();
     }
+
+    public async Task<IEnumerable<Message>> GetUserMessagesWithBuddyAsync(Guid userId, Guid buddyId)
+    {
+        return await dbContext.Messages
+            .Where(m => (m.Sender.Id == userId && m.Recipient.Id == buddyId) ||
+                        (m.Sender.Id == buddyId && m.Recipient.Id == userId))
+            .Include(m => m.Sender)
+            .Include(m => m.Recipient)
+            .ToListAsync();
+    }
 }
