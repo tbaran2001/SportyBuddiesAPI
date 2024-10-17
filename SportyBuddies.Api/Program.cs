@@ -1,6 +1,8 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using SportyBuddies.Application;
+using SportyBuddies.Application.Hubs;
 using SportyBuddies.Identity;
 using SportyBuddies.Identity.Models;
 using SportyBuddies.Infrastructure;
@@ -32,10 +34,12 @@ builder.Services.AddCors(options =>
             .AllowCredentials());
 });
 
+builder.Services.AddSignalR();
+
 var app = builder.Build();
 
 app.UseExceptionHandler();
-app.AddInfrastructureMiddleware();
+//app.AddInfrastructureMiddleware();
 
 app.MapGroup("/api").MapIdentityApi<ApplicationUser>();
 app.MapPost("/api/logout", async (ClaimsPrincipal user, SignInManager<ApplicationUser> signInManager) =>
@@ -60,5 +64,14 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapPost("broadcast", async (HubMessage message, IHubContext<ChatHub, IChatClient> context) =>
+{
+    await context.Clients.All.ReceiveMessage(message);
+    return Results.NoContent();
+});
+
+//signalR
+app.MapHub<ChatHub>("chatHub");
 
 app.Run();

@@ -18,6 +18,7 @@ public class MessagesRepository(SportyBuddiesDbContext dbContext) : IMessagesRep
             .Where(m => m.Sender.Id == userId || m.Recipient.Id == userId)
             .Include(m => m.Sender)
             .Include(m => m.Recipient)
+            .OrderBy(m => m.TimeSent)
             .ToListAsync();
     }
 
@@ -28,6 +29,7 @@ public class MessagesRepository(SportyBuddiesDbContext dbContext) : IMessagesRep
                         (m.Sender.Id == buddyId && m.Recipient.Id == userId))
             .Include(m => m.Sender)
             .Include(m => m.Recipient)
+            .OrderBy(m => m.TimeSent)
             .ToListAsync();
     }
 
