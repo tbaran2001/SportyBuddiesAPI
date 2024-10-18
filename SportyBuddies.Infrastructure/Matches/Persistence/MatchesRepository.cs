@@ -24,7 +24,9 @@ public class MatchesRepository(SportyBuddiesDbContext dbContext) : IMatchesRepos
     {
         return await dbContext.Matches
             .Include(m => m.User)
+            .ThenInclude(u=>u.Sports)
             .Include(m => m.MatchedUser)
+            .ThenInclude(u=>u.Sports)
             .Where(m => m.User.Id == userId)
             .ToListAsync();
     }

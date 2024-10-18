@@ -8,15 +8,15 @@ using SportyBuddies.Domain.Users;
 namespace SportyBuddies.Application.Users.Commands.CreateUser;
 
 public class CreateUserCommandHandler(IUsersRepository usersRepository, IMapper mapper, IUnitOfWork unitOfWork)
-    : IRequestHandler<CreateUserCommand, ErrorOr<UserResponse>>
+    : IRequestHandler<CreateUserCommand, ErrorOr<UserWithSportsResponse>>
 {
-    public async Task<ErrorOr<UserResponse>> Handle(CreateUserCommand command, CancellationToken cancellationToken)
+    public async Task<ErrorOr<UserWithSportsResponse>> Handle(CreateUserCommand command, CancellationToken cancellationToken)
     {
         var user = mapper.Map<User>(command);
 
         await usersRepository.AddUserAsync(user);
         await unitOfWork.CommitChangesAsync();
 
-        return mapper.Map<UserResponse>(user);
+        return mapper.Map<UserWithSportsResponse>(user);
     }
 }

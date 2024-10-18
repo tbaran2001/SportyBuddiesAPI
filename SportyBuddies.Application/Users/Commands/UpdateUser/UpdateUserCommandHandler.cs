@@ -7,9 +7,9 @@ using SportyBuddies.Application.Common.Interfaces;
 namespace SportyBuddies.Application.Users.Commands.UpdateUser;
 
 public class UpdateUserCommandHandler(IUsersRepository usersRepository, IMapper mapper, IUnitOfWork unitOfWork)
-    : IRequestHandler<UpdateUserCommand, ErrorOr<UserResponse>>
+    : IRequestHandler<UpdateUserCommand, ErrorOr<UserWithSportsResponse>>
 {
-    public async Task<ErrorOr<UserResponse>> Handle(UpdateUserCommand command, CancellationToken cancellationToken)
+    public async Task<ErrorOr<UserWithSportsResponse>> Handle(UpdateUserCommand command, CancellationToken cancellationToken)
     {
         var user = await usersRepository.GetUserByIdAsync(command.UserId);
 
@@ -19,6 +19,6 @@ public class UpdateUserCommandHandler(IUsersRepository usersRepository, IMapper 
         mapper.Map(command, user);
         await unitOfWork.CommitChangesAsync();
 
-        return mapper.Map<UserResponse>(user);
+        return mapper.Map<UserWithSportsResponse>(user);
     }
 }

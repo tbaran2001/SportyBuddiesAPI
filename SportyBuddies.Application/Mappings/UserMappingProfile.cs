@@ -13,5 +13,6 @@ public class UserMappingProfile : Profile
         CreateMap<CreateUserCommand, User>();
         CreateMap<UpdateUserCommand, User>();
         CreateMap<User, UserResponse>();
+        CreateMap<User, UserWithSportsResponse>();
     }
 }

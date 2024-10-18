@@ -4,4 +4,4 @@ using SportyBuddies.Application.Common.DTOs;
 
 namespace SportyBuddies.Application.Users.Queries.GetUsers;
 
-public record GetUsersQuery : IRequest<ErrorOr<List<UserResponse>>>;
+public record GetUsersQuery : IRequest<ErrorOr<List<UserWithSportsResponse>>>;
