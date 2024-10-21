@@ -22,6 +22,7 @@ public class SportyBuddiesDbContext(
     public DbSet<Match> Matches { get; set; }
     public DbSet<Buddy> Buddies { get; set; }
     public DbSet<Message> Messages { get; set; }
+    public DbSet<UserPhoto> UserPhotos { get; set; }
 
     public async Task CommitChangesAsync()
     {
@@ -67,6 +68,18 @@ public class SportyBuddiesDbContext(
                     .WithMany()
                     .HasForeignKey("UserId")
             );
+
+        modelBuilder.Entity<User>()
+            .HasMany(u => u.Photos)
+            .WithOne(p => p.User)
+            .HasForeignKey(p => p.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<User>()
+            .HasOne(u => u.MainPhoto)
+            .WithMany()
+            .HasForeignKey(u => u.MainPhotoId)
+            .OnDelete(DeleteBehavior.SetNull);
 
         base.OnModelCreating(modelBuilder);
     }

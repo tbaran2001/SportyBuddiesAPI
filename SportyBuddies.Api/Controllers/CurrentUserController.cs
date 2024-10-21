@@ -11,6 +11,7 @@ using SportyBuddies.Application.Messages.Queries.GetLastUserMessages;
 using SportyBuddies.Application.Messages.Queries.GetUserMessages;
 using SportyBuddies.Application.Messages.Queries.GetUserMessagesWithBuddy;
 using SportyBuddies.Application.Users.Commands.UpdateUser;
+using SportyBuddies.Application.Users.Commands.UploadPhoto;
 using SportyBuddies.Application.Users.Queries.GetUser;
 using SportyBuddies.Application.UserSports.Commands.AddUserSport;
 using SportyBuddies.Application.UserSports.Commands.RemoveUserSport;
@@ -218,6 +219,21 @@ namespace SportyBuddies.Api.Controllers
             var messagesResult = await mediator.Send(query);
 
             return messagesResult.Match(
+                Ok,
+                Problem);
+        }
+
+        [HttpPost("photos")]
+        public async Task<IActionResult> UploadPhoto([FromForm] IFormFile file)
+        {
+            var userId = userManager.GetUserId(User);
+            if (userId == null) return Unauthorized();
+
+            var command = new UploadPhotoCommand(Guid.Parse(userId), file);
+
+            var photoResult = await mediator.Send(command);
+
+            return photoResult.Match(
                 Ok,
                 Problem);
         }

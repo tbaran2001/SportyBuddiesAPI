@@ -60,6 +60,8 @@ app.UseHttpsRedirection();
 
 app.UseCors("React");
 
+app.UseStaticFiles();
+
 app.UseAuthentication();
 app.UseAuthorization();
 

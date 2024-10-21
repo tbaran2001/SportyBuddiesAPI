@@ -25,6 +25,7 @@
 
     <ItemGroup>
       <Folder Include="Controllers\" />
+        <Folder Include="wwwroot\"/>
     </ItemGroup>
     <ItemGroup>
         <InternalsVisibleTo Include="SportyBuddies.Api.IntegrationTests"/>
