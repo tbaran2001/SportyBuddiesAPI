@@ -7,11 +7,16 @@ using SportyBuddies.Application.Common.Interfaces;
 namespace SportyBuddies.Application.Matches.Queries.GetUserMatches;
 
 public class GetUserMatchesQueryHandler(IMatchesRepository matchesRepository, IMapper mapper)
-    : IRequestHandler<GetUserMatchesQuery, ErrorOr<List<MatchResponse>>>
+    : IRequestHandler<GetUserMatchesQuery, ErrorOr<object>>
 {
-    public async Task<ErrorOr<List<MatchResponse>>> Handle(GetUserMatchesQuery request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<object>> Handle(GetUserMatchesQuery query,
+        CancellationToken cancellationToken)
     {
-        var matches = await matchesRepository.GetUserMatchesAsync(request.UserId);
-        return mapper.Map<List<MatchResponse>>(matches);
+        var matches =
+            await matchesRepository.GetUserMatchesAsync(query.UserId, query.IncludeUsers);
+
+        return query.IncludeUsers
+            ? mapper.Map<List<MatchWithUsersResponse>>(matches)
+            : mapper.Map<List<MatchResponse>>(matches);
     }
 }

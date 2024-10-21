@@ -103,12 +103,12 @@ namespace SportyBuddies.Api.Controllers
         }
 
         [HttpGet("matches")]
-        public async Task<IActionResult> GetCurrentUserMatches()
+        public async Task<IActionResult> GetCurrentUserMatches(bool includeUsers = false)
         {
             var userId = userManager.GetUserId(User);
             if (userId == null) return Unauthorized();
 
-            var query = new GetUserMatchesQuery(Guid.Parse(userId));
+            var query = new GetUserMatchesQuery(Guid.Parse(userId), includeUsers);
 
             var matchesResult = await mediator.Send(query);
 

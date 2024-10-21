@@ -20,15 +20,17 @@ public class MatchesRepository(SportyBuddiesDbContext dbContext) : IMatchesRepos
             .FirstOrDefaultAsync(m => m.Id == matchId);
     }
 
-    public async Task<IEnumerable<Match>> GetUserMatchesAsync(Guid userId)
+    public async Task<IEnumerable<Match>> GetUserMatchesAsync(Guid userId, bool includeUsers)
     {
-        return await dbContext.Matches
-            .Include(m => m.User)
-            .ThenInclude(u=>u.Sports)
-            .Include(m => m.MatchedUser)
-            .ThenInclude(u=>u.Sports)
-            .Where(m => m.User.Id == userId)
-            .ToListAsync();
+        var query = dbContext.Matches
+            .Where(m => m.User.Id == userId);
+
+        if (includeUsers)
+            query = query
+                .Include(m => m.User)
+                .Include(m => m.MatchedUser);
+
+        return await query.ToListAsync();
     }
 
     public async Task<IEnumerable<Match>> GetUserExistingMatchesAsync(Guid userId)

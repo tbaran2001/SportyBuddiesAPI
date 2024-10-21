@@ -9,15 +9,9 @@ public class MatchMappingProfile : Profile
 {
     public MatchMappingProfile()
     {
-        CreateMap<Match, MatchResponse>()
-            .ConstructUsing((src, ctx) => new MatchResponse(
-                src.Id,
-                ctx.Mapper.Map<UserWithSportsResponse>(src.User),
-                ctx.Mapper.Map<UserWithSportsResponse>(src.MatchedUser),
-                src.MatchDateTime,
-                src.Swipe,
-                src.SwipeDateTime
-            ));
+        CreateMap<Match, MatchResponse>();
+        CreateMap<Match, MatchWithUsersResponse>();
+        CreateMap<Match, RandomMatchResponse>();
         CreateMap<UpdateMatchCommand, Match>();
     }
 }

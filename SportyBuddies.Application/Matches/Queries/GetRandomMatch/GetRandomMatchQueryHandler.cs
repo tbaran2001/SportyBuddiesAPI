@@ -7,11 +7,13 @@ using SportyBuddies.Application.Common.Interfaces;
 namespace SportyBuddies.Application.Matches.Queries.GetRandomMatch;
 
 public class GetRandomMatchQueryHandler(IMatchesRepository matchesRepository, IMapper mapper)
-    : IRequestHandler<GetRandomMatchQuery, ErrorOr<MatchResponse?>>
+    : IRequestHandler<GetRandomMatchQuery, ErrorOr<RandomMatchResponse?>>
 {
-    public async Task<ErrorOr<MatchResponse?>> Handle(GetRandomMatchQuery query, CancellationToken cancellationToken)
+    public async Task<ErrorOr<RandomMatchResponse?>> Handle(GetRandomMatchQuery query,
+        CancellationToken cancellationToken)
     {
         var match = await matchesRepository.GetRandomMatchAsync(query.UserId);
-        return mapper.Map<MatchResponse>(match);
+
+        return mapper.Map<RandomMatchResponse>(match);
     }
 }

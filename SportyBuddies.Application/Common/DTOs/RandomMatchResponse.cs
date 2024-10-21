@@ -2,10 +2,10 @@
 
 namespace SportyBuddies.Application.Common.DTOs;
 
-public record MatchResponse(
+public record RandomMatchResponse(
     Guid Id,
     Guid UserId,
-    Guid MatchedUserId,
+    UserWithSportsResponse MatchedUser,
     DateTime MatchDateTime,
     Swipe? Swipe,
     DateTime? SwipeDateTime);

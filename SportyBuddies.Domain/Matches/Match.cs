@@ -13,6 +13,8 @@ public class Match : Entity
         MatchDateTime = matchDateTime;
         Swipe = swipe;
         SwipeDateTime = swipeDateTime;
+        UserId = user.Id;
+        MatchedUserId = matchedUser.Id;
     }
 
     public Match()
@@ -20,7 +22,9 @@ public class Match : Entity
     }
 
     public User User { get; private set; }
+    public Guid UserId { get; private set; }
     public User MatchedUser { get; private set; }
+    public Guid MatchedUserId { get; private set; }
     public DateTime MatchDateTime { get; private set; }
     public Swipe? Swipe { get; private set; }
     public DateTime? SwipeDateTime { get; private set; }
