@@ -1,3 +1,3 @@
 ﻿namespace SportyBuddies.Application.Common.DTOs;
 
-public record BuddyResponse(Guid Id, UserWithSportsResponse UserWithSports, UserWithSportsResponse MatchedUserWithSports, DateTime MatchDateTime);
+public record BuddyResponse(Guid Id, Guid UserId, Guid MatchedUserId, DateTime MatchDateTime);

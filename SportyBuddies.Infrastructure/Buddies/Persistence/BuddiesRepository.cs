@@ -7,12 +7,20 @@ namespace SportyBuddies.Infrastructure.Buddies.Persistence;
 
 public class BuddiesRepository(SportyBuddiesDbContext dbContext) : IBuddiesRepository
 {
-    public async Task<IEnumerable<Buddy>> GetUserBuddiesAsync(Guid userId)
+    public async Task<IEnumerable<Buddy>> GetUserBuddiesAsync(Guid userId, bool includeUsers)
     {
-        return await dbContext.Buddies
-            .Include(b => b.MatchedUser)
-            .Where(b => b.User.Id == userId)
-            .ToListAsync();
+        var query = dbContext.Buddies
+            .Where(b => b.UserId == userId);
+
+        if (includeUsers)
+            query = query
+                .Include(b => b.User)
+                .Include(b => b.MatchedUser);
+
+        return includeUsers
+            ? await query.ToListAsync()
+            : await query.Select(b => new Buddy(b.User, b.MatchedUser, b.MatchDateTime, b.Id))
+                .ToListAsync();
     }
 
     public async Task AddBuddyAsync(Buddy buddy)

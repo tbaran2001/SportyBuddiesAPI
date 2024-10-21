@@ -10,6 +10,8 @@ public class Buddy : Entity
         User = user;
         MatchedUser = matchedUser;
         MatchDateTime = matchDateTime;
+        UserId = user.Id;
+        MatchedUserId = matchedUser.Id;
     }
 
     public Buddy()
@@ -17,6 +19,8 @@ public class Buddy : Entity
     }
 
     public User User { get; private set; }
+    public Guid UserId { get; private set; }
     public User MatchedUser { get; private set; }
+    public Guid MatchedUserId { get; private set; }
     public DateTime MatchDateTime { get; private set; }
 }

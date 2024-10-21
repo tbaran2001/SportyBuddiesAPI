@@ -148,12 +148,12 @@ namespace SportyBuddies.Api.Controllers
         }
 
         [HttpGet("buddies")]
-        public async Task<IActionResult> GetCurrentUserBuddies()
+        public async Task<IActionResult> GetCurrentUserBuddies(bool includeUsers = false)
         {
             var userId = userManager.GetUserId(User);
             if (userId == null) return Unauthorized();
 
-            var query = new GetUserBuddiesQuery(Guid.Parse(userId));
+            var query = new GetUserBuddiesQuery(Guid.Parse(userId), includeUsers);
 
             var buddiesResult = await mediator.Send(query);
 

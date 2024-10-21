@@ -4,6 +4,6 @@ namespace SportyBuddies.Application.Common.Interfaces;
 
 public interface IBuddiesRepository
 {
-    Task<IEnumerable<Buddy>> GetUserBuddiesAsync(Guid userId);
+    Task<IEnumerable<Buddy>> GetUserBuddiesAsync(Guid userId, bool includeUsers);
     Task AddBuddyAsync(Buddy buddy);
 }

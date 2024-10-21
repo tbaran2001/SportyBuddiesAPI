@@ -9,5 +9,6 @@ public class BuddyMappingProfile : Profile
     public BuddyMappingProfile()
     {
         CreateMap<Buddy, BuddyResponse>();
+        CreateMap<Buddy, BuddyWithUsersResponse>();
     }
 }

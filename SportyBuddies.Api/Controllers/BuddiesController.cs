@@ -9,13 +9,13 @@ namespace SportyBuddies.Api.Controllers;
 public class BuddiesController(ISender mediator, IMapper mapper) : ApiController
 {
     [HttpGet("{userId:guid}")]
-    public async Task<IActionResult> GetUserBuddies(Guid userId)
+    public async Task<IActionResult> GetUserBuddies(Guid userId, bool includeUsers = false)
     {
-        var query = new GetUserBuddiesQuery(userId);
+        var query = new GetUserBuddiesQuery(userId, includeUsers);
 
-        var buddiesResult = await mediator.Send(query);
+        var buddiesWithUsersResult = await mediator.Send(query);
 
-        return buddiesResult.Match(
+        return buddiesWithUsersResult.Match(
             Ok,
             Problem);
     }
