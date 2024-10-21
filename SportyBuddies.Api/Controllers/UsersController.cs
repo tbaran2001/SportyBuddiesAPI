@@ -13,9 +13,9 @@ namespace SportyBuddies.Api.Controllers
     public class UsersController(IMapper mapper, ISender mediator) : ApiController
     {
         [HttpGet]
-        public async Task<IActionResult> GetUsers()
+        public async Task<IActionResult> GetUsers(bool includeSports = false)
         {
-            var query = new GetUsersQuery();
+            var query = new GetUsersQuery(includeSports);
 
             var usersResult = await mediator.Send(query);
 

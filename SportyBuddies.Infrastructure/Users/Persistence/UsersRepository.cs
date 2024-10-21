@@ -12,9 +12,21 @@ public class UsersRepository(SportyBuddiesDbContext dbContext) : IUsersRepositor
         return await dbContext.Users.FindAsync(userId);
     }
 
-    public async Task<IEnumerable<User>> GetAllUsersAsync()
+    public async Task<User?> GetUserByIdWithSportsAsync(Guid userId)
     {
-        return await dbContext.Users.ToListAsync();
+        return await dbContext.Users
+            .Include(u => u.Sports)
+            .FirstOrDefaultAsync(u => u.Id == userId);
+    }
+
+    public async Task<IEnumerable<User>> GetAllUsersAsync(bool includeSports)
+    {
+        IQueryable<User> query = dbContext.Users;
+
+        if (includeSports)
+            query = query.Include(u => u.Sports);
+
+        return await query.ToListAsync();
     }
 
     public async Task AddUserAsync(User user)
@@ -25,13 +37,6 @@ public class UsersRepository(SportyBuddiesDbContext dbContext) : IUsersRepositor
     public void RemoveUser(User user)
     {
         dbContext.Users.Remove(user);
-    }
-
-    public async Task<User?> GetUserByIdWithSportsAsync(Guid userId)
-    {
-        return await dbContext.Users
-            .Include(u => u.Sports)
-            .FirstOrDefaultAsync(u => u.Id == userId);
     }
 
     public async Task<IEnumerable<User>> GetAllUsersWithSportsAsync()

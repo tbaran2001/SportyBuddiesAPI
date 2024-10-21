@@ -6,10 +6,10 @@ using SportyBuddies.Application.Common.Interfaces;
 
 namespace SportyBuddies.Application.Messages.Queries.GetUserMessagesWithBuddy;
 
-public class GetUserMessagesWithBuddyQueryHandler(IMessagesRepository messagesRepository, IMapper mapper)
-    : IRequestHandler<GetUserMessagesWithBuddyQuery, ErrorOr<IEnumerable<MessageResponse>>>
+public class GetUserMessagesByBuddyIdQueryHandler(IMessagesRepository messagesRepository, IMapper mapper)
+    : IRequestHandler<GetUserMessagesByBuddyIdQuery, ErrorOr<IEnumerable<MessageResponse>>>
 {
-    public async Task<ErrorOr<IEnumerable<MessageResponse>>> Handle(GetUserMessagesWithBuddyQuery request,
+    public async Task<ErrorOr<IEnumerable<MessageResponse>>> Handle(GetUserMessagesByBuddyIdQuery request,
         CancellationToken cancellationToken)
     {
         var messages = await messagesRepository.GetUserMessagesWithBuddyAsync(request.UserId, request.BuddyId);

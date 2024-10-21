@@ -193,12 +193,12 @@ namespace SportyBuddies.Api.Controllers
         }
 
         [HttpGet("messages/{buddyId}")]
-        public async Task<IActionResult> GetUserMessagesWithBuddy(Guid buddyId)
+        public async Task<IActionResult> GetUserMessagesByBuddyId(Guid buddyId)
         {
             var userId = userManager.GetUserId(User);
             if (userId == null) return Unauthorized();
 
-            var query = new GetUserMessagesWithBuddyQuery(Guid.Parse(userId), buddyId);
+            var query = new GetUserMessagesByBuddyIdQuery(Guid.Parse(userId), buddyId);
 
             var messagesResult = await mediator.Send(query);
 

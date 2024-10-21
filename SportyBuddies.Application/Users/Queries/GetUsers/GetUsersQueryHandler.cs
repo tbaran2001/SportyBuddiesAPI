@@ -7,12 +7,14 @@ using SportyBuddies.Application.Common.Interfaces;
 namespace SportyBuddies.Application.Users.Queries.GetUsers;
 
 public class GetUsersQueryHandler(IUsersRepository usersRepository, IMapper mapper)
-    : IRequestHandler<GetUsersQuery, ErrorOr<List<UserWithSportsResponse>>>
+    : IRequestHandler<GetUsersQuery, ErrorOr<object>>
 {
-    public async Task<ErrorOr<List<UserWithSportsResponse>>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<object>> Handle(GetUsersQuery query, CancellationToken cancellationToken)
     {
-        var users = await usersRepository.GetAllUsersAsync();
+        var users = await usersRepository.GetAllUsersAsync(query.IncludeSports);
 
-        return mapper.Map<List<UserWithSportsResponse>>(users);
+        return query.IncludeSports
+            ? mapper.Map<List<UserWithSportsResponse>>(users)
+            : mapper.Map<List<UserResponse>>(users);
     }
 }
