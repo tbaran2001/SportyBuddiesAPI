@@ -81,6 +81,10 @@ public class SportyBuddiesDbContext(
             .HasForeignKey(u => u.MainPhotoId)
             .OnDelete(DeleteBehavior.SetNull);
 
+        modelBuilder.Entity<UserPhoto>()
+            .Property(up => up.Id)
+            .ValueGeneratedNever();
+
         base.OnModelCreating(modelBuilder);
     }
 }

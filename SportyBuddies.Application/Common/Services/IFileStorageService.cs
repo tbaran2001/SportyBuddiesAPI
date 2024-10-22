@@ -4,5 +4,5 @@ namespace SportyBuddies.Application.Common.Services;
 
 public interface IFileStorageService
 {
-    Task<string> SaveFileAsync(IFormFile file);
+    Task<string> SaveFileAsync(Guid userId, IFormFile file, Guid photoId);
 }

@@ -1,3 +1,4 @@
+using System.IO.Compression;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -13,6 +14,7 @@ using SportyBuddies.Application.Messages.Queries.GetUserMessagesWithBuddy;
 using SportyBuddies.Application.Users.Commands.UpdateUser;
 using SportyBuddies.Application.Users.Commands.UploadPhoto;
 using SportyBuddies.Application.Users.Queries.GetUser;
+using SportyBuddies.Application.Users.Queries.GetUserPhotos;
 using SportyBuddies.Application.UserSports.Commands.AddUserSport;
 using SportyBuddies.Application.UserSports.Commands.RemoveUserSport;
 using SportyBuddies.Application.UserSports.Queries.GetUserSports;
@@ -236,6 +238,34 @@ namespace SportyBuddies.Api.Controllers
             return photoResult.Match(
                 Ok,
                 Problem);
+        }
+
+        [HttpGet("photos")]
+        public async Task<IActionResult> GetUserPhotos()
+        {
+            var userId = userManager.GetUserId(User);
+            if (userId == null) return Unauthorized();
+
+            var query = new GetUserPhotosQuery(Guid.Parse(userId));
+
+            var photosResult = await mediator.Send(query);
+
+            var zipStream = new MemoryStream();
+            using (var archive = new ZipArchive(zipStream, ZipArchiveMode.Create, true))
+            {
+                foreach (var photo in photosResult.Value)
+                {
+                    var entry = archive.CreateEntry(Path.GetFileName(photo.Url));
+                    using (var entryStream = entry.Open())
+                    {
+                        await using var fileStream = System.IO.File.OpenRead(photo.Url);
+                        await fileStream.CopyToAsync(entryStream);
+                    }
+                }
+            }
+
+            zipStream.Seek(0, SeekOrigin.Begin);
+            return File(zipStream, "application/zip", "photos.zip");
         }
     }
 }

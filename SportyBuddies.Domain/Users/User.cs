@@ -59,4 +59,9 @@ public class User : Entity
     {
         Sports.Clear();
     }
+
+    public void AddPhoto(UserPhoto photo)
+    {
+        Photos.Add(photo);
+    }
 }
