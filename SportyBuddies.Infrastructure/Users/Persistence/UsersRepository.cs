@@ -22,6 +22,7 @@ public class UsersRepository(SportyBuddiesDbContext dbContext) : IUsersRepositor
     public async Task<User?> GetUserByIdWithPhotosAsync(Guid userId)
     {
         return await dbContext.Users
+            .Include(u => u.MainPhoto)
             .Include(u => u.Photos)
             .FirstOrDefaultAsync(u => u.Id == userId);
     }

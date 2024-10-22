@@ -21,7 +21,7 @@ public class UploadPhotoCommandHandler(
         var photoId = Guid.NewGuid();
         var url = await fileStorageService.SaveFileAsync(user.Id, command.File, photoId);
 
-        var userPhoto = new UserPhoto(user, url, false, photoId);
+        var userPhoto = new UserPhoto(user, url, command.IsMain, photoId);
 
         user.AddPhoto(userPhoto);
 

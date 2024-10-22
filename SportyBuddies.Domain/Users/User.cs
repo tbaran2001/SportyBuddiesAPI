@@ -62,6 +62,14 @@ public class User : Entity
 
     public void AddPhoto(UserPhoto photo)
     {
-        Photos.Add(photo);
+        if (photo.IsMain)
+        {
+            MainPhoto = photo;
+            MainPhotoId = photo.Id;
+        }
+        else
+        {
+            Photos.Add(photo);
+        }
     }
 }

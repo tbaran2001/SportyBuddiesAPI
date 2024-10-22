@@ -14,6 +14,7 @@ using SportyBuddies.Application.Messages.Queries.GetUserMessagesWithBuddy;
 using SportyBuddies.Application.Users.Commands.UpdateUser;
 using SportyBuddies.Application.Users.Commands.UploadPhoto;
 using SportyBuddies.Application.Users.Queries.GetUser;
+using SportyBuddies.Application.Users.Queries.GetUserMainPhoto;
 using SportyBuddies.Application.Users.Queries.GetUserPhotos;
 using SportyBuddies.Application.UserSports.Commands.AddUserSport;
 using SportyBuddies.Application.UserSports.Commands.RemoveUserSport;
@@ -226,18 +227,32 @@ namespace SportyBuddies.Api.Controllers
         }
 
         [HttpPost("photos")]
-        public async Task<IActionResult> UploadPhoto([FromForm] IFormFile file)
+        public async Task<IActionResult> UploadPhoto([FromForm] IFormFile file, bool isMain = false)
         {
             var userId = userManager.GetUserId(User);
             if (userId == null) return Unauthorized();
 
-            var command = new UploadPhotoCommand(Guid.Parse(userId), file);
+            var command = new UploadPhotoCommand(Guid.Parse(userId), isMain, file);
 
             var photoResult = await mediator.Send(command);
 
             return photoResult.Match(
                 Ok,
                 Problem);
+        }
+
+        [HttpGet("photos/main")]
+        public async Task<IActionResult> GetUserMainPhoto()
+        {
+            var userId = userManager.GetUserId(User);
+            if (userId == null) return Unauthorized();
+
+            var query = new GetUserMainPhotoQuery(Guid.Parse(userId));
+
+            var photoResult = await mediator.Send(query);
+
+            var stream = System.IO.File.OpenRead(photoResult.Value);
+            return File(stream, "image/jpeg");
         }
 
         [HttpGet("photos")]
