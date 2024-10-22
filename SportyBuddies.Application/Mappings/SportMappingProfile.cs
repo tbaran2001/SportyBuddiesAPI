@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using SportyBuddies.Application.Common.DTOs;
+using SportyBuddies.Application.Common.DTOs.Sport;
 using SportyBuddies.Application.Sports.Commands.CreateSport;
 using SportyBuddies.Domain.Sports;
 

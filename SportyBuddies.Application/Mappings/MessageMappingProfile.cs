@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using SportyBuddies.Application.Common.DTOs;
+using SportyBuddies.Application.Common.DTOs.Message;
 using SportyBuddies.Domain.Messages;
 
 namespace SportyBuddies.Application.Mappings;

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using ErrorOr;
 using MediatR;
-using SportyBuddies.Application.Common.DTOs;
+using SportyBuddies.Application.Common.DTOs.Sport;
 using SportyBuddies.Application.Common.Interfaces;
 
 namespace SportyBuddies.Application.Sports.Queries.GetSport;
@@ -21,7 +21,7 @@ public class GetSportQueryHandler : IRequestHandler<GetSportQuery, ErrorOr<Sport
     {
         var sport = await _sportsRepository.GetSportByIdAsync(query.SportId);
 
-        if (sport == null) 
+        if (sport == null)
             return Error.NotFound();
 
         return _mapper.Map<SportResponse>(sport);

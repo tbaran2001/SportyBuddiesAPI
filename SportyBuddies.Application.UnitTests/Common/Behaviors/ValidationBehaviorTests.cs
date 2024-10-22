@@ -5,7 +5,7 @@ using FluentValidation.Results;
 using MediatR;
 using NSubstitute;
 using SportyBuddies.Application.Common.Behaviors;
-using SportyBuddies.Application.Common.DTOs;
+using SportyBuddies.Application.Common.DTOs.Sport;
 using SportyBuddies.Application.Sports.Commands.CreateSport;
 using TestCommon.Sports;
 

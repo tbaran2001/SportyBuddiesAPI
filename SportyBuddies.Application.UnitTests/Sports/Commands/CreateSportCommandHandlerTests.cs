@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using FluentAssertions;
 using NSubstitute;
-using SportyBuddies.Application.Common.DTOs;
+using SportyBuddies.Application.Common.DTOs.Sport;
 using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Application.Mappings;
 using SportyBuddies.Application.Sports.Commands.CreateSport;

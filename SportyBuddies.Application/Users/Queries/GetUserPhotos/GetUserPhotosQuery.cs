@@ -1,6 +1,6 @@
 ﻿using ErrorOr;
 using MediatR;
-using SportyBuddies.Application.Common.DTOs;
+using SportyBuddies.Application.Common.DTOs.User;
 
 namespace SportyBuddies.Application.Users.Queries.GetUserPhotos;
 

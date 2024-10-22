@@ -1,7 +1,8 @@
 using ErrorOr;
 using MediatR;
-using SportyBuddies.Application.Common.DTOs;
+using SportyBuddies.Application.Common.DTOs.User;
 
 namespace SportyBuddies.Application.Users.Commands.UpdateUser;
 
-public record UpdateUserCommand(Guid UserId, string Name, string Description) : IRequest<ErrorOr<UserWithSportsResponse>>;
+public record UpdateUserCommand(Guid UserId, string Name, string Description)
+    : IRequest<ErrorOr<UserWithSportsResponse>>;

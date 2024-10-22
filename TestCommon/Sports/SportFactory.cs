@@ -1,4 +1,4 @@
-﻿using SportyBuddies.Application.Common.DTOs;
+﻿using SportyBuddies.Application.Common.DTOs.Sport;
 using TestCommon.TestConstants;
 
 namespace TestCommon.Sports;

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using ErrorOr;
 using MediatR;
-using SportyBuddies.Application.Common.DTOs;
+using SportyBuddies.Application.Common.DTOs.Buddy;
 using SportyBuddies.Application.Common.Interfaces;
 
 namespace SportyBuddies.Application.Buddies.Queries.GetUserBuddies;

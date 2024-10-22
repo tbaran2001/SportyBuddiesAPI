@@ -1,6 +1,6 @@
 ﻿using SportyBuddies.Domain.Matches;
 
-namespace SportyBuddies.Application.Common.DTOs;
+namespace SportyBuddies.Application.Common.DTOs.Match;
 
 public record MatchResponse(
     Guid Id,
