@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using ErrorOr;
 using MediatR;
 using SportyBuddies.Application.Common.DTOs.Buddy;
 using SportyBuddies.Application.Common.Interfaces;
@@ -7,9 +6,9 @@ using SportyBuddies.Application.Common.Interfaces;
 namespace SportyBuddies.Application.Buddies.Queries.GetUserBuddies;
 
 public class GetUserBuddiesQueryHandler(IBuddiesRepository buddiesRepository, IMapper mapper)
-    : IRequestHandler<GetUserBuddiesQuery, ErrorOr<object>>
+    : IRequestHandler<GetUserBuddiesQuery, object>
 {
-    public async Task<ErrorOr<object>> Handle(GetUserBuddiesQuery query,
+    public async Task<object> Handle(GetUserBuddiesQuery query,
         CancellationToken cancellationToken)
     {
         var buddies = await buddiesRepository.GetUserBuddiesAsync(query.UserId, query.IncludeUsers);

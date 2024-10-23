@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
+using SportyBuddies.Api.Middlewares;
 using SportyBuddies.Application;
 using SportyBuddies.Application.Hubs;
 using SportyBuddies.Identity;
@@ -20,7 +21,7 @@ builder.Services
     .AddApplication()
     .AddInfrastructure()
     .AddIdentity();
-builder.Services.AddProblemDetails();
+
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -38,7 +39,18 @@ builder.Services.AddSignalR();
 
 var app = builder.Build();
 
-app.UseExceptionHandler();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+//app.UseExceptionHandler();
+//app.UseExceptionHandler("/errors");
+
 //app.AddInfrastructureMiddleware();
 
 app.MapGroup("/api").MapIdentityApi<ApplicationUser>();
@@ -48,14 +60,6 @@ app.MapPost("/api/logout", async (ClaimsPrincipal user, SignInManager<Applicatio
     return TypedResults.Ok();
 });
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-//app.UseExceptionHandler("/errors");
 app.UseHttpsRedirection();
 
 app.UseCors("React");

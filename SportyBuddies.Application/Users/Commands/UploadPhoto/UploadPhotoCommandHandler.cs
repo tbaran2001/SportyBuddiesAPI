@@ -1,7 +1,7 @@
-﻿using ErrorOr;
-using MediatR;
+﻿using MediatR;
 using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Application.Common.Services;
+using SportyBuddies.Application.Exceptions;
 using SportyBuddies.Domain.Users;
 
 namespace SportyBuddies.Application.Users.Commands.UploadPhoto;
@@ -10,13 +10,13 @@ public class UploadPhotoCommandHandler(
     IFileStorageService fileStorageService,
     IUsersRepository usersRepository,
     IUnitOfWork unitOfWork)
-    : IRequestHandler<UploadPhotoCommand, ErrorOr<string>>
+    : IRequestHandler<UploadPhotoCommand, string>
 {
-    public async Task<ErrorOr<string>> Handle(UploadPhotoCommand command, CancellationToken cancellationToken)
+    public async Task<string> Handle(UploadPhotoCommand command, CancellationToken cancellationToken)
     {
         var user = await usersRepository.GetUserByIdWithPhotosAsync(command.UserId);
         if (user == null)
-            return Error.NotFound();
+            throw new NotFoundException(nameof(user), command.UserId.ToString());
 
         var photoId = Guid.NewGuid();
         var url = await fileStorageService.SaveFileAsync(user.Id, command.File, photoId);

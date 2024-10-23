@@ -1,30 +1,30 @@
-﻿using ErrorOr;
-using FluentValidation;
+﻿using FluentValidation;
 using MediatR;
+using ValidationException = SportyBuddies.Application.Exceptions.ValidationException;
 
 namespace SportyBuddies.Application.Common.Behaviors;
 
 public class ValidationBehavior<TRequest, TResponse>(IValidator<TRequest>? validator = null)
     : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
-    where TResponse : IErrorOr
 {
-    private readonly IValidator<TRequest>? _validator = validator;
-
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next,
         CancellationToken cancellationToken)
     {
         if (validator is null)
             return await next();
 
-        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
         if (validationResult.IsValid)
             return await next();
 
         var errors = validationResult.Errors
-            .ConvertAll(error => Error.Validation(error.PropertyName, error.ErrorMessage));
+            .GroupBy(x => x.PropertyName, x => x.ErrorMessage)
+            .ToDictionary(x => x.Key, x => x.ToArray());
 
-        return (dynamic)errors;
+        if (errors.Any()) throw new ValidationException(errors);
+
+        return await next();
     }
 }

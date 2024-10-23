@@ -1,20 +1,20 @@
 ﻿using AutoMapper;
-using ErrorOr;
 using MediatR;
 using SportyBuddies.Application.Common.DTOs.User;
 using SportyBuddies.Application.Common.Interfaces;
+using SportyBuddies.Application.Exceptions;
 
 namespace SportyBuddies.Application.Users.Queries.GetUserPhotos;
 
 public class GetUserPhotosQueryHandler(IUsersRepository usersRepository, IMapper mapper)
-    : IRequestHandler<GetUserPhotosQuery, ErrorOr<List<UserPhotoResponse>>>
+    : IRequestHandler<GetUserPhotosQuery, List<UserPhotoResponse>>
 {
-    public async Task<ErrorOr<List<UserPhotoResponse>>> Handle(GetUserPhotosQuery request,
+    public async Task<List<UserPhotoResponse>> Handle(GetUserPhotosQuery query,
         CancellationToken cancellationToken)
     {
-        var user = await usersRepository.GetUserByIdWithPhotosAsync(request.UserId);
+        var user = await usersRepository.GetUserByIdWithPhotosAsync(query.UserId);
         if (user == null)
-            return Error.NotFound();
+            throw new NotFoundException(nameof(user), query.UserId.ToString());
 
         var photos = user.Photos;
 

@@ -1,8 +1,8 @@
 using AutoMapper;
-using ErrorOr;
 using MediatR;
 using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Application.Common.Services;
+using SportyBuddies.Application.Exceptions;
 using SportyBuddies.Domain.Matches;
 
 namespace SportyBuddies.Application.Matches.Commands.UpdateMatch;
@@ -12,13 +12,13 @@ public class UpdateMatchCommandHandler(
     IMapper mapper,
     IUnitOfWork unitOfWork,
     IMatchingService matchingService)
-    : IRequestHandler<UpdateMatchCommand, ErrorOr<Updated>>
+    : IRequestHandler<UpdateMatchCommand>
 {
-    public async Task<ErrorOr<Updated>> Handle(UpdateMatchCommand command, CancellationToken cancellationToken)
+    public async Task Handle(UpdateMatchCommand command, CancellationToken cancellationToken)
     {
         var match = await matchesRepository.GetMatchByIdAsync(command.MatchId);
         if (match == null)
-            return Error.NotFound();
+            throw new NotFoundException(nameof(match), command.MatchId.ToString());
 
         mapper.Map(command, match);
 
@@ -26,7 +26,5 @@ public class UpdateMatchCommandHandler(
             await matchingService.CreateBuddyRelationshipAsync(match.Id);
 
         await unitOfWork.CommitChangesAsync();
-
-        return Result.Updated;
     }
 }

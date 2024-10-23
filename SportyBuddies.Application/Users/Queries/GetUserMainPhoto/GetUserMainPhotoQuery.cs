@@ -1,6 +1,5 @@
-﻿using ErrorOr;
-using MediatR;
+﻿using MediatR;
 
 namespace SportyBuddies.Application.Users.Queries.GetUserMainPhoto;
 
-public record GetUserMainPhotoQuery(Guid UserId) : IRequest<ErrorOr<string>>;
+public record GetUserMainPhotoQuery(Guid UserId) : IRequest<string>;

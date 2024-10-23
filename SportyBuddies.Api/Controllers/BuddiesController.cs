@@ -6,7 +6,7 @@ using SportyBuddies.Application.Buddies.Queries.GetUserBuddies;
 namespace SportyBuddies.Api.Controllers;
 
 [Route("api/[controller]")]
-public class BuddiesController(ISender mediator, IMapper mapper) : ApiController
+public class BuddiesController(ISender mediator, IMapper mapper) : ControllerBase
 {
     [HttpGet("{userId:guid}")]
     public async Task<IActionResult> GetUserBuddies(Guid userId, bool includeUsers = false)
@@ -15,8 +15,6 @@ public class BuddiesController(ISender mediator, IMapper mapper) : ApiController
 
         var buddiesWithUsersResult = await mediator.Send(query);
 
-        return buddiesWithUsersResult.Match(
-            Ok,
-            Problem);
+        return Ok(buddiesWithUsersResult);
     }
 }

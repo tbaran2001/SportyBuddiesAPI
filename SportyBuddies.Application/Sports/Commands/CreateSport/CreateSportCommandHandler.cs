@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using ErrorOr;
 using MediatR;
 using SportyBuddies.Application.Common.DTOs.Sport;
 using SportyBuddies.Application.Common.Interfaces;
@@ -8,9 +7,9 @@ using SportyBuddies.Domain.Sports;
 namespace SportyBuddies.Application.Sports.Commands.CreateSport;
 
 public class CreateSportCommandHandler(ISportsRepository sportsRepository, IUnitOfWork unitOfWork, IMapper mapper)
-    : IRequestHandler<CreateSportCommand, ErrorOr<SportResponse>>
+    : IRequestHandler<CreateSportCommand, SportResponse>
 {
-    public async Task<ErrorOr<SportResponse>> Handle(CreateSportCommand request, CancellationToken cancellationToken)
+    public async Task<SportResponse> Handle(CreateSportCommand request, CancellationToken cancellationToken)
     {
         var sport = mapper.Map<Sport>(request);
 
