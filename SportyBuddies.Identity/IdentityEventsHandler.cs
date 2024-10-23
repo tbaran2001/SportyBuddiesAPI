@@ -16,8 +16,8 @@ public class IdentityEventsHandler
 
     public async Task OnUserCreatedAsync(ApplicationUser user)
     {
-        var userEntity = new User(user.UserName, user.UserName, DateTime.Now, new List<Sport>(), null,
-            new List<UserPhoto>(), user.Id);
+        var userEntity = new User(user.UserName, null, DateTime.Now, new List<Sport>(), null,
+            new List<UserPhoto>(), 0, user.Id);
         await _context.Users.AddAsync(userEntity);
         await _context.SaveChangesAsync();
     }

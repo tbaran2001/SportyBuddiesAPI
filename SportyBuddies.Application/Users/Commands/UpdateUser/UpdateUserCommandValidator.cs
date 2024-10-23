@@ -1,12 +1,14 @@
 using FluentValidation;
+using SportyBuddies.Domain.Users;
 
 namespace SportyBuddies.Application.Users.Commands.UpdateUser;
 
-public class UpdateUserCommandValidator: AbstractValidator<UpdateUserCommand>
+public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
 {
     public UpdateUserCommandValidator()
     {
-        RuleFor(x => x.Name).NotEmpty().MaximumLength(4);
-        RuleFor(x => x.Description).NotEmpty().MaximumLength(6);
+        RuleFor(x => x.Name).NotEmpty().MaximumLength(10);
+        RuleFor(x => x.Description).NotEmpty().MaximumLength(60);
+        RuleFor(x => x.Gender).Must(gender => Enum.IsDefined(typeof(Gender), gender) && gender != Gender.Unknown);
     }
 }

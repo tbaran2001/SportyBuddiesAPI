@@ -24,6 +24,7 @@ using SportyBuddies.Contracts.Messages;
 using SportyBuddies.Contracts.Users;
 using SportyBuddies.Identity.Models;
 using Swipe = SportyBuddies.Domain.Matches.Swipe;
+using Gender = SportyBuddies.Domain.Users.Gender;
 
 namespace SportyBuddies.Api.Controllers
 {
@@ -52,7 +53,8 @@ namespace SportyBuddies.Api.Controllers
             var userId = userManager.GetUserId(User);
             if (userId == null) return Unauthorized();
 
-            var command = new UpdateUserCommand(Guid.Parse(userId), userRequest.Name, userRequest.Description);
+            var command = new UpdateUserCommand(Guid.Parse(userId), userRequest.Name, userRequest.Description,
+                (Gender)userRequest.Gender);
 
             var userResult = await mediator.Send(command);
 
