@@ -1,3 +1,3 @@
 namespace SportyBuddies.Contracts.Users;
 
-public record UpdateUserRequest(string Name, string Description, Gender Gender);
+public record UpdateUserRequest(string Name, string Description, Gender Gender, DateTime DateOfBirth);

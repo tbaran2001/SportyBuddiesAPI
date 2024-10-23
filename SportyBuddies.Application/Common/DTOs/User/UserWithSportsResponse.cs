@@ -10,4 +10,5 @@ public record UserWithSportsResponse(
     DateTime LastActive,
     Guid? MainPhotoId,
     Gender? Gender,
+    DateTime? DateOfBirth,
     ICollection<SportResponse> Sports);

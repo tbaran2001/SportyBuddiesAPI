@@ -8,7 +8,7 @@ namespace SportyBuddies.Domain.Users;
 public class User : Entity
 {
     public User(string name, string? description, DateTime lastActive, ICollection<Sport> sports, UserPhoto? mainPhoto,
-        ICollection<UserPhoto> photos, Gender? gender = 0, Guid? id = null) :
+        ICollection<UserPhoto> photos, DateTime? dateOfBirth, Gender? gender = 0, Guid? id = null) :
         base(id ?? Guid.NewGuid())
     {
         Name = name;
@@ -19,6 +19,7 @@ public class User : Entity
         Photos = photos;
         MainPhotoId = mainPhoto?.Id;
         Gender = gender;
+        DateOfBirth = dateOfBirth;
     }
 
     public User()
@@ -33,6 +34,7 @@ public class User : Entity
     public Guid? MainPhotoId { get; private set; }
     public ICollection<UserPhoto> Photos { get; private set; } = new List<UserPhoto>();
     public Gender? Gender { get; private set; }
+    public DateTime? DateOfBirth { get; private set; }
 
     public void Delete()
     {

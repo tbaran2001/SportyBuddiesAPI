@@ -8,4 +8,5 @@ public record UserResponse(
     string Description,
     DateTime LastActive,
     Guid? MainPhotoId,
-    Gender? Gender);
+    Gender? Gender,
+    DateTime? DateOfBirth);

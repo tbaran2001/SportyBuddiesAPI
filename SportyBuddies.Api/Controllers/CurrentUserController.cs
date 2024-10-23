@@ -54,7 +54,7 @@ namespace SportyBuddies.Api.Controllers
             if (userId == null) return Unauthorized();
 
             var command = new UpdateUserCommand(Guid.Parse(userId), userRequest.Name, userRequest.Description,
-                (Gender)userRequest.Gender);
+                (Gender)userRequest.Gender, userRequest.DateOfBirth);
 
             var userResult = await mediator.Send(command);
 
