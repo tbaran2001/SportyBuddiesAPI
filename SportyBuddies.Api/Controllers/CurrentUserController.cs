@@ -12,6 +12,7 @@ using SportyBuddies.Application.Messages.Queries.GetLastUserMessages;
 using SportyBuddies.Application.Messages.Queries.GetUserMessages;
 using SportyBuddies.Application.Messages.Queries.GetUserMessagesWithBuddy;
 using SportyBuddies.Application.Users.Commands.UpdateUser;
+using SportyBuddies.Application.Users.Commands.UpdateUserPreferences;
 using SportyBuddies.Application.Users.Commands.UploadPhoto;
 using SportyBuddies.Application.Users.Queries.GetUser;
 using SportyBuddies.Application.Users.Queries.GetUserMainPhoto;
@@ -283,6 +284,22 @@ namespace SportyBuddies.Api.Controllers
 
             zipStream.Seek(0, SeekOrigin.Begin);
             return File(zipStream, "application/zip", "photos.zip");
+        }
+
+        [HttpPut("preferences")]
+        public async Task<IActionResult> UpdateUserPreferences(UpdateUserPreferencesRequest preferencesRequest)
+        {
+            var userId = userManager.GetUserId(User);
+            if (userId == null) return Unauthorized();
+
+            var command = new UpdateUserPreferencesCommand(Guid.Parse(userId), preferencesRequest.MinAge,
+                preferencesRequest.MaxAge, (Gender)preferencesRequest.Gender);
+
+            var preferencesResult = await mediator.Send(command);
+
+            return preferencesResult.Match(
+                _ => NoContent(),
+                Problem);
         }
     }
 }

@@ -9,4 +9,5 @@ public record UserResponse(
     DateTime LastActive,
     Guid? MainPhotoId,
     Gender? Gender,
-    DateTime? DateOfBirth);
+    DateTime? DateOfBirth,
+    Preferences Preferences);

@@ -85,6 +85,8 @@ public class SportyBuddiesDbContext(
             .Property(up => up.Id)
             .ValueGeneratedNever();
 
+        modelBuilder.Entity<User>().OwnsOne(u => u.Preferences);
+
         base.OnModelCreating(modelBuilder);
     }
 }
