@@ -7,7 +7,7 @@ using SportyBuddies.Infrastructure.Common.Persistence;
 
 namespace SportyBuddies.Api.IntegrationTests.Controllers.UsersController;
 
-public class DeleteUserTests:IClassFixture<SportyBuddiesWebApplicationFactory<IApiMarker>>, IAsyncLifetime
+public class DeleteUserTests : IClassFixture<SportyBuddiesWebApplicationFactory<IApiMarker>>, IAsyncLifetime
 {
     private readonly SportyBuddiesWebApplicationFactory<IApiMarker> _appFactory;
     private readonly HttpClient _httpClient;
@@ -19,10 +19,23 @@ public class DeleteUserTests:IClassFixture<SportyBuddiesWebApplicationFactory<IA
         _httpClient = appFactory.CreateClient();
     }
 
+    public async Task InitializeAsync()
+    {
+        _dbContext = await DatabaseHelper.InitializeDatabaseAsync(_appFactory);
+    }
+
+    public async Task DisposeAsync()
+    {
+        _dbContext.Users.RemoveRange(_dbContext.Users);
+        await _dbContext.SaveChangesAsync();
+    }
+
     [Fact]
     public async Task DeleteUser_ReturnsNoContent_WhenUserIsDeleted()
     {
-        var user = new User("John", "Doe", DateTime.Now, new List<Sport>());
+        var user = new User("John", null, DateTime.Now, new List<Sport>(), null,
+            new List<UserPhoto>(), null);
+
         await _dbContext.Users.AddAsync(user);
         await _dbContext.SaveChangesAsync();
 
@@ -37,16 +50,5 @@ public class DeleteUserTests:IClassFixture<SportyBuddiesWebApplicationFactory<IA
         var response = await _httpClient.DeleteAsync($"/api/users/{Guid.NewGuid()}");
 
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
-    }
-
-    public async Task InitializeAsync()
-    {
-        _dbContext = await DatabaseHelper.InitializeDatabaseAsync(_appFactory);
-    }
-
-    public async Task DisposeAsync()
-    {
-        _dbContext.Users.RemoveRange(_dbContext.Users);
-        await _dbContext.SaveChangesAsync();
     }
 }

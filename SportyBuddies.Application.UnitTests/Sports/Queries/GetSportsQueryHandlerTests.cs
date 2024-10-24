@@ -40,9 +40,8 @@ public class GetSportsQueryHandlerTests
         var result = await _sut.Handle(_getSportQuery, CancellationToken.None);
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.Should().HaveCount(2);
-        result.Value.Should().Contain(x => x.Name == "Football");
-        result.Value.Should().Contain(x => x.Name == "Basketball");
+        result.Should().HaveCount(2);
+        result.Should().Contain(x => x.Name == "Football");
+        result.Should().Contain(x => x.Name == "Basketball");
     }
 }
