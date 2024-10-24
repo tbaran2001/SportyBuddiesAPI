@@ -1,12 +1,11 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using SportyBuddies.Application.Common.DTOs.User;
 using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Application.Exceptions;
 
 namespace SportyBuddies.Application.Users.Queries.GetUserPhotos;
 
-public class GetUserPhotosQueryHandler(IUsersRepository usersRepository, IMapper mapper)
+public class GetUserPhotosQueryHandler(IUsersRepository usersRepository)
     : IRequestHandler<GetUserPhotosQuery, List<UserPhotoResponse>>
 {
     public async Task<List<UserPhotoResponse>> Handle(GetUserPhotosQuery query,

@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.SignalR;
 using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Application.Exceptions;
@@ -11,7 +10,6 @@ namespace SportyBuddies.Application.Messages.Commands.SendMessage;
 public class SendMessageCommandHandler(
     IMessagesRepository messagesRepository,
     IUsersRepository usersRepository,
-    IMapper mapper,
     IHubContext<ChatHub, IChatClient> hubContext,
     IUnitOfWork unitOfWork) : IRequestHandler<SendMessageCommand>
 {
