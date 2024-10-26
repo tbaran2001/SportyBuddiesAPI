@@ -57,6 +57,11 @@ public class MatchingService(
         }
     }
 
+    public async Task<bool> AreUsersBuddiesAsync(Guid userId, Guid matchedUserId)
+    {
+        return await buddiesRepository.AreUsersBuddiesAsync(userId, matchedUserId);
+    }
+
     private void ProcessMatches(User user, List<User> allUsers, List<Match> existingMatches, List<Match> newMatches,
         List<Match> matchesToRemove)
     {

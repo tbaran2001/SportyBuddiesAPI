@@ -19,8 +19,11 @@ public class UpdateMatchCommandHandler(
         if (match == null)
             throw new NotFoundException(nameof(match), command.MatchId.ToString());
 
+        if(await matchingService.AreUsersBuddiesAsync(match.UserId, match.MatchedUserId))
+            throw new BadRequestException("Users are already buddies");
+        
         match.UpdateSwipe(command.Swipe);
-
+        
         if (command.Swipe == Swipe.Right)
             await matchingService.CreateBuddyRelationshipAsync(match.Id);
 

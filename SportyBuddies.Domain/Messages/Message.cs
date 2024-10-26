@@ -5,21 +5,39 @@ namespace SportyBuddies.Domain.Messages;
 
 public class Message : Entity
 {
-    public Message(User sender, User recipient, string content, DateTime timeSent, Guid? id = null) : base(
-        id ?? Guid.NewGuid())
+    private Message(
+        Guid id,
+        Guid senderId,
+        Guid recipientId,
+        string content,
+        DateTime timeSent
+    ) : base(id)
     {
-        Sender = sender;
-        Recipient = recipient;
+        SenderId = senderId;
+        RecipientId = recipientId;
         Content = content;
         TimeSent = timeSent;
+    }
+    
+    public static Message Create(
+        Guid senderId, 
+        Guid recipientId, 
+        string content)
+    {
+        return new Message(
+            Guid.NewGuid(), 
+            senderId, 
+            recipientId, 
+            content, 
+            DateTime.UtcNow);
     }
 
     public Message()
     {
     }
 
-    public User Sender { get; private set; }
-    public User Recipient { get; private set; }
+    public Guid SenderId { get; private set; }
+    public Guid RecipientId { get; private set; }
     public string Content { get; private set; }
     public DateTime TimeSent { get; private set; }
 }

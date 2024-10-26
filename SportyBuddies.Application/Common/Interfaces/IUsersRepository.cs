@@ -11,4 +11,5 @@ public interface IUsersRepository
     Task AddUserAsync(User user);
     void RemoveUser(User user);
     Task<IEnumerable<User>> GetAllUsersWithSportsAsync();
+    Task<bool> UserExistsAsync(Guid userId);
 }

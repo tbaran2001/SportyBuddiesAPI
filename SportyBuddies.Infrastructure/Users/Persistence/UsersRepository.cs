@@ -53,4 +53,9 @@ public class UsersRepository(SportyBuddiesDbContext dbContext) : IUsersRepositor
             .Include(u => u.Sports)
             .ToListAsync();
     }
+
+    public async Task<bool> UserExistsAsync(Guid userId)
+    {
+        return await dbContext.Users.AnyAsync(u => u.Id == userId);
+    }
 }

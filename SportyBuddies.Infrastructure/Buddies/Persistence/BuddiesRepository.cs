@@ -27,4 +27,10 @@ public class BuddiesRepository(SportyBuddiesDbContext dbContext) : IBuddiesRepos
     {
         await dbContext.Buddies.AddAsync(buddy);
     }
+
+    public async Task<bool> AreUsersBuddiesAsync(Guid userId, Guid matchedUserId)
+    {
+        return await dbContext.Buddies
+            .AnyAsync(b => b.UserId == userId && b.MatchedUserId == matchedUserId);
+    }
 }
