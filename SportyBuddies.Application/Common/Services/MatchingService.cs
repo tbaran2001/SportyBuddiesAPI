@@ -47,8 +47,8 @@ public class MatchingService(
         if (userMatch.Swipe == Swipe.Right && matchedUserMatch?.Swipe == Swipe.Right)
         {
             var now = DateTime.Now;
-            var userBuddy = new Buddy(userMatch.User, userMatch.MatchedUser, now);
-            var matchedUserBuddy = new Buddy(userMatch.MatchedUser, userMatch.User, now);
+            var userBuddy = Buddy.Create(userMatch.User, userMatch.MatchedUser, now);
+            var matchedUserBuddy = Buddy.Create(userMatch.MatchedUser, userMatch.User, now);
 
             await buddiesRepository.AddBuddyAsync(userBuddy);
             await buddiesRepository.AddBuddyAsync(matchedUserBuddy);

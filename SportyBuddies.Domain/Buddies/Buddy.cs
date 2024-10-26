@@ -5,13 +5,30 @@ namespace SportyBuddies.Domain.Buddies;
 
 public class Buddy : Entity
 {
-    public Buddy(User user, User matchedUser, DateTime matchDateTime, Guid? id = null) : base(id ?? Guid.NewGuid())
+    private Buddy(
+        Guid id,
+        User user,
+        User matchedUser,
+        DateTime matchDateTime
+    ) : base(id)
     {
         User = user;
         MatchedUser = matchedUser;
         MatchDateTime = matchDateTime;
         UserId = user.Id;
         MatchedUserId = matchedUser.Id;
+    }
+    
+    public static Buddy Create(
+        User user, 
+        User matchedUser,
+        DateTime matchDateTime)
+    {
+        return new Buddy(
+            Guid.NewGuid(), 
+            user, 
+            matchedUser, 
+            matchDateTime);
     }
 
     public Buddy()

@@ -19,7 +19,7 @@ public class BuddiesRepository(SportyBuddiesDbContext dbContext) : IBuddiesRepos
 
         return includeUsers
             ? await query.ToListAsync()
-            : await query.Select(b => new Buddy(b.User, b.MatchedUser, b.MatchDateTime, b.Id))
+            : await query.Select(b => Buddy.Create(b.User, b.MatchedUser, b.MatchDateTime))
                 .ToListAsync();
     }
 
