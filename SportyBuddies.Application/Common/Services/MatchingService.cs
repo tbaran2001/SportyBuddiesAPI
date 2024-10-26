@@ -87,8 +87,8 @@ public class MatchingService(
                 (m.User.Id == matchedUser.Id && m.MatchedUser.Id == user.Id)))
             return;
 
-        newMatches.Add(new Match(user, matchedUser, now, null, null));
-        newMatches.Add(new Match(matchedUser, user, now, null, null));
+        newMatches.Add(Match.Create(user, matchedUser, now));
+        newMatches.Add(Match.Create(matchedUser, user, now));
     }
 
     private void RemoveExistingMatches(User user, User matchedUser, IEnumerable<Match> existingMatches,

@@ -5,14 +5,16 @@ namespace SportyBuddies.Domain.Matches;
 
 public class Match : Entity
 {
-    public Match(User user, User matchedUser, DateTime matchDateTime, Swipe? swipe, DateTime? swipeDateTime,
-        Guid? id = null) : base(id ?? Guid.NewGuid())
+    private Match(
+        Guid id,
+        User user,
+        User matchedUser,
+        DateTime matchDateTime
+    ) : base(id)
     {
         User = user;
         MatchedUser = matchedUser;
         MatchDateTime = matchDateTime;
-        Swipe = swipe;
-        SwipeDateTime = swipeDateTime;
         UserId = user.Id;
         MatchedUserId = matchedUser.Id;
     }
@@ -28,4 +30,15 @@ public class Match : Entity
     public DateTime MatchDateTime { get; private set; }
     public Swipe? Swipe { get; private set; }
     public DateTime? SwipeDateTime { get; private set; }
+
+    public static Match Create(User user, User matchedUser, DateTime matchDateTime)
+    {
+        return new Match(Guid.NewGuid(), user, matchedUser, matchDateTime);
+    }
+    
+    public void UpdateSwipe(Swipe swipe)
+    {
+        Swipe = swipe;
+        SwipeDateTime = DateTime.UtcNow;
+    }
 }

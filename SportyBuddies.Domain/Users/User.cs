@@ -14,8 +14,7 @@ public class User : Entity
         DateOnly? dateOfBirth,
         Gender gender,
         UserPhoto? mainPhoto
-    ) :
-        base(id)
+    ) : base(id)
     {
         Name = name;
         Description = description;
