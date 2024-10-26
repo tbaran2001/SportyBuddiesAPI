@@ -2,7 +2,7 @@ using AutoMapper;
 using MediatR;
 using SportyBuddies.Application.Common.DTOs.Match;
 using SportyBuddies.Application.Common.DTOs.Message;
-using SportyBuddies.Application.Common.Interfaces;
+using SportyBuddies.Domain.Matches;
 
 namespace SportyBuddies.Application.Matches.Queries.GetRandomMatch;
 

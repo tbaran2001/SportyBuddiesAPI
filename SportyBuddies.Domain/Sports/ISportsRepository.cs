@@ -1,6 +1,4 @@
-﻿using SportyBuddies.Domain.Sports;
-
-namespace SportyBuddies.Application.Common.Interfaces;
+﻿namespace SportyBuddies.Domain.Sports;
 
 public interface ISportsRepository
 {

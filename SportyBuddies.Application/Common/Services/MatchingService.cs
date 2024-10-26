@@ -1,5 +1,5 @@
-using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Domain.Buddies;
+using SportyBuddies.Domain.Common;
 using SportyBuddies.Domain.Matches;
 using SportyBuddies.Domain.Users;
 

@@ -1,8 +1,8 @@
 using AutoMapper;
 using MediatR;
 using SportyBuddies.Application.Common.DTOs.User;
-using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Application.Exceptions;
+using SportyBuddies.Domain.Users;
 
 namespace SportyBuddies.Application.Users.Queries.GetUser;
 

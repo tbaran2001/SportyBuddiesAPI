@@ -1,7 +1,9 @@
 using MediatR;
-using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Application.Common.Services;
 using SportyBuddies.Application.Exceptions;
+using SportyBuddies.Domain.Common;
+using SportyBuddies.Domain.Sports;
+using SportyBuddies.Domain.Users;
 
 namespace SportyBuddies.Application.UserSports.Commands.RemoveUserSport;
 

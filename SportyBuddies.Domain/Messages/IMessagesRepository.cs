@@ -1,6 +1,4 @@
-﻿using SportyBuddies.Domain.Messages;
-
-namespace SportyBuddies.Application.Common.Interfaces;
+﻿namespace SportyBuddies.Domain.Messages;
 
 public interface IMessagesRepository
 {

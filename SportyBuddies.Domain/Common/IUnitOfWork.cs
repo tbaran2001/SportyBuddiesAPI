@@ -1,4 +1,4 @@
-﻿namespace SportyBuddies.Application.Common.Interfaces;
+﻿namespace SportyBuddies.Domain.Common;
 
 public interface IUnitOfWork
 {

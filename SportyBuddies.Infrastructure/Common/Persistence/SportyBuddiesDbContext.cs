@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Domain.Buddies;
 using SportyBuddies.Domain.Common;
 using SportyBuddies.Domain.Matches;

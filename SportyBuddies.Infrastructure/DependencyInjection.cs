@@ -1,7 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Application.Common.Services;
+using SportyBuddies.Domain.Buddies;
+using SportyBuddies.Domain.Common;
+using SportyBuddies.Domain.Matches;
+using SportyBuddies.Domain.Messages;
+using SportyBuddies.Domain.Sports;
+using SportyBuddies.Domain.Users;
 using SportyBuddies.Infrastructure.Buddies.Persistence;
 using SportyBuddies.Infrastructure.Common.Persistence;
 using SportyBuddies.Infrastructure.Matches.Persistence;

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using SportyBuddies.Application.Common.DTOs.Sport;
-using SportyBuddies.Application.Common.Interfaces;
+using SportyBuddies.Domain.Common;
 using SportyBuddies.Domain.Sports;
 
 namespace SportyBuddies.Application.Sports.Commands.CreateSport;

@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.SignalR;
-using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Application.Exceptions;
 using SportyBuddies.Application.Hubs;
+using SportyBuddies.Domain.Common;
 using SportyBuddies.Domain.Messages;
 using SportyBuddies.Domain.Users;
 

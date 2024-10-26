@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Domain.Buddies;
 using SportyBuddies.Infrastructure.Common.Persistence;
 

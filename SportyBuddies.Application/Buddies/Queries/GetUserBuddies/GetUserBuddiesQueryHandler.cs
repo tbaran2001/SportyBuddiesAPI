@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using SportyBuddies.Application.Common.DTOs.Buddy;
-using SportyBuddies.Application.Common.Interfaces;
+using SportyBuddies.Domain.Buddies;
 
 namespace SportyBuddies.Application.Buddies.Queries.GetUserBuddies;
 

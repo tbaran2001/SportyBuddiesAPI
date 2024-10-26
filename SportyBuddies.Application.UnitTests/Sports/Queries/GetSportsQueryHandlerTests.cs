@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using FluentAssertions;
 using NSubstitute;
-using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Application.Mappings;
 using SportyBuddies.Application.Sports.Queries.GetSports;
 using SportyBuddies.Domain.Sports;
