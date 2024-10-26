@@ -9,8 +9,9 @@ using SportyBuddies.Contracts.Users;
 
 namespace SportyBuddies.Api.Controllers
 {
+    [ApiController]
     [Route("api/[controller]")]
-    public class UsersController(IMapper mapper, ISender mediator) : ApiController
+    public class UsersController(IMapper mapper, ISender mediator) : ControllerBase
     {
         [HttpGet]
         public async Task<IActionResult> GetUsers(bool includeSports = false)
@@ -19,9 +20,7 @@ namespace SportyBuddies.Api.Controllers
 
             var usersResult = await mediator.Send(query);
 
-            return usersResult.Match(
-                Ok,
-                Problem);
+            return Ok(usersResult);
         }
 
         [HttpGet("{userId:guid}")]
@@ -31,9 +30,7 @@ namespace SportyBuddies.Api.Controllers
 
             var userResult = await mediator.Send(query);
 
-            return userResult.Match(
-                Ok,
-                Problem);
+            return Ok(userResult);
         }
 
         [HttpPost]
@@ -43,9 +40,7 @@ namespace SportyBuddies.Api.Controllers
 
             var createUserResult = await mediator.Send(command);
 
-            return createUserResult.Match(
-                user => CreatedAtAction(nameof(GetUser), new { userId = user.Id }, user),
-                Problem);
+            return CreatedAtAction(nameof(GetUser), new { userId = createUserResult.Id }, createUserResult);
         }
 
         [HttpDelete("{userId:guid}")]
@@ -53,11 +48,9 @@ namespace SportyBuddies.Api.Controllers
         {
             var command = new DeleteUserCommand(userId);
 
-            var deleteUserResult = await mediator.Send(command);
+            await mediator.Send(command);
 
-            return deleteUserResult.Match<IActionResult>(
-                _ => NoContent(),
-                Problem);
+            return NoContent();
         }
     }
 }

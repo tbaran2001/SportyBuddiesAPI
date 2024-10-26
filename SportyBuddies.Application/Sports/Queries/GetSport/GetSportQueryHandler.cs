@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using ErrorOr;
 using MediatR;
 using SportyBuddies.Application.Common.DTOs.Sport;
 using SportyBuddies.Application.Common.Interfaces;
+using SportyBuddies.Application.Exceptions;
 
 namespace SportyBuddies.Application.Sports.Queries.GetSport;
 
-public class GetSportQueryHandler : IRequestHandler<GetSportQuery, ErrorOr<SportResponse>>
+public class GetSportQueryHandler : IRequestHandler<GetSportQuery, SportResponse>
 {
     private readonly IMapper _mapper;
     private readonly ISportsRepository _sportsRepository;
@@ -17,12 +17,12 @@ public class GetSportQueryHandler : IRequestHandler<GetSportQuery, ErrorOr<Sport
         _mapper = mapper;
     }
 
-    public async Task<ErrorOr<SportResponse>> Handle(GetSportQuery query, CancellationToken cancellationToken)
+    public async Task<SportResponse> Handle(GetSportQuery query, CancellationToken cancellationToken)
     {
         var sport = await _sportsRepository.GetSportByIdAsync(query.SportId);
 
         if (sport == null)
-            return Error.NotFound();
+            throw new NotFoundException(nameof(sport), query.SportId.ToString());
 
         return _mapper.Map<SportResponse>(sport);
     }

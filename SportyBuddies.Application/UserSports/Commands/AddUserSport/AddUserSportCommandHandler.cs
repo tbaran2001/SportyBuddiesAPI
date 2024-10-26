@@ -1,7 +1,7 @@
-using ErrorOr;
 using MediatR;
 using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Application.Common.Services;
+using SportyBuddies.Application.Exceptions;
 
 namespace SportyBuddies.Application.UserSports.Commands.AddUserSport;
 
@@ -10,26 +10,21 @@ public class AddUserSportCommandHandler(
     ISportsRepository sportsRepository,
     IUnitOfWork unitOfWork,
     IMatchingService matchingService)
-    : IRequestHandler<AddUserSportCommand, ErrorOr<Success>>
+    : IRequestHandler<AddUserSportCommand>
 {
-    public async Task<ErrorOr<Success>> Handle(AddUserSportCommand command, CancellationToken cancellationToken)
+    public async Task Handle(AddUserSportCommand command, CancellationToken cancellationToken)
     {
         var user = await usersRepository.GetUserByIdWithSportsAsync(command.UserId);
         if (user is null)
-            return Error.NotFound(description: "User not found");
+            throw new NotFoundException(nameof(user), command.UserId.ToString());
 
         var sport = await sportsRepository.GetSportByIdAsync(command.SportId);
         if (sport is null)
-            return Error.NotFound(description: "Sport not found");
+            throw new NotFoundException(nameof(sport), command.SportId.ToString());
 
-        var addSportResult = user.AddSport(sport);
-
-        if (addSportResult.IsError)
-            return addSportResult.Errors;
+        user.AddSport(sport);
 
         await matchingService.FindMatchesAsync(command.UserId);
         await unitOfWork.CommitChangesAsync();
-
-        return Result.Success;
     }
 }

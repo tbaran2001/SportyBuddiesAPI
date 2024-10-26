@@ -1,20 +1,20 @@
 using AutoMapper;
-using ErrorOr;
 using MediatR;
 using SportyBuddies.Application.Common.DTOs.Sport;
 using SportyBuddies.Application.Common.Interfaces;
+using SportyBuddies.Application.Exceptions;
 
 namespace SportyBuddies.Application.UserSports.Queries.GetUserSports;
 
 public class GetUserSportsQueryHandler(IUsersRepository usersRepository, IMapper mapper)
-    : IRequestHandler<GetUserSportsQuery, ErrorOr<List<SportResponse>>>
+    : IRequestHandler<GetUserSportsQuery, List<SportResponse>>
 {
-    public async Task<ErrorOr<List<SportResponse>>> Handle(GetUserSportsQuery query,
+    public async Task<List<SportResponse>> Handle(GetUserSportsQuery query,
         CancellationToken cancellationToken)
     {
         var user = await usersRepository.GetUserByIdWithSportsAsync(query.UserId);
         if (user is null)
-            return Error.NotFound();
+            throw new NotFoundException(nameof(user), query.UserId.ToString());
 
         var sports = user.Sports;
 

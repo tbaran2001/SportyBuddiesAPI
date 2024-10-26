@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using SportyBuddies.Application.Common.Services;
-using SportyBuddies.Infrastructure.Common.Persistence;
 
 namespace SportyBuddies.Infrastructure.Services;
 
-public class FileStorageService(IWebHostEnvironment webHostEnvironment, SportyBuddiesDbContext dbContext)
+public class FileStorageService(IWebHostEnvironment webHostEnvironment)
     : IFileStorageService
 {
     public async Task<string> SaveFileAsync(Guid userId, IFormFile file, Guid photoId)

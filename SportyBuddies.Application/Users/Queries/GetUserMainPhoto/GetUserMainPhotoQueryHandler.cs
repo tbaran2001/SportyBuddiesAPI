@@ -1,20 +1,20 @@
-﻿using ErrorOr;
-using MediatR;
+﻿using MediatR;
 using SportyBuddies.Application.Common.Interfaces;
+using SportyBuddies.Application.Exceptions;
 
 namespace SportyBuddies.Application.Users.Queries.GetUserMainPhoto;
 
 public class GetUserMainPhotoQueryHandler(IUsersRepository usersRepository)
-    : IRequestHandler<GetUserMainPhotoQuery, ErrorOr<string>>
+    : IRequestHandler<GetUserMainPhotoQuery, string>
 {
-    public async Task<ErrorOr<string>> Handle(GetUserMainPhotoQuery request, CancellationToken cancellationToken)
+    public async Task<string> Handle(GetUserMainPhotoQuery request, CancellationToken cancellationToken)
     {
         var user = await usersRepository.GetUserByIdWithPhotosAsync(request.UserId);
         if (user == null)
-            return Error.NotFound();
+            throw new NotFoundException(nameof(user), request.UserId.ToString());
 
         if (user.MainPhoto == null)
-            return Error.NotFound();
+            throw new NotFoundException(nameof(user.MainPhoto), request.UserId.ToString());
 
         var mainPhoto = user.MainPhoto;
 

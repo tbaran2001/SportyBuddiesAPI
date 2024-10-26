@@ -1,5 +1,4 @@
-﻿using ErrorOr;
-using SportyBuddies.Domain.Common;
+﻿using SportyBuddies.Domain.Common;
 using SportyBuddies.Domain.Sports;
 using SportyBuddies.Domain.Users.Events;
 
@@ -37,10 +36,9 @@ public class User : Entity
     public DateTime? DateOfBirth { get; private set; }
     public Preferences? Preferences { get; private set; }
 
-    public ErrorOr<Success> UpdatePreferences(Preferences preferences)
+    public void UpdatePreferences(Preferences preferences)
     {
         Preferences = preferences;
-        return Result.Success;
     }
 
     public void Delete()
@@ -48,22 +46,20 @@ public class User : Entity
         AddDomainEvent(new UserDeletedEvent(Id));
     }
 
-    public ErrorOr<Success> AddSport(Sport sport)
+    public void AddSport(Sport sport)
     {
         if (Sports.Contains(sport))
-            return Error.Conflict(description: "User already has this sport");
+            throw new Exception("User already has this sport");
 
         Sports.Add(sport);
-        return Result.Success;
     }
 
-    public ErrorOr<Success> RemoveSport(Sport sport)
+    public void RemoveSport(Sport sport)
     {
         if (!Sports.Contains(sport))
-            return Error.NotFound(description: "User does not have this sport");
+            throw new Exception("User does not have this sport");
 
         Sports.Remove(sport);
-        return Result.Success;
     }
 
     public void RemoveAllSports()

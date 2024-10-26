@@ -1,7 +1,7 @@
-using ErrorOr;
 using MediatR;
 using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Application.Common.Services;
+using SportyBuddies.Application.Exceptions;
 
 namespace SportyBuddies.Application.UserSports.Commands.RemoveUserSport;
 
@@ -10,26 +10,21 @@ public class RemoveUserSportCommandHandler(
     ISportsRepository sportsRepository,
     IUnitOfWork unitOfWork,
     IMatchingService matchingService)
-    : IRequestHandler<RemoveUserSportCommand, ErrorOr<Success>>
+    : IRequestHandler<RemoveUserSportCommand>
 {
-    public async Task<ErrorOr<Success>> Handle(RemoveUserSportCommand command, CancellationToken cancellationToken)
+    public async Task Handle(RemoveUserSportCommand command, CancellationToken cancellationToken)
     {
         var user = await usersRepository.GetUserByIdWithSportsAsync(command.UserId);
         if (user is null)
-            return Error.NotFound(description: "User not found");
-        
+            throw new NotFoundException(nameof(user), command.UserId.ToString());
+
         var sport = await sportsRepository.GetSportByIdAsync(command.SportId);
         if (sport is null)
-            return Error.NotFound(description: "Sport not found");
-        
-        var removeSportResult = user.RemoveSport(sport);
-        
-        if (removeSportResult.IsError)
-            return removeSportResult.Errors;
+            throw new NotFoundException(nameof(sport), command.SportId.ToString());
+
+        user.RemoveSport(sport);
 
         await matchingService.FindMatchesAsync(command.UserId);
         await unitOfWork.CommitChangesAsync();
-
-        return Result.Success;
     }
 }

@@ -29,9 +29,10 @@ using Gender = SportyBuddies.Domain.Users.Gender;
 
 namespace SportyBuddies.Api.Controllers
 {
+    [ApiController]
     [Route("api/[controller]")]
     [Authorize]
-    public class CurrentUserController(UserManager<ApplicationUser> userManager, ISender mediator) : ApiController
+    public class CurrentUserController(UserManager<ApplicationUser> userManager, ISender mediator) : ControllerBase
     {
         [HttpGet]
         public async Task<IActionResult> GetCurrentUser()
@@ -43,9 +44,7 @@ namespace SportyBuddies.Api.Controllers
 
             var userResult = await mediator.Send(query);
 
-            return userResult.Match(
-                Ok,
-                Problem);
+            return Ok(userResult);
         }
 
         [HttpPut]
@@ -59,9 +58,7 @@ namespace SportyBuddies.Api.Controllers
 
             var userResult = await mediator.Send(command);
 
-            return userResult.Match(
-                Ok,
-                Problem);
+            return Ok(userResult);
         }
 
         [HttpGet("sports")]
@@ -74,9 +71,7 @@ namespace SportyBuddies.Api.Controllers
 
             var userSportsResult = await mediator.Send(query);
 
-            return userSportsResult.Match(
-                Ok,
-                Problem);
+            return Ok(userSportsResult);
         }
 
         [HttpPost("sports/{sportId}")]
@@ -87,11 +82,9 @@ namespace SportyBuddies.Api.Controllers
 
             var command = new AddUserSportCommand(Guid.Parse(userId), sportId);
 
-            var userSportResult = await mediator.Send(command);
+            await mediator.Send(command);
 
-            return userSportResult.Match<IActionResult>(
-                _ => NoContent(),
-                Problem);
+            return NoContent();
         }
 
         [HttpDelete("sports/{sportId}")]
@@ -102,11 +95,9 @@ namespace SportyBuddies.Api.Controllers
 
             var command = new RemoveUserSportCommand(Guid.Parse(userId), sportId);
 
-            var userSportResult = await mediator.Send(command);
+            await mediator.Send(command);
 
-            return userSportResult.Match<IActionResult>(
-                _ => NoContent(),
-                Problem);
+            return NoContent();
         }
 
         [HttpGet("matches")]
@@ -119,9 +110,7 @@ namespace SportyBuddies.Api.Controllers
 
             var matchesResult = await mediator.Send(query);
 
-            return matchesResult.Match(
-                Ok,
-                Problem);
+            return Ok(matchesResult);
         }
 
         [HttpGet("matches/random")]
@@ -134,9 +123,7 @@ namespace SportyBuddies.Api.Controllers
 
             var matchResult = await mediator.Send(query);
 
-            return matchResult.Match(
-                Ok,
-                Problem);
+            return Ok(matchResult);
         }
 
         [HttpPut("matches/{matchId}")]
@@ -147,11 +134,9 @@ namespace SportyBuddies.Api.Controllers
 
             var command = new UpdateMatchCommand(matchId, (Swipe)matchRequest.Swipe);
 
-            var matchResult = await mediator.Send(command);
+            await mediator.Send(command);
 
-            return matchResult.Match<IActionResult>(
-                _ => NoContent(),
-                Problem);
+            return NoContent();
         }
 
         [HttpGet("buddies")]
@@ -164,9 +149,7 @@ namespace SportyBuddies.Api.Controllers
 
             var buddiesResult = await mediator.Send(query);
 
-            return buddiesResult.Match(
-                Ok,
-                Problem);
+            return Ok(buddiesResult);
         }
 
         [HttpPost("messages/{recipientId}")]
@@ -177,11 +160,9 @@ namespace SportyBuddies.Api.Controllers
 
             var command = new SendMessageCommand(Guid.Parse(userId), recipientId, messageRequest.Content);
 
-            var messageResult = await mediator.Send(command);
+            await mediator.Send(command);
 
-            return messageResult.Match<IActionResult>(
-                _ => NoContent(),
-                Problem);
+            return NoContent();
         }
 
         [HttpGet("messages")]
@@ -194,9 +175,7 @@ namespace SportyBuddies.Api.Controllers
 
             var messagesResult = await mediator.Send(query);
 
-            return messagesResult.Match(
-                Ok,
-                Problem);
+            return Ok(messagesResult);
         }
 
         [HttpGet("messages/{buddyId}")]
@@ -209,9 +188,7 @@ namespace SportyBuddies.Api.Controllers
 
             var messagesResult = await mediator.Send(query);
 
-            return messagesResult.Match(
-                Ok,
-                Problem);
+            return Ok(messagesResult);
         }
 
         [HttpGet("messages/last")]
@@ -224,9 +201,7 @@ namespace SportyBuddies.Api.Controllers
 
             var messagesResult = await mediator.Send(query);
 
-            return messagesResult.Match(
-                Ok,
-                Problem);
+            return Ok(messagesResult);
         }
 
         [HttpPost("photos")]
@@ -239,9 +214,7 @@ namespace SportyBuddies.Api.Controllers
 
             var photoResult = await mediator.Send(command);
 
-            return photoResult.Match(
-                Ok,
-                Problem);
+            return Ok(photoResult);
         }
 
         [HttpGet("photos/main")]
@@ -254,7 +227,7 @@ namespace SportyBuddies.Api.Controllers
 
             var photoResult = await mediator.Send(query);
 
-            var stream = System.IO.File.OpenRead(photoResult.Value);
+            var stream = System.IO.File.OpenRead(photoResult);
             return File(stream, "image/jpeg");
         }
 
@@ -271,7 +244,7 @@ namespace SportyBuddies.Api.Controllers
             var zipStream = new MemoryStream();
             using (var archive = new ZipArchive(zipStream, ZipArchiveMode.Create, true))
             {
-                foreach (var photo in photosResult.Value)
+                foreach (var photo in photosResult)
                 {
                     var entry = archive.CreateEntry(Path.GetFileName(photo.Url));
                     using (var entryStream = entry.Open())
@@ -295,11 +268,9 @@ namespace SportyBuddies.Api.Controllers
             var command = new UpdateUserPreferencesCommand(Guid.Parse(userId), preferencesRequest.MinAge,
                 preferencesRequest.MaxAge, (Gender)preferencesRequest.Gender);
 
-            var preferencesResult = await mediator.Send(command);
+            await mediator.Send(command);
 
-            return preferencesResult.Match(
-                _ => NoContent(),
-                Problem);
+            return NoContent();
         }
     }
 }

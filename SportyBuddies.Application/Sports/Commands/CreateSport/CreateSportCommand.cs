@@ -1,7 +1,6 @@
-﻿using ErrorOr;
-using MediatR;
+﻿using MediatR;
 using SportyBuddies.Application.Common.DTOs.Sport;
 
 namespace SportyBuddies.Application.Sports.Commands.CreateSport;
 
-public record CreateSportCommand(string Name, string Description) : IRequest<ErrorOr<SportResponse>>;
+public record CreateSportCommand(string Name, string Description) : IRequest<SportResponse>;
