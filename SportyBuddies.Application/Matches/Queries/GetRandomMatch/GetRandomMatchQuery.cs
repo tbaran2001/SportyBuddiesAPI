@@ -1,4 +1,5 @@
 using MediatR;
+using SportyBuddies.Application.Common.DTOs.Match;
 using SportyBuddies.Application.Common.DTOs.Message;
 
 namespace SportyBuddies.Application.Matches.Queries.GetRandomMatch;

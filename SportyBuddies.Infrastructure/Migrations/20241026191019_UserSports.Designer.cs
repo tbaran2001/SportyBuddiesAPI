@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SportyBuddies.Infrastructure.Common.Persistence;
 
@@ -10,9 +11,11 @@ using SportyBuddies.Infrastructure.Common.Persistence;
 namespace SportyBuddies.Infrastructure.Migrations
 {
     [DbContext(typeof(SportyBuddiesDbContext))]
-    partial class SportyBuddiesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241026191019_UserSports")]
+    partial class UserSports
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.2");

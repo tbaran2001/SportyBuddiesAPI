@@ -7,19 +7,19 @@ using SportyBuddies.Application.Exceptions;
 namespace SportyBuddies.Application.Users.Commands.UpdateUser;
 
 public class UpdateUserCommandHandler(IUsersRepository usersRepository, IMapper mapper, IUnitOfWork unitOfWork)
-    : IRequestHandler<UpdateUserCommand, UserWithSportsResponse>
+    : IRequestHandler<UpdateUserCommand, UserResponse>
 {
-    public async Task<UserWithSportsResponse> Handle(UpdateUserCommand command,
+    public async Task<UserResponse> Handle(UpdateUserCommand command,
         CancellationToken cancellationToken)
     {
         var user = await usersRepository.GetUserByIdAsync(command.UserId);
 
         if (user == null)
             throw new NotFoundException(nameof(user), command.UserId.ToString());
-
-        mapper.Map(command, user);
+        
+        user.Update(command.Name, command.Description, command.DateOfBirth,command.Gender);
         await unitOfWork.CommitChangesAsync();
 
-        return mapper.Map<UserWithSportsResponse>(user);
+        return mapper.Map<UserResponse>(user);
     }
 }

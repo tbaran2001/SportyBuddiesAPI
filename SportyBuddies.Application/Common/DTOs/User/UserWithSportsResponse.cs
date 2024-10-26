@@ -7,9 +7,9 @@ public record UserWithSportsResponse(
     Guid Id,
     string Name,
     string Description,
-    DateTime LastActive,
-    Guid? MainPhotoId,
-    Gender? Gender,
-    DateTime? DateOfBirth,
+    DateTime CreatedOnUtc,
+    Guid MainPhotoId,
+    Gender Gender,
+    DateOnly DateOfBirth,
     Preferences Preferences,
     ICollection<SportResponse> Sports);

@@ -5,20 +5,12 @@ using SportyBuddies.Infrastructure.Common.Persistence;
 
 namespace SportyBuddies.Identity;
 
-public class IdentityEventsHandler
+public class IdentityEventsHandler(SportyBuddiesDbContext context)
 {
-    private readonly SportyBuddiesDbContext _context;
-
-    public IdentityEventsHandler(SportyBuddiesDbContext context)
-    {
-        _context = context;
-    }
-
     public async Task OnUserCreatedAsync(ApplicationUser user)
     {
-        var userEntity = new User(user.UserName!, null, DateTime.Now, new List<Sport>(), null,
-            new List<UserPhoto>(), null, 0, user.Id);
-        await _context.Users.AddAsync(userEntity);
-        await _context.SaveChangesAsync();
+        var userEntity = User.Create(user.Id);
+        await context.Users.AddAsync(userEntity);
+        await context.SaveChangesAsync();
     }
 }

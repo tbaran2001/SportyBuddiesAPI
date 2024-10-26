@@ -56,9 +56,9 @@ public class SportyBuddiesDbContext(
     {
         modelBuilder.Entity<User>()
             .HasMany(u => u.Sports)
-            .WithMany(s => s.Users)
+            .WithMany()
             .UsingEntity<Dictionary<string, object>>(
-                "UserSport",
+                "UserSports",
                 j => j
                     .HasOne<Sport>()
                     .WithMany()
