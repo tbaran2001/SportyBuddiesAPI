@@ -29,6 +29,7 @@ using Gender = SportyBuddies.Domain.Users.Gender;
 
 namespace SportyBuddies.Api.Controllers
 {
+    [ApiController]
     [Route("api/[controller]")]
     [Authorize]
     public class CurrentUserController(UserManager<ApplicationUser> userManager, ISender mediator) : ControllerBase

@@ -4,6 +4,7 @@ using SportyBuddies.Application.Buddies.Queries.GetUserBuddies;
 
 namespace SportyBuddies.Api.Controllers;
 
+[ApiController]
 [Route("api/[controller]")]
 public class BuddiesController(ISender mediator) : ControllerBase
 {

@@ -9,6 +9,7 @@ using SportyBuddies.Contracts.Sports;
 
 namespace SportyBuddies.Api.Controllers
 {
+    [ApiController]
     [Route("api/[controller]")]
     public class SportsController(ISender mediator, IMapper mapper) : ControllerBase
     {
