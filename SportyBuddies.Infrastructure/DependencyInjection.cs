@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Application.Common.Services;
 using SportyBuddies.Domain.Buddies;
 using SportyBuddies.Domain.Common;
@@ -8,6 +9,7 @@ using SportyBuddies.Domain.Messages;
 using SportyBuddies.Domain.Sports;
 using SportyBuddies.Domain.Users;
 using SportyBuddies.Infrastructure.Buddies.Persistence;
+using SportyBuddies.Infrastructure.Common.Clock;
 using SportyBuddies.Infrastructure.Common.Persistence;
 using SportyBuddies.Infrastructure.Matches.Persistence;
 using SportyBuddies.Infrastructure.Messages.Persistence;
@@ -31,6 +33,8 @@ public static class DependencyInjection
         services.AddScoped<IMessagesRepository, MessagesRepository>();
 
         services.AddScoped<IFileStorageService, FileStorageService>();
+
+        services.AddTransient<IDateTimeProvider, DateTimeProvider>();
 
         services.AddScoped<IUnitOfWork>(serviceProvider =>
             serviceProvider.GetRequiredService<SportyBuddiesDbContext>());

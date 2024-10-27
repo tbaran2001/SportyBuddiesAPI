@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.SignalR;
+using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Application.Exceptions;
 using SportyBuddies.Application.Hubs;
 using SportyBuddies.Domain.Common;
@@ -12,7 +13,8 @@ public class SendMessageCommandHandler(
     IMessagesRepository messagesRepository,
     IUsersRepository usersRepository,
     IHubContext<ChatHub, IChatClient> hubContext,
-    IUnitOfWork unitOfWork) : IRequestHandler<SendMessageCommand>
+    IUnitOfWork unitOfWork,
+    IDateTimeProvider dateTimeProvider) : IRequestHandler<SendMessageCommand>
 {
     public async Task Handle(SendMessageCommand command, CancellationToken cancellationToken)
     {
@@ -22,7 +24,7 @@ public class SendMessageCommandHandler(
         if (await usersRepository.UserExistsAsync(command.RecipientId) == false)
             throw new NotFoundException(nameof(User), command.RecipientId.ToString());
 
-        var message = Message.Create(command.SenderId, command.RecipientId, command.Content);
+        var message = Message.Create(command.SenderId, command.RecipientId, command.Content, dateTimeProvider.UtcNow);
 
         await messagesRepository.AddMessageAsync(message);
         await unitOfWork.CommitChangesAsync();

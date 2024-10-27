@@ -22,14 +22,15 @@ public class Message : Entity
     public static Message Create(
         Guid senderId, 
         Guid recipientId, 
-        string content)
+        string content,
+        DateTime utcNow)
     {
         return new Message(
             Guid.NewGuid(), 
             senderId, 
             recipientId, 
             content, 
-            DateTime.UtcNow);
+            utcNow);
     }
 
     public Message()

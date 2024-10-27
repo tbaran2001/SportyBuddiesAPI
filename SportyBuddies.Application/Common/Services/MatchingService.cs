@@ -1,3 +1,4 @@
+using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Domain.Buddies;
 using SportyBuddies.Domain.Common;
 using SportyBuddies.Domain.Matches;
@@ -9,7 +10,8 @@ public class MatchingService(
     IUsersRepository usersRepository,
     IMatchesRepository matchesRepository,
     IBuddiesRepository buddiesRepository,
-    IUnitOfWork unitOfWork)
+    IUnitOfWork unitOfWork,
+    IDateTimeProvider dateTimeProvider)
     : IMatchingService
 {
     public async Task FindMatchesAsync(Guid userId)
@@ -46,7 +48,7 @@ public class MatchingService(
 
         if (userMatch.Swipe == Swipe.Right && matchedUserMatch?.Swipe == Swipe.Right)
         {
-            var now = DateTime.Now;
+            var now = dateTimeProvider.UtcNow;
             var userBuddy = Buddy.Create(userMatch.User, userMatch.MatchedUser, now);
             var matchedUserBuddy = Buddy.Create(userMatch.MatchedUser, userMatch.User, now);
 
@@ -70,7 +72,7 @@ public class MatchingService(
             if (user.Id == matchedUser.Id)
                 continue;
 
-            var now = DateTime.Now;
+            var now =dateTimeProvider.UtcNow;
 
             if (HasCommonSports(user, matchedUser))
                 AddNewMatches(user, matchedUser, existingMatches, newMatches, now);
