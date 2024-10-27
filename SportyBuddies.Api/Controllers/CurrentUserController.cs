@@ -3,6 +3,9 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SportyBuddies.Api.Contracts.Matches;
+using SportyBuddies.Api.Contracts.Messages;
+using SportyBuddies.Api.Contracts.Users;
 using SportyBuddies.Application.Buddies.Queries.GetUserBuddies;
 using SportyBuddies.Application.Matches.Commands.UpdateMatch;
 using SportyBuddies.Application.Matches.Queries.GetRandomMatch;
@@ -20,12 +23,7 @@ using SportyBuddies.Application.Users.Queries.GetUserPhotos;
 using SportyBuddies.Application.UserSports.Commands.AddUserSport;
 using SportyBuddies.Application.UserSports.Commands.RemoveUserSport;
 using SportyBuddies.Application.UserSports.Queries.GetUserSports;
-using SportyBuddies.Contracts.Matches;
-using SportyBuddies.Contracts.Messages;
-using SportyBuddies.Contracts.Users;
 using SportyBuddies.Identity.Models;
-using Swipe = SportyBuddies.Domain.Matches.Swipe;
-using Gender = SportyBuddies.Domain.Users.Gender;
 
 namespace SportyBuddies.Api.Controllers
 {
@@ -54,7 +52,7 @@ namespace SportyBuddies.Api.Controllers
             if (userId == null) return Unauthorized();
 
             var command = new UpdateUserCommand(Guid.Parse(userId), userRequest.Name, userRequest.Description,
-                (Gender)userRequest.Gender, userRequest.DateOfBirth);
+                userRequest.Gender, userRequest.DateOfBirth);
 
             var userResult = await mediator.Send(command);
 
@@ -132,7 +130,7 @@ namespace SportyBuddies.Api.Controllers
             var userId = userManager.GetUserId(User);
             if (userId == null) return Unauthorized();
 
-            var command = new UpdateMatchCommand(matchId, (Swipe)matchRequest.Swipe);
+            var command = new UpdateMatchCommand(matchId, matchRequest.Swipe);
 
             await mediator.Send(command);
 
@@ -266,7 +264,7 @@ namespace SportyBuddies.Api.Controllers
             if (userId == null) return Unauthorized();
 
             var command = new UpdateUserPreferencesCommand(Guid.Parse(userId), preferencesRequest.MinAge,
-                preferencesRequest.MaxAge, (Gender)preferencesRequest.Gender);
+                preferencesRequest.MaxAge, preferencesRequest.Gender);
 
             await mediator.Send(command);
 

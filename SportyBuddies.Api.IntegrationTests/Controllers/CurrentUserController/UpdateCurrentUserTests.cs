@@ -1,12 +1,12 @@
 using System.Net;
 using System.Net.Http.Json;
 using FluentAssertions;
+using SportyBuddies.Api.Contracts.Users;
 using SportyBuddies.Api.IntegrationTests.Helpers;
-using SportyBuddies.Contracts.Users;
 using SportyBuddies.Domain.Sports;
 using SportyBuddies.Domain.Users;
 using SportyBuddies.Infrastructure.Common.Persistence;
-using Gender = SportyBuddies.Contracts.Users.Gender;
+using Gender = SportyBuddies.Api.Contracts.Users.Gender;
 
 namespace SportyBuddies.Api.IntegrationTests.Controllers.CurrentUserController;
 

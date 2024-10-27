@@ -1,8 +1,8 @@
 using System.Net;
 using System.Net.Http.Json;
 using FluentAssertions;
+using SportyBuddies.Api.Contracts.Sports;
 using SportyBuddies.Api.IntegrationTests.Helpers;
-using SportyBuddies.Contracts.Sports;
 using SportyBuddies.Infrastructure.Common.Persistence;
 
 namespace SportyBuddies.Api.IntegrationTests.Controllers.SportsController;

@@ -18,12 +18,12 @@
 
     <ItemGroup>
       <ProjectReference Include="..\SportyBuddies.Application\SportyBuddies.Application.csproj" />
-      <ProjectReference Include="..\SportyBuddies.Contracts\SportyBuddies.Contracts.csproj" />
       <ProjectReference Include="..\SportyBuddies.Identity\SportyBuddies.Identity.csproj" />
       <ProjectReference Include="..\SportyBuddies.Infrastructure\SportyBuddies.Infrastructure.csproj" />
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Contracts\" />
       <Folder Include="Controllers\" />
         <Folder Include="wwwroot\"/>
     </ItemGroup>

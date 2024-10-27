@@ -1,11 +1,11 @@
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using SportyBuddies.Api.Contracts.Sports;
 using SportyBuddies.Application.Sports.Commands.CreateSport;
 using SportyBuddies.Application.Sports.Commands.DeleteSport;
 using SportyBuddies.Application.Sports.Queries.GetSport;
 using SportyBuddies.Application.Sports.Queries.GetSports;
-using SportyBuddies.Contracts.Sports;
 
 namespace SportyBuddies.Api.Controllers
 {

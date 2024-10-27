@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
+using SportyBuddies.Api.Contracts.Matches;
 using SportyBuddies.Application.Common.DTOs;
 using SportyBuddies.Application.Matches.Commands.UpdateMatch;
-using SportyBuddies.Contracts.Matches;
 
 namespace SportyBuddies.Api.Mappings;
 
