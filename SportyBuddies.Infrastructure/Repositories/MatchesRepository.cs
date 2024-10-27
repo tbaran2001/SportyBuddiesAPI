@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SportyBuddies.Domain.Matches;
-using SportyBuddies.Infrastructure.Common.Persistence;
 
-namespace SportyBuddies.Infrastructure.Matches.Persistence;
+namespace SportyBuddies.Infrastructure.Repositories;
 
 public class MatchesRepository(SportyBuddiesDbContext dbContext) : IMatchesRepository
 {

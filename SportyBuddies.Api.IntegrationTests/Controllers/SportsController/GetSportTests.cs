@@ -4,9 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 using SportyBuddies.Api.IntegrationTests.Helpers;
 using SportyBuddies.Domain.Sports;
 using SportyBuddies.Domain.Users;
-using SportyBuddies.Infrastructure.Common.Persistence;
 using Xunit;
 using System.Threading.Tasks;
+using SportyBuddies.Infrastructure;
 
 namespace SportyBuddies.Api.IntegrationTests.Controllers.SportsController;
 

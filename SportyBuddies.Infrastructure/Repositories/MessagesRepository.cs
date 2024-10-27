@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SportyBuddies.Domain.Messages;
-using SportyBuddies.Infrastructure.Common.Persistence;
 
-namespace SportyBuddies.Infrastructure.Messages.Persistence;
+namespace SportyBuddies.Infrastructure.Repositories;
 
 public class MessagesRepository(SportyBuddiesDbContext dbContext) : IMessagesRepository
 {

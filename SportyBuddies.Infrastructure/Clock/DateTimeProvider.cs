@@ -1,6 +1,6 @@
 using SportyBuddies.Application.Common.Interfaces;
 
-namespace SportyBuddies.Infrastructure.Common.Clock;
+namespace SportyBuddies.Infrastructure.Clock;
 
 public class DateTimeProvider:IDateTimeProvider
 {

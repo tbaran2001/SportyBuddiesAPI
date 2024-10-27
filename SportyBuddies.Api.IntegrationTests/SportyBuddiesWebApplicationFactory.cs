@@ -6,7 +6,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SportyBuddies.Identity;
-using SportyBuddies.Infrastructure.Common.Persistence;
+using SportyBuddies.Infrastructure;
 
 namespace SportyBuddies.Api.IntegrationTests;
 

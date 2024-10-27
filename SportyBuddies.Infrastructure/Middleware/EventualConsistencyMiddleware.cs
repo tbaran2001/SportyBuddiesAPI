@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using SportyBuddies.Domain.Common;
-using SportyBuddies.Infrastructure.Common.Persistence;
 
 namespace SportyBuddies.Infrastructure.Middleware;
 

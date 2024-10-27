@@ -3,7 +3,7 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using SportyBuddies.Domain.Sports;
 using SportyBuddies.Domain.Users;
-using SportyBuddies.Infrastructure.Common.Persistence;
+using SportyBuddies.Infrastructure;
 
 namespace SportyBuddies.Api.IntegrationTests.Controllers;
 

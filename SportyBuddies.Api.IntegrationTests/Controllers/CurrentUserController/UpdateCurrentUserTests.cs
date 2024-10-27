@@ -5,7 +5,7 @@ using SportyBuddies.Api.Contracts.Users;
 using SportyBuddies.Api.IntegrationTests.Helpers;
 using SportyBuddies.Domain.Sports;
 using SportyBuddies.Domain.Users;
-using SportyBuddies.Infrastructure.Common.Persistence;
+using SportyBuddies.Infrastructure;
 using Gender = SportyBuddies.Api.Contracts.Users.Gender;
 
 namespace SportyBuddies.Api.IntegrationTests.Controllers.CurrentUserController;

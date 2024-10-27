@@ -8,14 +8,9 @@ using SportyBuddies.Domain.Matches;
 using SportyBuddies.Domain.Messages;
 using SportyBuddies.Domain.Sports;
 using SportyBuddies.Domain.Users;
-using SportyBuddies.Infrastructure.Buddies.Persistence;
-using SportyBuddies.Infrastructure.Common.Clock;
-using SportyBuddies.Infrastructure.Common.Persistence;
-using SportyBuddies.Infrastructure.Matches.Persistence;
-using SportyBuddies.Infrastructure.Messages.Persistence;
+using SportyBuddies.Infrastructure.Clock;
+using SportyBuddies.Infrastructure.Repositories;
 using SportyBuddies.Infrastructure.Services;
-using SportyBuddies.Infrastructure.Sports.Persistence;
-using SportyBuddies.Infrastructure.Users.Persistence;
 
 namespace SportyBuddies.Infrastructure;
 

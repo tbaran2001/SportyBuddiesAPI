@@ -3,7 +3,7 @@ using System.Net.Http.Json;
 using FluentAssertions;
 using SportyBuddies.Api.Contracts.Sports;
 using SportyBuddies.Api.IntegrationTests.Helpers;
-using SportyBuddies.Infrastructure.Common.Persistence;
+using SportyBuddies.Infrastructure;
 
 namespace SportyBuddies.Api.IntegrationTests.Controllers.SportsController;
 

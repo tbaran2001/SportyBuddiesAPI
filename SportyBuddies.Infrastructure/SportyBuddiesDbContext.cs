@@ -8,7 +8,7 @@ using SportyBuddies.Domain.Messages;
 using SportyBuddies.Domain.Sports;
 using SportyBuddies.Domain.Users;
 
-namespace SportyBuddies.Infrastructure.Common.Persistence;
+namespace SportyBuddies.Infrastructure;
 
 public class SportyBuddiesDbContext(
     DbContextOptions<SportyBuddiesDbContext> options,

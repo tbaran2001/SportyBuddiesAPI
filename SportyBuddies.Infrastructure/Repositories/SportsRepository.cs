@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SportyBuddies.Domain.Sports;
-using SportyBuddies.Infrastructure.Common.Persistence;
 
-namespace SportyBuddies.Infrastructure.Sports.Persistence;
+namespace SportyBuddies.Infrastructure.Repositories;
 
 public class SportsRepository(SportyBuddiesDbContext dbContext) : ISportsRepository
 {
