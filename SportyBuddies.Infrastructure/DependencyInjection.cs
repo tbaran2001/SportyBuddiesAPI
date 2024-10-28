@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Application.Common.Services;
@@ -16,10 +17,10 @@ namespace SportyBuddies.Infrastructure;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services)
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<SportyBuddiesDbContext>(options =>
-            options.UseSqlite("Data Source = SportyBuddies.db"));
+            options.UseNpgsql(configuration.GetConnectionString("Database")));
 
         services.AddScoped<ISportsRepository, SportsRepository>();
         services.AddScoped<IUsersRepository, UsersRepository>();

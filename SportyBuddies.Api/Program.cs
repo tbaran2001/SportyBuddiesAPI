@@ -10,17 +10,16 @@ using SportyBuddies.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services
     .AddApplication()
-    .AddInfrastructure()
-    .AddIdentity();
+    .AddInfrastructure(builder.Configuration)
+    .AddIdentity(builder.Configuration);
 
 builder.Services.AddHttpContextAccessor();
 
@@ -40,7 +39,6 @@ builder.Services.AddSignalR();
 var app = builder.Build();
 
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -48,8 +46,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
-//app.UseExceptionHandler();
-//app.UseExceptionHandler("/errors");
 
 //app.AddInfrastructureMiddleware();
 
@@ -61,9 +57,7 @@ app.MapPost("/api/logout", async (ClaimsPrincipal user, SignInManager<Applicatio
 });
 
 app.UseHttpsRedirection();
-
 app.UseCors("React");
-
 app.UseStaticFiles();
 
 app.UseAuthentication();
@@ -71,13 +65,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapPost("broadcast", async (HubMessage message, IHubContext<ChatHub, IChatClient> context) =>
-{
-    await context.Clients.All.ReceiveMessage(message);
-    return Results.NoContent();
-});
-
-//signalR
 app.MapHub<ChatHub>("chatHub");
 
 app.Run();

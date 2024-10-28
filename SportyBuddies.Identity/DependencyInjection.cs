@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SportyBuddies.Identity.Models;
 
@@ -8,22 +9,22 @@ namespace SportyBuddies.Identity;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddIdentity(this IServiceCollection services)
+    public static IServiceCollection AddIdentity(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddAuthentication(IdentityConstants.ApplicationScheme)
             .AddIdentityCookies();
 
         services.ConfigureApplicationCookie(options =>
         {
-            options.Cookie.HttpOnly = false; // Set to true if you don't need JS access
+            options.Cookie.HttpOnly = false;
             options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
-            options.Cookie.SameSite = SameSiteMode.None; // Adjust as needed
+            options.Cookie.SameSite = SameSiteMode.None;
         });
 
         services.AddAuthorizationBuilder();
-
+        
         services.AddDbContext<SportyBuddiesIdentityDbContext>(options =>
-            options.UseSqlite("Data Source = SportyBuddiesIdentity.db"));
+            options.UseNpgsql(configuration.GetConnectionString("IdentityDatabase")));
 
         services.AddIdentityCore<ApplicationUser>()
             .AddEntityFrameworkStores<SportyBuddiesIdentityDbContext>()
