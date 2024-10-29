@@ -25,6 +25,17 @@ public class SportyBuddiesDbContext(
 
     public async Task CommitChangesAsync()
     {
+        var domainEvents = ChangeTracker
+            .Entries<Entity>()
+            .Select(entry => entry.Entity.PopDomainEvents())
+            .SelectMany(domainEvents => domainEvents)
+            .ToList();
+
+        if (IsUserWaitingOnline())
+            AddDomainEventsToOfflineProcessingQueue(domainEvents);
+        else
+            await PublishDomainEvents(publisher, domainEvents);
+
         await base.SaveChangesAsync();
     }
 
