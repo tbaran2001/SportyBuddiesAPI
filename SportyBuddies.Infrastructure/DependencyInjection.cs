@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Quartz;
 using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Application.Common.Services;
 using SportyBuddies.Domain.Buddies;
@@ -11,6 +12,7 @@ using SportyBuddies.Domain.Messages;
 using SportyBuddies.Domain.Sports;
 using SportyBuddies.Domain.Users;
 using SportyBuddies.Infrastructure.Clock;
+using SportyBuddies.Infrastructure.Outbox;
 using SportyBuddies.Infrastructure.Repositories;
 using SportyBuddies.Infrastructure.Services;
 
@@ -20,8 +22,15 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        var connectionString = configuration.GetConnectionString("Database") ??
+                               throw new ArgumentNullException(nameof(configuration));
         services.AddDbContext<SportyBuddiesDbContext>(options =>
-            options.UseNpgsql(configuration.GetConnectionString("Database")));
+        {
+            options.UseNpgsql(connectionString).UseSnakeCaseNamingConvention();
+        });
+
+        services.AddSingleton<ISqlConnectionFactory>(_ =>
+            new SqlConnectionFactory(connectionString));
 
         services.AddScoped<ISportsRepository, SportsRepository>();
         services.AddScoped<IUsersRepository, UsersRepository>();
@@ -39,6 +48,8 @@ public static class DependencyInjection
         AddCaching(services, configuration);
         
         //AddApiVersioning(services);
+        
+        AddBackgroundJobs(services, configuration);
 
         return services;
     }
@@ -68,5 +79,16 @@ public static class DependencyInjection
                 options.GroupNameFormat = "'v'V";
                 options.SubstituteApiVersionInUrl = true;
             });
+    }
+    
+    private static void AddBackgroundJobs(IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<OutboxOptions>(configuration.GetSection("Outbox"));
+        
+        services.AddQuartz();
+
+        services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
+
+        services.ConfigureOptions<ProcessOutboxMessagesJobSetup>();
     }
 }

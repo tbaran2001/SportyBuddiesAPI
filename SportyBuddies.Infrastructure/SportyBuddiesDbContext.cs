@@ -1,21 +1,29 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Domain.Buddies;
 using SportyBuddies.Domain.Common;
 using SportyBuddies.Domain.Matches;
 using SportyBuddies.Domain.Messages;
 using SportyBuddies.Domain.Sports;
 using SportyBuddies.Domain.Users;
+using SportyBuddies.Infrastructure.Outbox;
 
 namespace SportyBuddies.Infrastructure;
 
 public class SportyBuddiesDbContext(
     DbContextOptions<SportyBuddiesDbContext> options,
     IHttpContextAccessor httpContextAccessor,
-    IPublisher publisher)
+    IPublisher publisher,
+    IDateTimeProvider dateTimeProvider)
     : DbContext(options), IUnitOfWork
 {
+    private static readonly JsonSerializerSettings JsonSerializerSettings = new()
+    {
+        TypeNameHandling = TypeNameHandling.All
+    };
     public DbSet<Sport> Sports { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Match> Matches { get; set; }
@@ -25,18 +33,30 @@ public class SportyBuddiesDbContext(
 
     public async Task CommitChangesAsync()
     {
-        var domainEvents = ChangeTracker
-            .Entries<Entity>()
-            .Select(entry => entry.Entity.PopDomainEvents())
-            .SelectMany(domainEvents => domainEvents)
-            .ToList();
-
-        if (IsUserWaitingOnline())
-            AddDomainEventsToOfflineProcessingQueue(domainEvents);
-        else
-            await PublishDomainEvents(publisher, domainEvents);
+        AddDomainEventsAsOutboxMessages();
 
         await base.SaveChangesAsync();
+    }
+    
+    private void AddDomainEventsAsOutboxMessages()
+    {
+        var outboxMessages = ChangeTracker
+            .Entries<Entity>()
+            .Select(entry => entry.Entity)
+            .SelectMany(entity =>
+            {
+                var domainEvents = entity.PopDomainEvents();
+
+                return domainEvents;
+            })
+            .Select(domainEvent => new OutboxMessage(
+                Guid.NewGuid(),
+                dateTimeProvider.UtcNow,
+                domainEvent.GetType().Name,
+                JsonConvert.SerializeObject(domainEvent, JsonSerializerSettings)))
+            .ToList();
+
+        AddRange(outboxMessages);
     }
 
     private async Task PublishDomainEvents(IPublisher _publisher, List<IDomainEvent> domainEvents)
@@ -96,6 +116,8 @@ public class SportyBuddiesDbContext(
             .ValueGeneratedNever();
 
         modelBuilder.Entity<User>().OwnsOne(u => u.Preferences);
+
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(SportyBuddiesDbContext).Assembly);
 
         base.OnModelCreating(modelBuilder);
     }
