@@ -34,7 +34,20 @@ public static class DependencyInjection
 
         services.AddScoped<IUnitOfWork>(serviceProvider =>
             serviceProvider.GetRequiredService<SportyBuddiesDbContext>());
+        
+        AddCaching(services, configuration);
 
         return services;
     }
+    
+    private static void AddCaching(IServiceCollection services, IConfiguration configuration)
+    {
+        var connectionString = configuration.GetConnectionString("Cache") ??
+                               throw new ArgumentNullException(nameof(configuration));
+
+        services.AddStackExchangeRedisCache(options => options.Configuration = connectionString);
+
+        services.AddSingleton<ICacheService, CacheService>();
+    }
+
 }
