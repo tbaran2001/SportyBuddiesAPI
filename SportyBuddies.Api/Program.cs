@@ -1,6 +1,6 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.SignalR;
+using Serilog;
 using SportyBuddies.Api.Middlewares;
 using SportyBuddies.Application;
 using SportyBuddies.Application.Hubs;
@@ -10,6 +10,8 @@ using SportyBuddies.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Host.UseSerilog((context, loggerConfig) =>
+    loggerConfig.ReadFrom.Configuration(context.Configuration));
 
 builder.Services.AddControllers();
 
@@ -45,8 +47,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseHttpsRedirection();
+app.UseMiddleware<RequestContextLoggingMiddleware>();
+app.UseSerilogRequestLogging();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
-
 app.AddInfrastructureMiddleware();
 
 app.MapGroup("/api").MapIdentityApi<ApplicationUser>();
@@ -56,15 +60,11 @@ app.MapPost("/api/logout", async (ClaimsPrincipal user, SignInManager<Applicatio
     return TypedResults.Ok();
 });
 
-app.UseHttpsRedirection();
 app.UseCors("React");
 app.UseStaticFiles();
-
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.MapHub<ChatHub>("chatHub");
 
 app.Run();

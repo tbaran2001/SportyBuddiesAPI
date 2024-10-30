@@ -17,8 +17,8 @@ public class LoggingBehavior<TRequest, TResponse>(ILogger<LoggingBehavior<TReque
             logger.LogInformation("Executing request {RequestName}", requestName);
 
             var response = await next();
-
-            logger.LogInformation("Executed request {RequestName}", requestName);
+            
+            logger.LogInformation("Request {RequestName} processed successfully", requestName);
 
             return response;
         }
