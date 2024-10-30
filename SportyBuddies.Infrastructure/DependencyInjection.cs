@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Asp.Versioning;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SportyBuddies.Application.Common.Interfaces;
@@ -36,6 +37,8 @@ public static class DependencyInjection
             serviceProvider.GetRequiredService<SportyBuddiesDbContext>());
         
         AddCaching(services, configuration);
+        
+        //AddApiVersioning(services);
 
         return services;
     }
@@ -50,4 +53,20 @@ public static class DependencyInjection
         services.AddSingleton<ICacheService, CacheService>();
     }
 
+    private static void AddApiVersioning(IServiceCollection services)
+    {
+        services
+            .AddApiVersioning(options =>
+            {
+                options.DefaultApiVersion = new ApiVersion(1);
+                options.ReportApiVersions = true;
+                options.ApiVersionReader = new UrlSegmentApiVersionReader();
+            })
+            .AddMvc()
+            .AddApiExplorer(options =>
+            {
+                options.GroupNameFormat = "'v'V";
+                options.SubstituteApiVersionInUrl = true;
+            });
+    }
 }
