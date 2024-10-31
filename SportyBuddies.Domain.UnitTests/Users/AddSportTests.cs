@@ -1,8 +1,9 @@
 ﻿using FluentAssertions;
-using SportyBuddies.Domain.UnitTests.TestUtils.Sports;
-using SportyBuddies.Domain.UnitTests.TestUtils.Users;
+using SportyBuddies.Domain.Sports;
+using SportyBuddies.Domain.UnitTests.TestConstants;
+using SportyBuddies.Domain.Users;
 
-namespace SportyBuddies.Domain.UnitTests.UserTests;
+namespace SportyBuddies.Domain.UnitTests.Users;
 
 public class AddSportTests
 {
@@ -10,8 +11,8 @@ public class AddSportTests
     public void AddSport_WhenUserDoesNotHaveSport_ShouldAddSport()
     {
         // Arrange
-        var user = UserFactory.Create();
-        var sport = SportFactory.Create();
+        var user = User.Create(Guid.NewGuid());
+        var sport = Sport.Create(SportConstants.Name, SportConstants.Description);
 
         // Act
         user.AddSport(sport);
@@ -24,8 +25,8 @@ public class AddSportTests
     public void AddSport_WhenUserHasSport_ShouldThrowException()
     {
         // Arrange
-        var user = UserFactory.Create();
-        var sport = SportFactory.Create();
+        var user = User.Create(Guid.NewGuid());
+        var sport = Sport.Create(SportConstants.Name, SportConstants.Description);
         user.AddSport(sport);
 
         // Act
@@ -33,8 +34,5 @@ public class AddSportTests
 
         // Assert
         act.Should().Throw<Exception>().WithMessage("User already has this sport");
-
-        //cleanup
-        user.RemoveSport(sport);
     }
 }

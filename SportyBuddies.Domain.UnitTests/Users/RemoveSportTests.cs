@@ -1,8 +1,9 @@
 ﻿using FluentAssertions;
-using SportyBuddies.Domain.UnitTests.TestUtils.Sports;
-using SportyBuddies.Domain.UnitTests.TestUtils.Users;
+using SportyBuddies.Domain.Sports;
+using SportyBuddies.Domain.UnitTests.TestConstants;
+using SportyBuddies.Domain.Users;
 
-namespace SportyBuddies.Domain.UnitTests.UserTests;
+namespace SportyBuddies.Domain.UnitTests.Users;
 
 public class RemoveSportTests
 {
@@ -10,8 +11,8 @@ public class RemoveSportTests
     public void RemoveSport_WhenUserHasSport_ShouldRemoveSport()
     {
         // Arrange
-        var user = UserFactory.Create();
-        var sport = SportFactory.Create();
+        var user = User.Create(Guid.NewGuid());
+        var sport = Sport.Create(SportConstants.Name, SportConstants.Description);
         user.AddSport(sport);
 
         // Act
@@ -25,8 +26,8 @@ public class RemoveSportTests
     public void RemoveSport_WhenUserDoesNotHaveSport_ShouldThrowException()
     {
         // Arrange
-        var user = UserFactory.Create();
-        var sport = SportFactory.Create();
+        var user = User.Create(Guid.NewGuid());
+        var sport = Sport.Create(SportConstants.Name, SportConstants.Description);
 
         // Act
         var act = () => user.RemoveSport(sport);
