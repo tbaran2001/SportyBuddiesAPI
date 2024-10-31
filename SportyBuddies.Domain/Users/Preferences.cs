@@ -11,10 +11,6 @@ public class Preferences : ValueObject
         Gender = gender;
     }
 
-    public Preferences()
-    {
-    }
-
     public int MinAge { get; private set; }
     public int MaxAge { get; private set; }
     public Gender Gender { get; private set; }
@@ -39,5 +35,9 @@ public class Preferences : ValueObject
         yield return MinAge;
         yield return MaxAge;
         yield return Gender;
+    }
+
+    private Preferences()
+    {
     }
 }

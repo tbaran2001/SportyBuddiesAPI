@@ -31,13 +31,13 @@ public class Buddy : Entity
             matchDateTime);
     }
 
-    public Buddy()
-    {
-    }
-
     public User User { get; private set; }
     public Guid UserId { get; private set; }
     public User MatchedUser { get; private set; }
     public Guid MatchedUserId { get; private set; }
     public DateTime MatchDateTime { get; private set; }
+
+    private Buddy()
+    {
+    }
 }

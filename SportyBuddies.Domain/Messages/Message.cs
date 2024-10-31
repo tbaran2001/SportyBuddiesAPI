@@ -18,6 +18,11 @@ public class Message : Entity
         Content = content;
         TimeSent = timeSent;
     }
+
+    public Guid SenderId { get; private set; }
+    public Guid RecipientId { get; private set; }
+    public string Content { get; private set; }
+    public DateTime TimeSent { get; private set; }
     
     public static Message Create(
         Guid senderId, 
@@ -32,13 +37,8 @@ public class Message : Entity
             content, 
             utcNow);
     }
-
-    public Message()
+    
+    private Message()
     {
     }
-
-    public Guid SenderId { get; private set; }
-    public Guid RecipientId { get; private set; }
-    public string Content { get; private set; }
-    public DateTime TimeSent { get; private set; }
 }

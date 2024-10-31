@@ -9,7 +9,7 @@ public abstract class Entity : IEquatable<Entity>
         Id = id;
     }
 
-    public Entity()
+    protected Entity()
     {
     }
 

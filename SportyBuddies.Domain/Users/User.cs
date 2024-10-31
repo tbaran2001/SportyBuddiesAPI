@@ -25,10 +25,6 @@ public class User : Entity
         Gender = gender;
     }
 
-    public User()
-    {
-    }
-
     public string? Name { get; private set; }
     public string? Description { get; private set; }
     public DateTime CreatedOnUtc { get; private set; }
@@ -102,5 +98,9 @@ public class User : Entity
         {
             Photos.Add(photo);
         }
+    }
+
+    private User()
+    {
     }
 }

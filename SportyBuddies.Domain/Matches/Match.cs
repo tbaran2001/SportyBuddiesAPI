@@ -19,10 +19,6 @@ public class Match : Entity
         MatchedUserId = matchedUser.Id;
     }
 
-    public Match()
-    {
-    }
-
     public User User { get; private set; }
     public Guid UserId { get; private set; }
     public User MatchedUser { get; private set; }
@@ -40,5 +36,9 @@ public class Match : Entity
     {
         Swipe = swipe;
         SwipeDateTime = DateTime.UtcNow;
+    }
+
+    private Match()
+    {
     }
 }

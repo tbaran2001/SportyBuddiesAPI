@@ -5,7 +5,7 @@ namespace SportyBuddies.Domain.Sports;
 
 public class Sport : Entity
 {
-    public Sport(
+    private Sport(
         Guid id,
         string name,
         string description
@@ -13,10 +13,6 @@ public class Sport : Entity
     {
         Name = name;
         Description = description;
-    }
-
-    public Sport()
-    {
     }
 
     public string Name { get; private set; }
@@ -28,5 +24,9 @@ public class Sport : Entity
             id: Guid.NewGuid(),
             name: name,
             description: description);
+    }
+
+    private Sport()
+    {
     }
 }
