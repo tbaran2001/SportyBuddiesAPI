@@ -4,7 +4,12 @@ namespace SportyBuddies.Domain.Users;
 
 public class UserPhoto : Entity
 {
-    private UserPhoto(User user, string url, bool isMain, Guid? id = null) : base(id ?? Guid.NewGuid())
+    private UserPhoto(
+        Guid id,
+        User user,
+        string url,
+        bool isMain)
+        : base(id)
     {
         User = user;
         Url = url;
@@ -17,6 +22,15 @@ public class UserPhoto : Entity
     public string Url { get; private set; }
     public bool IsMain { get; private set; }
     public DateTime CreatedAt { get; private set; } = DateTime.Now;
+
+    public static UserPhoto Create(User user, string url, bool isMain)
+    {
+        return new UserPhoto(
+            id: Guid.NewGuid(),
+            user: user,
+            url: url,
+            isMain: isMain);
+    }
 
     private UserPhoto()
     {
