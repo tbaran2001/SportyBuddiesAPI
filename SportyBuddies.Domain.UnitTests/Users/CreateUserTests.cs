@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using SportyBuddies.Domain.UnitTests.TestConstants;
 using SportyBuddies.Domain.Users;
 
 namespace SportyBuddies.Domain.UnitTests.Users;

@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using SportyBuddies.Domain.Sports;
-using SportyBuddies.Domain.UnitTests.TestConstants;
+using SportyBuddies.Domain.UnitTests.TestData;
 using SportyBuddies.Domain.Users;
 
 namespace SportyBuddies.Domain.UnitTests.Users;
@@ -12,7 +12,7 @@ public class RemoveSportTests
     {
         // Arrange
         var user = User.Create(Guid.NewGuid());
-        var sport = Sport.Create(SportConstants.Name, SportConstants.Description);
+        var sport = Sport.Create(SportData.Name, SportData.Description);
         user.AddSport(sport);
 
         // Act
@@ -27,7 +27,7 @@ public class RemoveSportTests
     {
         // Arrange
         var user = User.Create(Guid.NewGuid());
-        var sport = Sport.Create(SportConstants.Name, SportConstants.Description);
+        var sport = Sport.Create(SportData.Name, SportData.Description);
 
         // Act
         var act = () => user.RemoveSport(sport);

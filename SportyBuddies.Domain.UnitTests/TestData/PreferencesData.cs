@@ -1,8 +1,8 @@
 ﻿using SportyBuddies.Domain.Users;
 
-namespace SportyBuddies.Domain.UnitTests.TestConstants;
+namespace SportyBuddies.Domain.UnitTests.TestData;
 
-public static class PreferencesConstants
+public static class PreferencesData
 {
     public static readonly int MinAge = 18;
     public static readonly int MaxAge = 21;

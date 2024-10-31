@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using SportyBuddies.Domain.Sports;
-using SportyBuddies.Domain.UnitTests.TestConstants;
+using SportyBuddies.Domain.UnitTests.TestData;
 
 namespace SportyBuddies.Domain.UnitTests.Sports;
 
@@ -10,10 +10,10 @@ public class CreateSportTests
     public void Create_Should_SetPropertyValue()
     {
         // Act
-        var sport = Sport.Create(SportConstants.Name, SportConstants.Description);
+        var sport = Sport.Create(SportData.Name, SportData.Description);
 
         // Assert
-        sport.Name.Should().Be(SportConstants.Name);
-        sport.Description.Should().Be(SportConstants.Description);
+        sport.Name.Should().Be(SportData.Name);
+        sport.Description.Should().Be(SportData.Description);
     }
 }

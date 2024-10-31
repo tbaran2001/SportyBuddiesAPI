@@ -1,9 +1,8 @@
-﻿using SportyBuddies.Domain.Sports;
-using SportyBuddies.Domain.Users;
+﻿using SportyBuddies.Domain.Users;
 
-namespace SportyBuddies.Domain.UnitTests.TestConstants;
+namespace SportyBuddies.Domain.UnitTests.TestData;
 
-public static class UserConstants
+public static class UserData
 {
     public static readonly string Name = "John";
     public static readonly string Description = "User description";
