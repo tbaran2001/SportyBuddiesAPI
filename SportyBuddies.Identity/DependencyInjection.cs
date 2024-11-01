@@ -23,8 +23,13 @@ public static class DependencyInjection
 
         services.AddAuthorizationBuilder();
         
+        var connectionString = configuration.GetConnectionString("IdentityDatabase") ??
+                               throw new ArgumentNullException(nameof(configuration));
+        
         services.AddDbContext<SportyBuddiesIdentityDbContext>(options =>
-            options.UseNpgsql(configuration.GetConnectionString("IdentityDatabase")));
+        {
+            options.UseNpgsql(connectionString).UseSnakeCaseNamingConvention();
+        });
 
         services.AddIdentityCore<ApplicationUser>()
             .AddEntityFrameworkStores<SportyBuddiesIdentityDbContext>()

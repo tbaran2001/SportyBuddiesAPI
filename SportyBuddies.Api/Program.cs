@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Serilog;
+using SportyBuddies.Api.Extensions;
 using SportyBuddies.Api.Middlewares;
 using SportyBuddies.Application;
 using SportyBuddies.Application.Hubs;
@@ -45,6 +46,9 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    
+    //app.ApplyMigrations();
+    //app.ApplyIdentityMigrations();
 }
 
 app.UseHttpsRedirection();
