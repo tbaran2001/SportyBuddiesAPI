@@ -37,7 +37,7 @@ public class MatchingService(
 
     public async Task CreateBuddyRelationshipAsync(Guid matchId)
     {
-        var userMatch = await matchesRepository.GetMatchWithUsersByIdAsync(matchId);
+        var userMatch = await matchesRepository.GetMatchWithUsersAsync(matchId);
         if (userMatch == null)
             return;
 
@@ -46,7 +46,7 @@ public class MatchingService(
         if (matchedUserMatch == null)
             return;
 
-        if (userMatch.Swipe == Swipe.Right && matchedUserMatch?.Swipe == Swipe.Right)
+        if (userMatch.Swipe == Swipe.Right && matchedUserMatch.Swipe == Swipe.Right)
         {
             var now = dateTimeProvider.UtcNow;
             var userBuddy = Buddy.Create(userMatch.User, userMatch.MatchedUser, now);

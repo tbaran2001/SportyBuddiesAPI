@@ -3,10 +3,6 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using SportyBuddies.Api.Contracts.Sports;
-using SportyBuddies.Application.Sports.Commands.CreateSport;
-using SportyBuddies.Application.Sports.Commands.DeleteSport;
-using SportyBuddies.Application.Sports.Queries.GetSport;
 using SportyBuddies.Application.Sports.Queries.GetSports;
 using SportyBuddies.Application.UserSports.Commands.AddUserSport;
 using SportyBuddies.Application.UserSports.Commands.RemoveUserSport;
@@ -20,6 +16,16 @@ namespace SportyBuddies.Api.Controllers
     [Route("api/[controller]")]
     public class SportsController(UserManager<ApplicationUser> userManager, ISender mediator, IMapper mapper) : ControllerBase
     {
+        [HttpGet("All")]
+        public async Task<IActionResult> GetSports()
+        {
+            var query = new GetSportsQuery();
+
+            var sportsResult = await mediator.Send(query);
+
+            return Ok(sportsResult);
+        }
+        
         [HttpGet]
         public async Task<IActionResult> GetUserSports()
         {

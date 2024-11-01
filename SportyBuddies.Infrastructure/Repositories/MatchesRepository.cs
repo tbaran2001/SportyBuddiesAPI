@@ -10,7 +10,7 @@ public class MatchesRepository(SportyBuddiesDbContext dbContext) : IMatchesRepos
         return await dbContext.Matches.FindAsync(matchId);
     }
 
-    public async Task<Match?> GetMatchWithUsersByIdAsync(Guid matchId)
+    public async Task<Match?> GetMatchWithUsersAsync(Guid matchId)
     {
         return await dbContext.Matches
             .Include(m => m.User)
