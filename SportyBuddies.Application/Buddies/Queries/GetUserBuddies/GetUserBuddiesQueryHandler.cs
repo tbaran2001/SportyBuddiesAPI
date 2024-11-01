@@ -11,10 +11,8 @@ public class GetUserBuddiesQueryHandler(IBuddiesRepository buddiesRepository, IM
     public async Task<object> Handle(GetUserBuddiesQuery query,
         CancellationToken cancellationToken)
     {
-        var buddies = await buddiesRepository.GetUserBuddiesAsync(query.UserId, query.IncludeUsers);
+        var buddies = await buddiesRepository.GetUserBuddiesAsync(query.UserId);
 
-        return query.IncludeUsers
-            ? mapper.Map<List<BuddyWithUsersResponse>>(buddies)
-            : mapper.Map<List<BuddyResponse>>(buddies);
+        return mapper.Map<List<BuddyResponse>>(buddies);
     }
 }

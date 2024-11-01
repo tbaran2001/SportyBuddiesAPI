@@ -1,20 +1,25 @@
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SportyBuddies.Application.Buddies.Queries.GetUserBuddies;
+using SportyBuddies.Identity.Models;
 
 namespace SportyBuddies.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class BuddiesController(ISender mediator) : ControllerBase
+public class BuddiesController(UserManager<ApplicationUser> userManager, ISender mediator) : ControllerBase
 {
-    [HttpGet("{userId:guid}")]
-    public async Task<IActionResult> GetUserBuddies(Guid userId, bool includeUsers = false)
+    [HttpGet]
+    public async Task<IActionResult> GetUserBuddies()
     {
-        var query = new GetUserBuddiesQuery(userId, includeUsers);
+        var userId = userManager.GetUserId(User);
+        if (userId == null) return Unauthorized();
 
-        var buddiesWithUsersResult = await mediator.Send(query);
+        var query = new GetUserBuddiesQuery(Guid.Parse(userId));
 
-        return Ok(buddiesWithUsersResult);
+        var userBuddiesResult = await mediator.Send(query);
+
+        return Ok(userBuddiesResult);
     }
 }

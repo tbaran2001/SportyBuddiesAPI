@@ -12,10 +12,8 @@ public class GetUserMatchesQueryHandler(IMatchesRepository matchesRepository, IM
         CancellationToken cancellationToken)
     {
         var matches =
-            await matchesRepository.GetUserMatchesAsync(query.UserId, query.IncludeUsers);
+            await matchesRepository.GetUserMatchesAsync(query.UserId);
 
-        return query.IncludeUsers
-            ? mapper.Map<List<MatchWithUsersResponse>>(matches)
-            : mapper.Map<List<MatchResponse>>(matches);
+        return mapper.Map<List<MatchResponse>>(matches);
     }
 }

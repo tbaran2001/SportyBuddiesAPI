@@ -2,4 +2,4 @@
 
 namespace SportyBuddies.Application.Buddies.Queries.GetUserBuddies;
 
-public record GetUserBuddiesQuery(Guid UserId, bool IncludeUsers) : IRequest<object>;
+public record GetUserBuddiesQuery(Guid UserId) : IRequest<object>;

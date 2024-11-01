@@ -1,28 +1,23 @@
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SportyBuddies.Api.Contracts.Users;
-using SportyBuddies.Application.Users.Commands.CreateUser;
 using SportyBuddies.Application.Users.Commands.DeleteUser;
+using SportyBuddies.Application.Users.Commands.UpdateUser;
+using SportyBuddies.Application.Users.Commands.UpdateUserPreferences;
 using SportyBuddies.Application.Users.Queries.GetUser;
-using SportyBuddies.Application.Users.Queries.GetUsers;
+using SportyBuddies.Identity.Models;
 
 namespace SportyBuddies.Api.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/[controller]")]
-    public class UsersController(IMapper mapper, ISender mediator) : ControllerBase
+    [ApiExplorerSettings(GroupName = "v1")]
+    public class UsersController(UserManager<ApplicationUser> userManager,IMapper mapper, ISender mediator) : ControllerBase
     {
-        [HttpGet]
-        public async Task<IActionResult> GetUsers(bool includeSports = false)
-        {
-            var query = new GetUsersQuery(includeSports);
-
-            var usersResult = await mediator.Send(query);
-
-            return Ok(usersResult);
-        }
-
         [HttpGet("{userId:guid}")]
         public async Task<IActionResult> GetUser(Guid userId)
         {
@@ -32,21 +27,52 @@ namespace SportyBuddies.Api.Controllers
 
             return Ok(userResult);
         }
-
-        [HttpPost]
-        public async Task<IActionResult> CreateUser(CreateUserRequest request)
+        
+        [HttpGet]
+        public async Task<IActionResult> GetCurrentUser()
         {
-            var command = mapper.Map<CreateUserCommand>(request);
+            var userId = userManager.GetUserId(User);
+            if (userId == null) return Unauthorized();
 
-            var createUserResult = await mediator.Send(command);
+            var query = new GetUserQuery(Guid.Parse(userId));
 
-            return CreatedAtAction(nameof(GetUser), new { userId = createUserResult.Id }, createUserResult);
+            var userResult = await mediator.Send(query);
+
+            return Ok(userResult);
+        }
+        
+        [HttpPut]
+        public async Task<IActionResult> UpdateCurrentUser(UpdateUserRequest userRequest)
+        {
+            var userId = userManager.GetUserId(User);
+            if (userId == null) return Unauthorized();
+
+            var command = new UpdateUserCommand(Guid.Parse(userId), userRequest.Name, userRequest.Description,
+                userRequest.Gender, userRequest.DateOfBirth);
+
+            var userResult = await mediator.Send(command);
+
+            return Ok(userResult);
         }
 
-        [HttpDelete("{userId:guid}")]
-        public async Task<IActionResult> DeleteUser(Guid userId)
+        [HttpDelete]
+        public async Task<IActionResult> DeleteCurrentUser(Guid userId)
         {
             var command = new DeleteUserCommand(userId);
+
+            await mediator.Send(command);
+
+            return NoContent();
+        }
+        
+        [HttpPut("Preferences")]
+        public async Task<IActionResult> UpdateUserPreferences(UpdateUserPreferencesRequest preferencesRequest)
+        {
+            var userId = userManager.GetUserId(User);
+            if (userId == null) return Unauthorized();
+
+            var command = new UpdateUserPreferencesCommand(Guid.Parse(userId), preferencesRequest.MinAge,
+                preferencesRequest.MaxAge, preferencesRequest.Gender);
 
             await mediator.Send(command);
 
