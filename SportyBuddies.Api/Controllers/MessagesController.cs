@@ -47,7 +47,7 @@ namespace SportyBuddies.Api.Controllers
             var userId = userManager.GetUserId(User);
             if (userId == null) return Unauthorized();
 
-            var query = new GetUserMessagesByBuddyIdQuery(Guid.Parse(userId), buddyId);
+            var query = new GetUserMessagesWithBuddyQuery(Guid.Parse(userId), buddyId);
 
             var messagesResult = await mediator.Send(query);
 
