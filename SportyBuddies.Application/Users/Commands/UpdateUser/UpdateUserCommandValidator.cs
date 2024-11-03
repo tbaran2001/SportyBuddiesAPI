@@ -9,10 +9,10 @@ public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
     {
         RuleFor(x => x.Name)
             .NotEmpty()
-            .MaximumLength(10);
+            .MaximumLength(50);
         RuleFor(x => x.Description)
             .NotEmpty()
-            .MaximumLength(60);
+            .MaximumLength(1000);
         RuleFor(x => x.Gender)
             .Must(gender => Enum.IsDefined(typeof(Gender), gender) && gender != Gender.Unknown);
         RuleFor(x => x.DateOfBirth)

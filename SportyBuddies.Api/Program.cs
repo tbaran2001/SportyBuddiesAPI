@@ -55,7 +55,7 @@ app.UseHttpsRedirection();
 app.UseMiddleware<RequestContextLoggingMiddleware>();
 app.UseSerilogRequestLogging();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
-app.AddInfrastructureMiddleware();
+//app.AddInfrastructureMiddleware();
 
 app.MapGroup("/api").MapIdentityApi<ApplicationUser>();
 app.MapPost("/api/logout", async (ClaimsPrincipal user, SignInManager<ApplicationUser> signInManager) =>
