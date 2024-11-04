@@ -7,6 +7,7 @@ using SportyBuddies.Application.Common.Behaviors;
 using SportyBuddies.Application.Common.DTOs.Sport;
 using SportyBuddies.Application.Sports.Commands.CreateSport;
 using TestCommon.Sports;
+using ValidationException = SportyBuddies.Application.Exceptions.ValidationException;
 
 namespace SportyBuddies.Application.UnitTests.Common.Behaviors;
 
@@ -48,8 +49,8 @@ public class ValidationBehaviorTests
         result.Should().Be(sport);
     }
 
-    /*[Fact]
-    public async Task InvokeBehavior_WhenValidatorResultIsNotValid_ShouldReturnListOfErrors()
+    [Fact]
+    public async Task InvokeBehavior_WhenValidatorResultIsNotValid_ShouldThrowValidationException()
     {
         // Arrange
         var createSportRequest = SportCommandFactory.CreateCreateSportCommand();
@@ -60,11 +61,9 @@ public class ValidationBehaviorTests
             .Returns(new ValidationResult(validationFailures));
 
         // Act
-        var result = await _validationBehavior.Handle(createSportRequest, _mockNextBehavior, CancellationToken.None);
-
+        var act = new Func<Task>(() => _validationBehavior.Handle(createSportRequest, _mockNextBehavior, CancellationToken.None));
+        
         // Assert
-        result.IsError.Should().BeTrue();
-        result.FirstError.Code.Should().Be("foo");
-        result.FirstError.Description.Should().Be("bad foo");
-    }*/
+        await act.Should().ThrowAsync<ValidationException>();
+    }
 }
