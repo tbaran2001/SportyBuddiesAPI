@@ -1,0 +1,52 @@
+﻿services:
+  sportybuddies.api:
+    image: sportybuddies.api
+    build:
+      context: .
+      dockerfile: SportyBuddies.Api/Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - sportybuddies.db
+      - sportybuddiesidentity.db
+      - sportybuddies.redis
+
+  sportybuddies.db:
+    image: postgres:latest
+    container_name: sportybuddies.db
+    environment:
+      - POSTGRES_DB=sportybuddies
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123
+    volumes:
+      - ./.containers/database/sportybuddies:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  sportybuddiesidentity.db:
+    image: postgres:latest
+    container_name: sportybuddiesidentity.db
+    environment:
+      - POSTGRES_DB=sportybuddiesidentity
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123
+    volumes:
+      - ./.containers/database/sportybuddiesidentity:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+        
+  sportybuddies.seq:
+    image: datalust/seq:latest
+    container_name: sportybuddies.Seq
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - "5341:5341"
+      - "8081:80"
+
+  sportybuddies.redis:
+    image: redis:latest
+    container_name: sportybuddies.Redis
+    restart: always
+    ports:
+      - "6379:6379"
