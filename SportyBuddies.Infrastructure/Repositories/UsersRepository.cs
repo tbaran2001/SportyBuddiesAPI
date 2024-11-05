@@ -25,14 +25,9 @@ public class UsersRepository(SportyBuddiesDbContext dbContext) : IUsersRepositor
             .FirstOrDefaultAsync(u => u.Id == userId);
     }
 
-    public async Task<IEnumerable<User>> GetAllUsersAsync(bool includeSports)
+    public async Task<IEnumerable<User>> GetAllUsersAsync()
     {
-        IQueryable<User> query = dbContext.Users;
-
-        if (includeSports)
-            query = query.Include(u => u.Sports);
-
-        return await query.ToListAsync();
+        return await dbContext.Users.ToListAsync();
     }
 
     public async Task AddUserAsync(User user)

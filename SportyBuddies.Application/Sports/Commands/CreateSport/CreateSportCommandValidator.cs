@@ -6,7 +6,7 @@ public class CreateSportCommandValidator : AbstractValidator<CreateSportCommand>
 {
     public CreateSportCommandValidator()
     {
-        RuleFor(x => x.Name).NotEmpty().MinimumLength(1).MaximumLength(10);
-        RuleFor(x => x.Description).NotEmpty().MaximumLength(25);
+        RuleFor(x => x.Name).NotEmpty().MinimumLength(1).MaximumLength(50);
+        RuleFor(x => x.Description).NotEmpty().MaximumLength(500);
     }
 }

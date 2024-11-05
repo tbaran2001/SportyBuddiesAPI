@@ -49,6 +49,8 @@ if (app.Environment.IsDevelopment())
     
     app.ApplyMigrations();
     app.ApplyIdentityMigrations();
+    
+    //app.SeedData();
 }
 
 app.UseHttpsRedirection();

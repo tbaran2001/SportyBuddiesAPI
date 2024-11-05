@@ -6,14 +6,12 @@ using SportyBuddies.Domain.Users;
 namespace SportyBuddies.Application.Users.Queries.GetUsers;
 
 public class GetUsersQueryHandler(IUsersRepository usersRepository, IMapper mapper)
-    : IRequestHandler<GetUsersQuery, object>
+    : IRequestHandler<GetUsersQuery, List<UserWithSportsResponse>>
 {
-    public async Task<object> Handle(GetUsersQuery query, CancellationToken cancellationToken)
+    public async Task<List<UserWithSportsResponse>> Handle(GetUsersQuery query, CancellationToken cancellationToken)
     {
-        var users = await usersRepository.GetAllUsersAsync(query.IncludeSports);
+        var users = await usersRepository.GetAllUsersAsync();
 
-        return query.IncludeSports
-            ? mapper.Map<List<UserWithSportsResponse>>(users)
-            : mapper.Map<List<UserResponse>>(users);
+        return mapper.Map<List<UserWithSportsResponse>>(users);
     }
 }
