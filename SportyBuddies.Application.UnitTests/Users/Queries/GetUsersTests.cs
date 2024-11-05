@@ -10,6 +10,7 @@ namespace SportyBuddies.Application.UnitTests.Users.Queries;
 
 public class GetUsersTests
 {
+    private readonly GetUsersQuery _query= new();
     private readonly GetUsersQueryHandler _handler;
     private readonly IUsersRepository _usersRepositoryMock;
 
@@ -23,32 +24,22 @@ public class GetUsersTests
     }
 
     [Fact]
-    public async Task Handle_ShouldReturnUserResponse_WhenIncludeSportsIsFalse()
+    public async Task Handle_Should_ReturnUsers()
     {
         // Arrange
-        GetUsersQuery query= new GetUsersQuery(false);
-        var users = new List<User> { User.Create(Guid.NewGuid()), User.Create(Guid.NewGuid()) };
-        _usersRepositoryMock.GetAllUsersAsync(query.IncludeSports).Returns(users);
-
+        var users = new List<User>
+        {
+            User.Create(Guid.NewGuid()),
+            User.Create(Guid.NewGuid())
+        };
+        _usersRepositoryMock.GetAllUsersAsync().Returns(users);
+        
         // Act
-        var result = await _handler.Handle(query, default);
-
+        var result = await _handler.Handle(_query, default);
+        
         // Assert
-        result.Should().BeOfType<List<UserResponse>>();
+        result.Should().NotBeNull();
+        result.Should().HaveCount(users.Count);
     }
-    
-    [Fact]
-    public async Task Handle_ShouldReturnUserWithSportsResponse_WhenIncludeSportsIsTrue()
-    {
-        // Arrange
-        GetUsersQuery query= new GetUsersQuery(true);
-        var users = new List<User> { User.Create(Guid.NewGuid()), User.Create(Guid.NewGuid()) };
-        _usersRepositoryMock.GetAllUsersAsync(query.IncludeSports).Returns(users);
 
-        // Act
-        var result = await _handler.Handle(query, default);
-
-        // Assert
-        result.Should().BeOfType<List<UserWithSportsResponse>>();
-    }
 }
