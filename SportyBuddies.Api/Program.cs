@@ -48,7 +48,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     
     app.ApplyMigrations();
-    app.ApplyIdentityMigrations();
+    //app.ApplyIdentityMigrations();
     
     //app.SeedData();
 }

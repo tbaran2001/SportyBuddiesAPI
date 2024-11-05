@@ -28,5 +28,9 @@
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.2" />
       <PackageReference Include="Quartz.Extensions.Hosting" Version="3.13.0" />
     </ItemGroup>
+    
+    <ItemGroup>
+        <InternalsVisibleTo Include="SportyBuddies.Application.IntegrationTests" />
+    </ItemGroup>
 
 </Project>
