@@ -24,4 +24,9 @@ public class SportsRepository(SportyBuddiesDbContext dbContext) : ISportsReposit
     {
         dbContext.Sports.Remove(sport);
     }
+
+    public async Task<bool> SportNameExistsAsync(string sportName)
+    {
+        return await dbContext.Sports.AnyAsync(s => s.Name == sportName);
+    }
 }

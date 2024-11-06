@@ -6,9 +6,9 @@ using SportyBuddies.Domain.Messages;
 namespace SportyBuddies.Application.Messages.Queries.GetLastUserMessages;
 
 public class GetLastUserMessagesQueryHandler(IMessagesRepository messagesRepository, IMapper mapper)
-    : IRequestHandler<GetLastUserMessagesQuery, IEnumerable<MessageResponse>>
+    : IRequestHandler<GetLastUserMessagesQuery, List<MessageResponse>>
 {
-    public async Task<IEnumerable<MessageResponse>> Handle(GetLastUserMessagesQuery request,
+    public async Task<List<MessageResponse>> Handle(GetLastUserMessagesQuery request,
         CancellationToken cancellationToken)
     {
         var messages = await messagesRepository.GetLastUserMessagesAsync(request.UserId);

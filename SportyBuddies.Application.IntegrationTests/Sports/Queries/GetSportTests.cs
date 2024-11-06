@@ -6,12 +6,8 @@ using SportyBuddies.Domain.Sports;
 
 namespace SportyBuddies.Application.IntegrationTests.Sports.Queries;
 
-public class GetSportTests: BaseIntegrationTest
+public class GetSportTests(IntegrationTestWebAppFactory factory) : BaseIntegrationTest(factory)
 {
-    public GetSportTests(IntegrationTestWebAppFactory factory) : base(factory)
-    {
-    }
-    
     [Fact]
     public async Task GetSport_ShouldReturnSport_WhenSportExists()
     {

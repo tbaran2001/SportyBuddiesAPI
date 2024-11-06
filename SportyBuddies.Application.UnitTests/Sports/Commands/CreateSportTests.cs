@@ -2,6 +2,7 @@
 using FluentAssertions;
 using NSubstitute;
 using SportyBuddies.Application.Common.DTOs.Sport;
+using SportyBuddies.Application.Exceptions;
 using SportyBuddies.Application.Mappings;
 using SportyBuddies.Application.Sports.Commands.CreateSport;
 using SportyBuddies.Domain.Common;
@@ -39,5 +40,18 @@ public class CreateSportTests
         
         await _sportsRepositoryMock.Received(1).AddSportAsync(Arg.Any<Sport>());
         await _unitOfWorkMock.Received(1).CommitChangesAsync();
+    }
+    
+    [Fact]
+    public async Task Handle_ShouldThrowException_WhenSportAlreadyExists()
+    {
+        // Arrange
+        _sportsRepositoryMock.SportNameExistsAsync(_command.Name).Returns(true);
+
+        // Act
+        Func<Task> act = async () => await _handler.Handle(_command, default);
+
+        // Assert
+        await act.Should().ThrowAsync<ConflictException>();
     }
 }

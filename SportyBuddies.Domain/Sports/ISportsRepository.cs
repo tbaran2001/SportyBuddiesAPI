@@ -6,4 +6,5 @@ public interface ISportsRepository
     Task<Sport?> GetSportByIdAsync(Guid sportId);
     Task AddSportAsync(Sport sport);
     void RemoveSport(Sport sport);
+    Task<bool> SportNameExistsAsync(string sportName);
 }

@@ -6,9 +6,9 @@ using SportyBuddies.Domain.Buddies;
 namespace SportyBuddies.Application.Buddies.Queries.GetUserBuddies;
 
 public class GetUserBuddiesQueryHandler(IBuddiesRepository buddiesRepository, IMapper mapper)
-    : IRequestHandler<GetUserBuddiesQuery, object>
+    : IRequestHandler<GetUserBuddiesQuery, List<BuddyResponse>>
 {
-    public async Task<object> Handle(GetUserBuddiesQuery query,
+    public async Task<List<BuddyResponse>> Handle(GetUserBuddiesQuery query,
         CancellationToken cancellationToken)
     {
         var buddies = await buddiesRepository.GetUserBuddiesAsync(query.UserId);
