@@ -12,10 +12,12 @@ Core Framework & Language
 - C#
 
 Database & Storage
+- Entity Framework Core
 - PostgreSQL
 - Redis
 
 Architecture & Patterns
+- REST Api
 - Clean Architecture 
 - Domain Driven Design
 
@@ -34,5 +36,6 @@ Testing
 - Nsubsitute
 - FluentAssertions
 
-Development Environment:
+Development:
 - JetBrains Rider
+- Postman
