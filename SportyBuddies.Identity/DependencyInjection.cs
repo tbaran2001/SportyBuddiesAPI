@@ -16,8 +16,8 @@ public static class DependencyInjection
 
         services.ConfigureApplicationCookie(options =>
         {
-            options.Cookie.HttpOnly = false;
-            options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+            options.Cookie.HttpOnly = true;
+            options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             options.Cookie.SameSite = SameSiteMode.None;
         });
 

@@ -63,13 +63,11 @@ public class MatchesRepository(SportyBuddiesDbContext dbContext) : IMatchesRepos
         return Task.CompletedTask;
     }
 
-    public async Task<Match?> GetMatchByUserAndMatchedUserAsync(Guid matchedUserId, Guid userId)
+    public async Task<Match?> GetMatchByUserAndMatchedUserAsync(Guid userId, Guid matchedUserId)
     {
         return await dbContext.Matches
             .Include(m => m.User)
             .Include(m => m.MatchedUser)
-            .FirstOrDefaultAsync(m =>
-                (m.User.Id == userId && m.MatchedUser.Id == matchedUserId) ||
-                (m.User.Id == matchedUserId && m.MatchedUser.Id == userId));
+            .FirstOrDefaultAsync(m => m.User.Id == userId && m.MatchedUser.Id == matchedUserId);
     }
 }
