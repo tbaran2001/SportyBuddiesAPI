@@ -11,7 +11,10 @@ public class UpdatePreferencesTests
     {
         // Arrange
         var user = User.Create(Guid.NewGuid());
-        var preferences = Preferences.Create(PreferencesData.MinAge, PreferencesData.MaxAge,
+        var preferences = Preferences.Create(
+            PreferencesData.MinAge,
+            PreferencesData.MaxAge,
+            PreferencesData.MaxDistance,
             PreferencesData.Gender);
 
         // Act

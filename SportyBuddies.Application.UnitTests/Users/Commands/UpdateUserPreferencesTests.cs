@@ -9,11 +9,11 @@ namespace SportyBuddies.Application.UnitTests.Users.Commands;
 
 public class UpdateUserPreferencesTests
 {
-    private readonly UpdateUserPreferencesCommand _command = new(Guid.NewGuid(), 18, 21, Gender.Male);
+    private readonly UpdateUserPreferencesCommand _command = new(Guid.NewGuid(), 18, 21,5, Gender.Male);
     private readonly UpdateUserPreferencesCommandHandler _handler;
     private readonly IUsersRepository _usersRepositoryMock;
     private readonly IUnitOfWork _unitOfWorkMock;
-    
+
     public UpdateUserPreferencesTests()
     {
         _usersRepositoryMock = Substitute.For<IUsersRepository>();
@@ -34,11 +34,12 @@ public class UpdateUserPreferencesTests
         // Assert
         user.Preferences.MinAge.Should().Be(_command.MinAge);
         user.Preferences.MaxAge.Should().Be(_command.MaxAge);
+        user.Preferences.MaxDistance.Should().Be(_command.MaxDistance);
         user.Preferences.Gender.Should().Be(_command.Gender);
-        
+
         await _unitOfWorkMock.Received(1).CommitChangesAsync();
     }
-    
+
     [Fact]
     public async Task Handle_ShouldThrowNotFoundException_WhenUserDoesNotExist()
     {

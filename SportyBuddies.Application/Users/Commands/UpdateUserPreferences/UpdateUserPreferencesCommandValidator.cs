@@ -18,5 +18,8 @@ public class UpdateUserPreferencesCommandValidator: AbstractValidator<UpdateUser
             .LessThanOrEqualTo(x => x.MaxAge);
         RuleFor(x => x.Gender)
             .IsInEnum();
+        RuleFor(x => x.MaxDistance)
+            .GreaterThanOrEqualTo(1)
+            .LessThanOrEqualTo(100);
     }
 }

@@ -9,15 +9,15 @@ public class UpdateUserPreferencesCommandHandler(
     IUsersRepository usersRepository,
     IUnitOfWork unitOfWork) : IRequestHandler<UpdateUserPreferencesCommand>
 {
-    public async Task Handle(UpdateUserPreferencesCommand request,
+    public async Task Handle(UpdateUserPreferencesCommand command,
         CancellationToken cancellationToken)
     {
-        var user = await usersRepository.GetUserByIdAsync(request.UserId);
+        var user = await usersRepository.GetUserByIdAsync(command.UserId);
 
         if (user == null)
-            throw new NotFoundException(nameof(user), request.UserId.ToString());
+            throw new NotFoundException(nameof(user), command.UserId.ToString());
 
-        var preferences = Preferences.Create(request.MinAge, request.MaxAge, request.Gender);
+        var preferences = Preferences.Create(command.MinAge, command.MaxAge,command.MaxDistance, command.Gender);
 
         user.UpdatePreferences(preferences);
 

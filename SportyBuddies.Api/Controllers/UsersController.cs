@@ -16,7 +16,8 @@ namespace SportyBuddies.Api.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "v1")]
-    public class UsersController(UserManager<ApplicationUser> userManager,IMapper mapper, ISender mediator) : ControllerBase
+    public class UsersController(UserManager<ApplicationUser> userManager, IMapper mapper, ISender mediator)
+        : ControllerBase
     {
         [HttpGet("{userId:guid}")]
         public async Task<IActionResult> GetUser(Guid userId)
@@ -27,7 +28,7 @@ namespace SportyBuddies.Api.Controllers
 
             return Ok(userResult);
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> GetCurrentUser()
         {
@@ -40,7 +41,7 @@ namespace SportyBuddies.Api.Controllers
 
             return Ok(userResult);
         }
-        
+
         [HttpPut]
         public async Task<IActionResult> UpdateCurrentUser(UpdateUserRequest userRequest)
         {
@@ -64,7 +65,7 @@ namespace SportyBuddies.Api.Controllers
 
             return NoContent();
         }
-        
+
         [HttpPut("Preferences")]
         public async Task<IActionResult> UpdateUserPreferences(UpdateUserPreferencesRequest preferencesRequest)
         {
@@ -72,7 +73,7 @@ namespace SportyBuddies.Api.Controllers
             if (userId == null) return Unauthorized();
 
             var command = new UpdateUserPreferencesCommand(Guid.Parse(userId), preferencesRequest.MinAge,
-                preferencesRequest.MaxAge, preferencesRequest.Gender);
+                preferencesRequest.MaxAge, preferencesRequest.MaxDistance, preferencesRequest.Gender);
 
             await mediator.Send(command);
 
