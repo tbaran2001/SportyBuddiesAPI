@@ -8,7 +8,7 @@ This project is an implementation of the API for the "SportyBuddies" application
 ### Built With
 
 Core Framework & Language
-- ASP.NET Core 8.0
+- ASP.NET 8.0
 - C#
 
 Database & Storage
@@ -30,10 +30,11 @@ Libraries & Utilities
 - FluentValidation
 - AutoMapper
 - Serilog
+- SignalR
 
 Testing
 - XUnit
-- Nsubsitute
+- NSubsitute
 - FluentAssertions
 
 Development:
