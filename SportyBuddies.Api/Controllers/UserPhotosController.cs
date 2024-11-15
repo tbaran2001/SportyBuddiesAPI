@@ -2,8 +2,8 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using SportyBuddies.Application.Users.Commands.UploadPhoto;
-using SportyBuddies.Application.Users.Queries.GetUserMainPhoto;
+using SportyBuddies.Application.Features.Users.Commands.UploadPhoto;
+using SportyBuddies.Application.Features.Users.Queries.GetUserMainPhoto;
 using SportyBuddies.Identity.Models;
 
 namespace SportyBuddies.Api.Controllers

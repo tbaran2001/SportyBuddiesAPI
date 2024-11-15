@@ -1,12 +1,9 @@
-using System.Security.Claims;
-using Microsoft.AspNetCore.Identity;
 using Serilog;
 using SportyBuddies.Api.Extensions;
 using SportyBuddies.Api.Middlewares;
 using SportyBuddies.Application;
 using SportyBuddies.Application.Hubs;
 using SportyBuddies.Identity;
-using SportyBuddies.Identity.Models;
 using SportyBuddies.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -57,14 +54,8 @@ app.UseHttpsRedirection();
 app.UseMiddleware<RequestContextLoggingMiddleware>();
 app.UseSerilogRequestLogging();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
-//app.AddInfrastructureMiddleware();
 
-app.MapGroup("/api").MapIdentityApi<ApplicationUser>();
-app.MapPost("/api/logout", async (ClaimsPrincipal user, SignInManager<ApplicationUser> signInManager) =>
-{
-    await signInManager.SignOutAsync();
-    return TypedResults.Ok();
-});
+app.MapIdentityApi();
 
 app.UseCors("React");
 app.UseStaticFiles();

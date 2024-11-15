@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using SportyBuddies.Application.Exceptions;
+using SportyBuddies.Application.Features.Matches.Commands.UpdateMatch;
 using SportyBuddies.Application.IntegrationTests.Infrastructure;
-using SportyBuddies.Application.Matches.Commands.UpdateMatch;
 using SportyBuddies.Domain.Matches;
 using SportyBuddies.Domain.Users;
 

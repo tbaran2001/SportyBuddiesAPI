@@ -1,8 +1,7 @@
 ﻿using FluentAssertions;
 using SportyBuddies.Application.Exceptions;
+using SportyBuddies.Application.Features.Sports.Commands.DeleteSport;
 using SportyBuddies.Application.IntegrationTests.Infrastructure;
-using SportyBuddies.Application.Sports.Commands.CreateSport;
-using SportyBuddies.Application.Sports.Commands.DeleteSport;
 using SportyBuddies.Domain.Sports;
 
 namespace SportyBuddies.Application.IntegrationTests.Sports.Commands;

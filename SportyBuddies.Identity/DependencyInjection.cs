@@ -1,5 +1,8 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -46,5 +49,18 @@ public static class DependencyInjection
         services.AddScoped<IdentityEventsHandler>();
 
         return services;
+    }
+
+    public static IEndpointRouteBuilder MapIdentityApi(this IEndpointRouteBuilder endpoints)
+    {
+        endpoints.MapGroup("/api").MapIdentityApi<ApplicationUser>();
+
+        endpoints.MapPost("/api/logout", async (SignInManager<ApplicationUser> signInManager) =>
+        {
+            await signInManager.SignOutAsync();
+            return TypedResults.Ok();
+        });
+
+        return endpoints;
     }
 }

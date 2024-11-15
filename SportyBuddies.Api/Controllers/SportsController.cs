@@ -3,10 +3,10 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using SportyBuddies.Application.Sports.Queries.GetSports;
-using SportyBuddies.Application.UserSports.Commands.AddUserSport;
-using SportyBuddies.Application.UserSports.Commands.RemoveUserSport;
-using SportyBuddies.Application.UserSports.Queries.GetUserSports;
+using SportyBuddies.Application.Features.Sports.Queries.GetSports;
+using SportyBuddies.Application.Features.UserSports.Commands.AddUserSport;
+using SportyBuddies.Application.Features.UserSports.Commands.RemoveUserSport;
+using SportyBuddies.Application.Features.UserSports.Queries.GetUserSports;
 using SportyBuddies.Identity.Models;
 
 namespace SportyBuddies.Api.Controllers

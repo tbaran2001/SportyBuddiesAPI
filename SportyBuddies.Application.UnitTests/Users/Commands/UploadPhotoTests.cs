@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using NSubstitute;
 using SportyBuddies.Application.Common.Services;
 using SportyBuddies.Application.Exceptions;
-using SportyBuddies.Application.Users.Commands.UploadPhoto;
+using SportyBuddies.Application.Features.Users.Commands.UploadPhoto;
 using SportyBuddies.Domain.Common;
 using SportyBuddies.Domain.Users;
 

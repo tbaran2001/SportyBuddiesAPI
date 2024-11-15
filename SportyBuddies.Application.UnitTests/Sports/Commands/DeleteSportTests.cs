@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using NSubstitute;
 using SportyBuddies.Application.Exceptions;
-using SportyBuddies.Application.Sports.Commands.DeleteSport;
+using SportyBuddies.Application.Features.Sports.Commands.DeleteSport;
 using SportyBuddies.Domain.Common;
 using SportyBuddies.Domain.Sports;
 

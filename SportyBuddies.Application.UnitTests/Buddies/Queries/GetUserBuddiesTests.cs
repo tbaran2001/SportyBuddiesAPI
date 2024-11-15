@@ -1,8 +1,8 @@
 using AutoMapper;
 using FluentAssertions;
 using NSubstitute;
-using SportyBuddies.Application.Buddies.Queries.GetUserBuddies;
 using SportyBuddies.Application.Common.DTOs.Buddy;
+using SportyBuddies.Application.Features.Buddies.Queries.GetUserBuddies;
 using SportyBuddies.Application.Mappings;
 using SportyBuddies.Domain.Buddies;
 using SportyBuddies.Domain.Users;

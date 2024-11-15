@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using NSubstitute;
 using SportyBuddies.Application.Exceptions;
-using SportyBuddies.Application.Users.Commands.UpdateUserPreferences;
+using SportyBuddies.Application.Features.Users.Commands.UpdateUserPreferences;
 using SportyBuddies.Domain.Common;
 using SportyBuddies.Domain.Users;
 

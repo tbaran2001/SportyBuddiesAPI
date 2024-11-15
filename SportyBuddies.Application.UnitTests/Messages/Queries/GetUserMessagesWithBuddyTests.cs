@@ -2,8 +2,8 @@ using AutoMapper;
 using FluentAssertions;
 using NSubstitute;
 using SportyBuddies.Application.Common.DTOs.Message;
+using SportyBuddies.Application.Features.Messages.Queries.GetUserMessagesWithBuddy;
 using SportyBuddies.Application.Mappings;
-using SportyBuddies.Application.Messages.Queries.GetUserMessagesWithBuddy;
 using SportyBuddies.Domain.Messages;
 
 namespace SportyBuddies.Application.UnitTests.Messages.Queries;

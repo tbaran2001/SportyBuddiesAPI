@@ -1,7 +1,7 @@
 using AutoMapper;
 using SportyBuddies.Application.Common.DTOs.User;
-using SportyBuddies.Application.Users.Commands.CreateUser;
-using SportyBuddies.Application.Users.Commands.UpdateUser;
+using SportyBuddies.Application.Features.Users.Commands.CreateUser;
+using SportyBuddies.Application.Features.Users.Commands.UpdateUser;
 using SportyBuddies.Domain.Users;
 
 namespace SportyBuddies.Application.Mappings;

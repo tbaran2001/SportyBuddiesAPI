@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using SportyBuddies.Application.Exceptions;
+using SportyBuddies.Application.Features.UserSports.Commands.RemoveUserSport;
 using SportyBuddies.Application.IntegrationTests.Infrastructure;
-using SportyBuddies.Application.UserSports.Commands.RemoveUserSport;
 using SportyBuddies.Domain.Sports;
 using SportyBuddies.Domain.Users;
 

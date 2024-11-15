@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SportyBuddies.Api.Contracts.Users;
-using SportyBuddies.Application.Users.Commands.DeleteUser;
-using SportyBuddies.Application.Users.Commands.UpdateUser;
-using SportyBuddies.Application.Users.Commands.UpdateUserPreferences;
-using SportyBuddies.Application.Users.Queries.GetUser;
+using SportyBuddies.Application.Features.Users.Commands.DeleteUser;
+using SportyBuddies.Application.Features.Users.Commands.UpdateUser;
+using SportyBuddies.Application.Features.Users.Commands.UpdateUserPreferences;
+using SportyBuddies.Application.Features.Users.Queries.GetUser;
 using SportyBuddies.Identity.Models;
 
 namespace SportyBuddies.Api.Controllers

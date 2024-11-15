@@ -3,8 +3,8 @@ using FluentAssertions;
 using NSubstitute;
 using SportyBuddies.Application.Common.DTOs.Sport;
 using SportyBuddies.Application.Exceptions;
+using SportyBuddies.Application.Features.Sports.Commands.CreateSport;
 using SportyBuddies.Application.Mappings;
-using SportyBuddies.Application.Sports.Commands.CreateSport;
 using SportyBuddies.Domain.Common;
 using SportyBuddies.Domain.Sports;
 

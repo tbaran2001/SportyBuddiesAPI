@@ -5,7 +5,7 @@ using MediatR;
 using NSubstitute;
 using SportyBuddies.Application.Common.Behaviors;
 using SportyBuddies.Application.Common.DTOs.Sport;
-using SportyBuddies.Application.Sports.Commands.CreateSport;
+using SportyBuddies.Application.Features.Sports.Commands.CreateSport;
 using TestCommon.Sports;
 using ValidationException = SportyBuddies.Application.Exceptions.ValidationException;
 

@@ -148,7 +148,6 @@ namespace SportyBuddies.Infrastructure.Migrations
             modelBuilder.Entity("SportyBuddies.Domain.Users.User", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
@@ -188,6 +187,7 @@ namespace SportyBuddies.Infrastructure.Migrations
             modelBuilder.Entity("SportyBuddies.Domain.Users.UserPhoto", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 

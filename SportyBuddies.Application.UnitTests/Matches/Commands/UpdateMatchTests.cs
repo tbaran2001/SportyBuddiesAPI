@@ -2,7 +2,7 @@ using FluentAssertions;
 using NSubstitute;
 using SportyBuddies.Application.Common.Services;
 using SportyBuddies.Application.Exceptions;
-using SportyBuddies.Application.Matches.Commands.UpdateMatch;
+using SportyBuddies.Application.Features.Matches.Commands.UpdateMatch;
 using SportyBuddies.Domain.Common;
 using SportyBuddies.Domain.Matches;
 using SportyBuddies.Domain.Users;

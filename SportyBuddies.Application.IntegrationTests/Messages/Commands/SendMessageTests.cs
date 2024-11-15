@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
+using SportyBuddies.Application.Features.Messages.Commands.SendMessage;
 using SportyBuddies.Application.IntegrationTests.Infrastructure;
-using SportyBuddies.Application.Messages.Commands.SendMessage;
 using SportyBuddies.Domain.Buddies;
 using SportyBuddies.Domain.Users;
 

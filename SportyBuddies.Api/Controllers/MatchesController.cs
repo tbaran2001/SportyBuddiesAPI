@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SportyBuddies.Api.Contracts.Matches;
-using SportyBuddies.Application.Matches.Commands.UpdateMatch;
-using SportyBuddies.Application.Matches.Queries.GetRandomMatch;
+using SportyBuddies.Application.Features.Matches.Commands.UpdateMatch;
+using SportyBuddies.Application.Features.Matches.Queries.GetRandomMatch;
 using SportyBuddies.Identity.Models;
 
 namespace SportyBuddies.Api.Controllers

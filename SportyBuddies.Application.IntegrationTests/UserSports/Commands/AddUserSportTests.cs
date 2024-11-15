@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using SportyBuddies.Application.Exceptions;
+using SportyBuddies.Application.Features.UserSports.Commands.AddUserSport;
 using SportyBuddies.Application.IntegrationTests.Infrastructure;
-using SportyBuddies.Application.UserSports.Commands.AddUserSport;
 using SportyBuddies.Domain.Sports;
 using SportyBuddies.Domain.Users;
 

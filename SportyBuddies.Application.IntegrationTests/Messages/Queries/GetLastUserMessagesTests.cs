@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using SportyBuddies.Application.Common.DTOs.Message;
+using SportyBuddies.Application.Features.Messages.Queries.GetLastUserMessages;
 using SportyBuddies.Application.IntegrationTests.Infrastructure;
-using SportyBuddies.Application.Messages.Queries.GetLastUserMessages;
 using SportyBuddies.Domain.Buddies;
 using SportyBuddies.Domain.Messages;
 using SportyBuddies.Domain.Users;

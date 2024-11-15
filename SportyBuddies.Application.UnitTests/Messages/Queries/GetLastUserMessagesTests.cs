@@ -3,8 +3,8 @@ using FluentAssertions;
 using NSubstitute;
 using SportyBuddies.Application.Common.DTOs.Message;
 using SportyBuddies.Application.Exceptions;
+using SportyBuddies.Application.Features.Messages.Queries.GetLastUserMessages;
 using SportyBuddies.Application.Mappings;
-using SportyBuddies.Application.Messages.Queries.GetLastUserMessages;
 using SportyBuddies.Domain.Messages;
 using SportyBuddies.Domain.Users;
 

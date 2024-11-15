@@ -1,5 +1,5 @@
 ﻿using NSubstitute;
-using SportyBuddies.Application.Users.Commands.DeleteUser;
+using SportyBuddies.Application.Features.Users.Commands.DeleteUser;
 using SportyBuddies.Domain.Common;
 using SportyBuddies.Domain.Users;
 

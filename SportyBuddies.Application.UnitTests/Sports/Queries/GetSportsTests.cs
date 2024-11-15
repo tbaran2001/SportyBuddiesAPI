@@ -2,8 +2,8 @@
 using FluentAssertions;
 using NSubstitute;
 using SportyBuddies.Application.Common.DTOs.Sport;
+using SportyBuddies.Application.Features.Sports.Queries.GetSports;
 using SportyBuddies.Application.Mappings;
-using SportyBuddies.Application.Sports.Queries.GetSports;
 using SportyBuddies.Domain.Sports;
 
 namespace SportyBuddies.Application.UnitTests.Sports.Queries;

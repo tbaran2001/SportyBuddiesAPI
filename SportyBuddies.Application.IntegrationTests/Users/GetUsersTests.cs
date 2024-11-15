@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using SportyBuddies.Application.Common.DTOs.User;
+using SportyBuddies.Application.Features.Users.Queries.GetUsers;
 using SportyBuddies.Application.IntegrationTests.Infrastructure;
-using SportyBuddies.Application.Users.Queries.GetUsers;
 using SportyBuddies.Domain.Users;
 
 namespace SportyBuddies.Application.IntegrationTests.Users;

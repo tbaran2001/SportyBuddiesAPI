@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using SportyBuddies.Application.Buddies.Queries.GetUserBuddies;
+using SportyBuddies.Application.Features.Buddies.Queries.GetUserBuddies;
 using SportyBuddies.Identity.Models;
 
 namespace SportyBuddies.Api.Controllers;

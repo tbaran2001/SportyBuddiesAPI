@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using NSubstitute;
 using SportyBuddies.Application.Exceptions;
-using SportyBuddies.Application.Users.Queries.GetUserMainPhoto;
+using SportyBuddies.Application.Features.Users.Queries.GetUserMainPhoto;
 using SportyBuddies.Domain.Users;
 
 namespace SportyBuddies.Application.UnitTests.Users.Queries;

@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using SportyBuddies.Application.Exceptions;
+using SportyBuddies.Application.Features.Sports.Queries.GetSport;
 using SportyBuddies.Application.IntegrationTests.Infrastructure;
-using SportyBuddies.Application.Sports.Queries.GetSport;
 using SportyBuddies.Domain.Sports;
 
 namespace SportyBuddies.Application.IntegrationTests.Sports.Queries;

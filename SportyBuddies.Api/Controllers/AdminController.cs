@@ -1,10 +1,10 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SportyBuddies.Api.Contracts.Sports;
-using SportyBuddies.Application.Sports.Commands.CreateSport;
-using SportyBuddies.Application.Sports.Queries.GetSports;
-using SportyBuddies.Application.Users.Queries.GetUsers;
-using SportyBuddies.Application.UserSports.Commands.AddUserSport;
+using SportyBuddies.Application.Features.Sports.Commands.CreateSport;
+using SportyBuddies.Application.Features.Sports.Queries.GetSports;
+using SportyBuddies.Application.Features.Users.Queries.GetUsers;
+using SportyBuddies.Application.Features.UserSports.Commands.AddUserSport;
 
 namespace SportyBuddies.Api.Controllers
 {

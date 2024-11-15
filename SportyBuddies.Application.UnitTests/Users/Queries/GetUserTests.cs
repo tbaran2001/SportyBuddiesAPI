@@ -3,8 +3,8 @@ using FluentAssertions;
 using NSubstitute;
 using SportyBuddies.Application.Common.DTOs.User;
 using SportyBuddies.Application.Exceptions;
+using SportyBuddies.Application.Features.Users.Queries.GetUser;
 using SportyBuddies.Application.Mappings;
-using SportyBuddies.Application.Users.Queries.GetUser;
 using SportyBuddies.Domain.Users;
 
 namespace SportyBuddies.Application.UnitTests.Users.Queries;

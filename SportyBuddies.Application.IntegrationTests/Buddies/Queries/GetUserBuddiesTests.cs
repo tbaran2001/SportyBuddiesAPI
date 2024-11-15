@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
-using SportyBuddies.Application.Buddies.Queries.GetUserBuddies;
 using SportyBuddies.Application.Common.DTOs.Buddy;
+using SportyBuddies.Application.Features.Buddies.Queries.GetUserBuddies;
 using SportyBuddies.Application.IntegrationTests.Infrastructure;
 using SportyBuddies.Domain.Buddies;
 using SportyBuddies.Domain.Users;

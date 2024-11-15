@@ -1,4 +1,4 @@
-﻿using SportyBuddies.Application.Sports.Commands.CreateSport;
+﻿using SportyBuddies.Application.Features.Sports.Commands.CreateSport;
 using TestCommon.TestConstants;
 
 namespace TestCommon.Sports;

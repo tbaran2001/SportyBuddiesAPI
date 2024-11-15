@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using SportyBuddies.Application.Exceptions;
+using SportyBuddies.Application.Features.Sports.Commands.CreateSport;
 using SportyBuddies.Application.IntegrationTests.Infrastructure;
-using SportyBuddies.Application.Sports.Commands.CreateSport;
 
 namespace SportyBuddies.Application.IntegrationTests.Sports.Commands;
 

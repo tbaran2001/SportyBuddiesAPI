@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using SportyBuddies.Application.Common.DTOs.Sport;
-using SportyBuddies.Application.Sports.Commands.CreateSport;
+using SportyBuddies.Application.Features.Sports.Commands.CreateSport;
 using SportyBuddies.Domain.Sports;
 
 namespace SportyBuddies.Application.Mappings;

@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SportyBuddies.Api.Contracts.Messages;
-using SportyBuddies.Application.Messages.Commands.SendMessage;
-using SportyBuddies.Application.Messages.Queries.GetLastUserMessages;
-using SportyBuddies.Application.Messages.Queries.GetUserMessagesWithBuddy;
+using SportyBuddies.Application.Features.Messages.Commands.SendMessage;
+using SportyBuddies.Application.Features.Messages.Queries.GetLastUserMessages;
+using SportyBuddies.Application.Features.Messages.Queries.GetUserMessagesWithBuddy;
 using SportyBuddies.Identity.Models;
 
 namespace SportyBuddies.Api.Controllers

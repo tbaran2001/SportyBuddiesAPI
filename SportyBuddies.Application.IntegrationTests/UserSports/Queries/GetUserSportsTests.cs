@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
 using SportyBuddies.Application.Common.DTOs.Sport;
 using SportyBuddies.Application.Exceptions;
+using SportyBuddies.Application.Features.UserSports.Queries.GetUserSports;
 using SportyBuddies.Application.IntegrationTests.Infrastructure;
-using SportyBuddies.Application.UserSports.Queries.GetUserSports;
 using SportyBuddies.Domain.Sports;
 using SportyBuddies.Domain.Users;
 

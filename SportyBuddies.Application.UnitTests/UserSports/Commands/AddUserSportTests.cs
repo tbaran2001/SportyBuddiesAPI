@@ -2,7 +2,7 @@ using FluentAssertions;
 using NSubstitute;
 using SportyBuddies.Application.Common.Services;
 using SportyBuddies.Application.Exceptions;
-using SportyBuddies.Application.UserSports.Commands.AddUserSport;
+using SportyBuddies.Application.Features.UserSports.Commands.AddUserSport;
 using SportyBuddies.Domain.Common;
 using SportyBuddies.Domain.Sports;
 using SportyBuddies.Domain.Users;

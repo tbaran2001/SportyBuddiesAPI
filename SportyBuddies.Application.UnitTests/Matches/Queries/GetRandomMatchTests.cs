@@ -3,8 +3,8 @@ using FluentAssertions;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using SportyBuddies.Application.Common.DTOs.Match;
+using SportyBuddies.Application.Features.Matches.Queries.GetRandomMatch;
 using SportyBuddies.Application.Mappings;
-using SportyBuddies.Application.Matches.Queries.GetRandomMatch;
 using SportyBuddies.Domain.Matches;
 using SportyBuddies.Domain.Users;
 
