@@ -22,4 +22,11 @@ public class BuddiesRepository(SportyBuddiesDbContext dbContext) : IBuddiesRepos
         return await dbContext.Buddies
             .AnyAsync(b => b.UserId == userId && b.MatchedUserId == matchedUserId);
     }
+
+    public async Task RemoveUserBuddiesAsync(Guid userId)
+    {
+        await dbContext.Buddies
+            .Where(b => b.UserId == userId || b.MatchedUserId == userId)
+            .ExecuteDeleteAsync();
+    }
 }

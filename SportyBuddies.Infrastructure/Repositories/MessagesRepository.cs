@@ -35,4 +35,11 @@ public class MessagesRepository(SportyBuddiesDbContext dbContext) : IMessagesRep
             .Select(g => g.OrderByDescending(m => m.TimeSent).First())
             .ToListAsync();
     }
+
+    public async Task RemoveUserMessagesAsync(Guid userId)
+    {
+        await dbContext.Messages
+            .Where(m => m.SenderId == userId || m.RecipientId == userId)
+            .ExecuteDeleteAsync();
+    }
 }

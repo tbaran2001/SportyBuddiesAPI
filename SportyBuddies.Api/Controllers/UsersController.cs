@@ -57,9 +57,12 @@ namespace SportyBuddies.Api.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteCurrentUser(Guid userId)
+        public async Task<IActionResult> DeleteCurrentUser()
         {
-            var command = new DeleteUserCommand(userId);
+            var userId = userManager.GetUserId(User);
+            if (userId == null) return Unauthorized();
+
+            var command = new DeleteUserCommand(Guid.Parse(userId));
 
             await mediator.Send(command);
 
