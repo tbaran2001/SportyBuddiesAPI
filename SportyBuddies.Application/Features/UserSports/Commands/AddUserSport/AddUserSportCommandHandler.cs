@@ -1,5 +1,4 @@
 using MediatR;
-using SportyBuddies.Application.Common.Services;
 using SportyBuddies.Application.Exceptions;
 using SportyBuddies.Domain.Common;
 using SportyBuddies.Domain.Sports;
@@ -10,8 +9,7 @@ namespace SportyBuddies.Application.Features.UserSports.Commands.AddUserSport;
 public class AddUserSportCommandHandler(
     IUsersRepository usersRepository,
     ISportsRepository sportsRepository,
-    IUnitOfWork unitOfWork,
-    IMatchingService matchingService)
+    IUnitOfWork unitOfWork)
     : IRequestHandler<AddUserSportCommand>
 {
     public async Task Handle(AddUserSportCommand command, CancellationToken cancellationToken)
@@ -26,7 +24,6 @@ public class AddUserSportCommandHandler(
 
         user.AddSport(sport);
 
-        await matchingService.FindMatchesAsync(command.UserId);
         await unitOfWork.CommitChangesAsync();
     }
 }

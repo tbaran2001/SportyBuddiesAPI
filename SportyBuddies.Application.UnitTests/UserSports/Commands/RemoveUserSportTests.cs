@@ -16,17 +16,14 @@ public class RemoveUserSportTests
     private readonly IUsersRepository _usersRepositoryMock;
     private readonly ISportsRepository _sportsRepositoryMock;
     private readonly IUnitOfWork _unitOfWorkMock;
-    private readonly IMatchingService _matchingServiceMock;
 
     public RemoveUserSportTests()
     {
         _usersRepositoryMock = Substitute.For<IUsersRepository>();
         _sportsRepositoryMock = Substitute.For<ISportsRepository>();
         _unitOfWorkMock = Substitute.For<IUnitOfWork>();
-        _matchingServiceMock = Substitute.For<IMatchingService>();
 
-        _handler = new RemoveUserSportCommandHandler(_usersRepositoryMock, _sportsRepositoryMock, _unitOfWorkMock,
-            _matchingServiceMock);
+        _handler = new RemoveUserSportCommandHandler(_usersRepositoryMock, _sportsRepositoryMock, _unitOfWorkMock);
     }
     
     [Fact]
@@ -45,7 +42,6 @@ public class RemoveUserSportTests
         // Assert
         user.Sports.Should().NotContain(sport);
         
-        await _matchingServiceMock.Received(1).FindMatchesAsync(_command.UserId);
         await _unitOfWorkMock.Received(1).CommitChangesAsync();
     }
     

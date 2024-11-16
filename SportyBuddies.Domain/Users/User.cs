@@ -72,6 +72,7 @@ public class User : Entity
             throw new Exception("User already has this sport");
 
         Sports.Add(sport);
+        AddDomainEvent(new UserSportAddedEvent(Id, sport.Id));
     }
 
     public void RemoveSport(Sport sport)
@@ -80,6 +81,7 @@ public class User : Entity
             throw new Exception("User does not have this sport");
 
         Sports.Remove(sport);
+        AddDomainEvent(new UserSportRemovedEvent(Id, sport.Id));
     }
 
     public void RemoveAllSports()
