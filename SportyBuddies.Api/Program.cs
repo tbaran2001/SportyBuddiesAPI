@@ -44,10 +44,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
     
-    //app.ApplyMigrations();
-    //app.ApplyIdentityMigrations();
+    app.ApplyMigrations();
+    app.ApplyIdentityMigrations();
     
-    //app.SeedData();
+    app.SeedData();
 }
 
 app.UseHttpsRedirection();

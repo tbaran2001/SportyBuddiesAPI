@@ -41,7 +41,6 @@
     environment:
       - ACCEPT_EULA=Y
     ports:
-      - "5341:5341"
       - "8081:80"
 
   sportybuddies.redis:
