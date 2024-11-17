@@ -42,5 +42,15 @@ public class UserConfiguration:IEntityTypeConfiguration<User>
 
         builder
             .OwnsOne(u => u.Preferences);
+
+        builder
+            .HasMany(u=>u.Messages)
+            .WithOne(m=>m.Sender)
+            .HasForeignKey(m=>m.SenderId);
+
+        builder
+            .HasMany(u=>u.Conversations)
+            .WithOne(c=>c.Creator)
+            .HasForeignKey(c=>c.CreatorId);
     }
 }

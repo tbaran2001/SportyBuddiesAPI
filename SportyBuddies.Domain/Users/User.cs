@@ -1,4 +1,5 @@
 ﻿using SportyBuddies.Domain.Common;
+using SportyBuddies.Domain.Conversations;
 using SportyBuddies.Domain.Sports;
 using SportyBuddies.Domain.Users.Events;
 
@@ -35,6 +36,9 @@ public class User : Entity
     public ICollection<UserPhoto> Photos { get; private set; } = new List<UserPhoto>();
     public ICollection<Sport> Sports { get; private set; } = new List<Sport>();
     public Preferences? Preferences { get; private set; }
+
+    public ICollection<Message> Messages { get; set; }
+    public ICollection<Conversation> Conversations { get; set; }
 
     public static User Create(Guid id)
     {

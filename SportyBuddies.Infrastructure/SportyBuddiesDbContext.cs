@@ -5,8 +5,8 @@ using Newtonsoft.Json;
 using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Domain.Buddies;
 using SportyBuddies.Domain.Common;
+using SportyBuddies.Domain.Conversations;
 using SportyBuddies.Domain.Matches;
-using SportyBuddies.Domain.Messages;
 using SportyBuddies.Domain.Sports;
 using SportyBuddies.Domain.Users;
 using SportyBuddies.Infrastructure.Outbox;
@@ -25,10 +25,12 @@ public class SportyBuddiesDbContext(
 
     public DbSet<Sport> Sports { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<UserPhoto> UserPhotos { get; set; }
     public DbSet<Match> Matches { get; set; }
     public DbSet<Buddy> Buddies { get; set; }
+    public DbSet<Conversation> Conversations { get; set; }
+    public DbSet<Participant> Participants { get; set; }
     public DbSet<Message> Messages { get; set; }
-    public DbSet<UserPhoto> UserPhotos { get; set; }
 
     public async Task CommitChangesAsync()
     {

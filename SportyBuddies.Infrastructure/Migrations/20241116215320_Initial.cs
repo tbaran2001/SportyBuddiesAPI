@@ -12,21 +12,6 @@ namespace SportyBuddies.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "messages",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
-                    sender_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    recipient_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    content = table.Column<string>(type: "text", nullable: false),
-                    time_sent = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_messages", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "outbox_messages",
                 columns: table => new
                 {
@@ -70,6 +55,19 @@ namespace SportyBuddies.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "conversations",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    creator_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    created_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_conversations", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "matches",
                 columns: table => new
                 {
@@ -83,6 +81,47 @@ namespace SportyBuddies.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_matches", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "messages",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    conversation_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    sender_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    content = table.Column<string>(type: "text", nullable: false),
+                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_messages", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_messages_conversations_conversation_id",
+                        column: x => x.conversation_id,
+                        principalTable: "conversations",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "participants",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    conversation_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_participants", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_participants_conversations_conversation_id",
+                        column: x => x.conversation_id,
+                        principalTable: "conversations",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -113,6 +152,7 @@ namespace SportyBuddies.Infrastructure.Migrations
                     main_photo_id = table.Column<Guid>(type: "uuid", nullable: true),
                     preferences_min_age = table.Column<int>(type: "integer", nullable: true),
                     preferences_max_age = table.Column<int>(type: "integer", nullable: true),
+                    preferences_max_distance = table.Column<int>(type: "integer", nullable: true),
                     preferences_gender = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
@@ -161,6 +201,11 @@ namespace SportyBuddies.Infrastructure.Migrations
                 column: "user_id");
 
             migrationBuilder.CreateIndex(
+                name: "ix_conversations_creator_id",
+                table: "conversations",
+                column: "creator_id");
+
+            migrationBuilder.CreateIndex(
                 name: "ix_matches_matched_user_id",
                 table: "matches",
                 column: "matched_user_id");
@@ -168,6 +213,26 @@ namespace SportyBuddies.Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "ix_matches_user_id",
                 table: "matches",
+                column: "user_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_messages_conversation_id",
+                table: "messages",
+                column: "conversation_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_messages_sender_id",
+                table: "messages",
+                column: "sender_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_participants_conversation_id",
+                table: "participants",
+                column: "conversation_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_participants_user_id",
+                table: "participants",
                 column: "user_id");
 
             migrationBuilder.CreateIndex(
@@ -202,6 +267,14 @@ namespace SportyBuddies.Infrastructure.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
+                name: "fk_conversations_users_creator_id",
+                table: "conversations",
+                column: "creator_id",
+                principalTable: "users",
+                principalColumn: "id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
                 name: "fk_matches_users_matched_user_id",
                 table: "matches",
                 column: "matched_user_id",
@@ -212,6 +285,22 @@ namespace SportyBuddies.Infrastructure.Migrations
             migrationBuilder.AddForeignKey(
                 name: "fk_matches_users_user_id",
                 table: "matches",
+                column: "user_id",
+                principalTable: "users",
+                principalColumn: "id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "fk_messages_users_sender_id",
+                table: "messages",
+                column: "sender_id",
+                principalTable: "users",
+                principalColumn: "id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "fk_participants_users_user_id",
+                table: "participants",
                 column: "user_id",
                 principalTable: "users",
                 principalColumn: "id",
@@ -246,7 +335,13 @@ namespace SportyBuddies.Infrastructure.Migrations
                 name: "outbox_messages");
 
             migrationBuilder.DropTable(
+                name: "participants");
+
+            migrationBuilder.DropTable(
                 name: "user_sports");
+
+            migrationBuilder.DropTable(
+                name: "conversations");
 
             migrationBuilder.DropTable(
                 name: "sports");

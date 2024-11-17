@@ -7,8 +7,8 @@ using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Application.Common.Services;
 using SportyBuddies.Domain.Buddies;
 using SportyBuddies.Domain.Common;
+using SportyBuddies.Domain.Conversations;
 using SportyBuddies.Domain.Matches;
-using SportyBuddies.Domain.Messages;
 using SportyBuddies.Domain.Sports;
 using SportyBuddies.Domain.Users;
 using SportyBuddies.Infrastructure.Clock;
@@ -36,7 +36,7 @@ public static class DependencyInjection
         services.AddScoped<IUsersRepository, UsersRepository>();
         services.AddScoped<IMatchesRepository, MatchesRepository>();
         services.AddScoped<IBuddiesRepository, BuddiesRepository>();
-        services.AddScoped<IMessagesRepository, MessagesRepository>();
+        services.AddScoped<IConversationsRepository, ConversationsRepository>();
 
         services.AddScoped<IFileStorageService, FileStorageService>();
 

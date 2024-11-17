@@ -53,6 +53,97 @@ namespace SportyBuddies.Infrastructure.Migrations
                     b.ToTable("buddies", (string)null);
                 });
 
+            modelBuilder.Entity("SportyBuddies.Domain.Conversations.Conversation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_on_utc");
+
+                    b.Property<Guid>("CreatorId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("creator_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_conversations");
+
+                    b.HasIndex("CreatorId")
+                        .HasDatabaseName("ix_conversations_creator_id");
+
+                    b.ToTable("conversations", (string)null);
+                });
+
+            modelBuilder.Entity("SportyBuddies.Domain.Conversations.Message", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("content");
+
+                    b.Property<Guid>("ConversationId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("conversation_id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<Guid>("SenderId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("sender_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_messages");
+
+                    b.HasIndex("ConversationId")
+                        .HasDatabaseName("ix_messages_conversation_id");
+
+                    b.HasIndex("SenderId")
+                        .HasDatabaseName("ix_messages_sender_id");
+
+                    b.ToTable("messages", (string)null);
+                });
+
+            modelBuilder.Entity("SportyBuddies.Domain.Conversations.Participant", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("ConversationId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("conversation_id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_participants");
+
+                    b.HasIndex("ConversationId")
+                        .HasDatabaseName("ix_participants_conversation_id");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_participants_user_id");
+
+                    b.ToTable("participants", (string)null);
+                });
+
             modelBuilder.Entity("SportyBuddies.Domain.Matches.Match", b =>
                 {
                     b.Property<Guid>("Id")
@@ -90,36 +181,6 @@ namespace SportyBuddies.Infrastructure.Migrations
                         .HasDatabaseName("ix_matches_user_id");
 
                     b.ToTable("matches", (string)null);
-                });
-
-            modelBuilder.Entity("SportyBuddies.Domain.Messages.Message", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("content");
-
-                    b.Property<Guid>("RecipientId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("recipient_id");
-
-                    b.Property<Guid>("SenderId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("sender_id");
-
-                    b.Property<DateTime>("TimeSent")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("time_sent");
-
-                    b.HasKey("Id")
-                        .HasName("pk_messages");
-
-                    b.ToTable("messages", (string)null);
                 });
 
             modelBuilder.Entity("SportyBuddies.Domain.Sports.Sport", b =>
@@ -292,6 +353,60 @@ namespace SportyBuddies.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("SportyBuddies.Domain.Conversations.Conversation", b =>
+                {
+                    b.HasOne("SportyBuddies.Domain.Users.User", "Creator")
+                        .WithMany("Conversations")
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_conversations_users_creator_id");
+
+                    b.Navigation("Creator");
+                });
+
+            modelBuilder.Entity("SportyBuddies.Domain.Conversations.Message", b =>
+                {
+                    b.HasOne("SportyBuddies.Domain.Conversations.Conversation", "Conversation")
+                        .WithMany("Messages")
+                        .HasForeignKey("ConversationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_messages_conversations_conversation_id");
+
+                    b.HasOne("SportyBuddies.Domain.Users.User", "Sender")
+                        .WithMany("Messages")
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_messages_users_sender_id");
+
+                    b.Navigation("Conversation");
+
+                    b.Navigation("Sender");
+                });
+
+            modelBuilder.Entity("SportyBuddies.Domain.Conversations.Participant", b =>
+                {
+                    b.HasOne("SportyBuddies.Domain.Conversations.Conversation", "Conversation")
+                        .WithMany("Participants")
+                        .HasForeignKey("ConversationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_participants_conversations_conversation_id");
+
+                    b.HasOne("SportyBuddies.Domain.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_participants_users_user_id");
+
+                    b.Navigation("Conversation");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("SportyBuddies.Domain.Matches.Match", b =>
                 {
                     b.HasOne("SportyBuddies.Domain.Users.User", "MatchedUser")
@@ -386,8 +501,19 @@ namespace SportyBuddies.Infrastructure.Migrations
                         .HasConstraintName("fk_user_sports_users_user_id");
                 });
 
+            modelBuilder.Entity("SportyBuddies.Domain.Conversations.Conversation", b =>
+                {
+                    b.Navigation("Messages");
+
+                    b.Navigation("Participants");
+                });
+
             modelBuilder.Entity("SportyBuddies.Domain.Users.User", b =>
                 {
+                    b.Navigation("Conversations");
+
+                    b.Navigation("Messages");
+
                     b.Navigation("Photos");
                 });
 #pragma warning restore 612, 618
