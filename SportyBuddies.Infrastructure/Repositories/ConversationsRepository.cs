@@ -38,4 +38,10 @@ public class ConversationsRepository(SportyBuddiesDbContext dbContext): IConvers
             .ToListAsync();
     }
 
+    public async Task<bool> AreParticipantsBuddiesAsync(ICollection<Guid> participantIds)
+    {
+        return await dbContext.Buddies
+            .Where(b => participantIds.Contains(b.UserId) && participantIds.Contains(b.MatchedUserId))
+            .CountAsync() == participantIds.Count * (participantIds.Count - 1);
+    }
 }
