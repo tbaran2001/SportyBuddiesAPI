@@ -16,10 +16,11 @@ public class CreateConversationCommandHandler(
 {
     public async Task<ConversationResponse> Handle(CreateConversationCommand command, CancellationToken cancellationToken)
     {
-        if(await conversationsRepository.AreParticipantsBuddiesAsync(command.ParticipantIds))
-        {
+        if(!await conversationsRepository.AreParticipantsBuddiesAsync(command.ParticipantIds))
             throw new BadRequestException("Participants are not buddies");
-        }
+
+        if(await conversationsRepository.UsersHaveConversation(command.ParticipantIds))
+            throw new BadRequestException("Conversation already exists");
 
         var conversation = Conversation.Create(command.CreatorId, command.ParticipantIds);
 
