@@ -8,6 +8,7 @@ public class BuddiesRepository(SportyBuddiesDbContext dbContext) : IBuddiesRepos
     public async Task<IEnumerable<Buddy>> GetUserBuddiesAsync(Guid userId)
     {
         return await dbContext.Buddies
+            .Include(b=>b.MatchedUser)
             .Where(b => b.UserId == userId)
             .ToListAsync();
     }
