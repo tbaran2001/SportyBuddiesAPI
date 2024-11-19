@@ -1,4 +1,5 @@
 ﻿using SportyBuddies.Domain.Common;
+using SportyBuddies.Domain.Conversations;
 using SportyBuddies.Domain.Users;
 
 namespace SportyBuddies.Domain.Buddies;
@@ -36,6 +37,15 @@ public class Buddy : Entity
     public User MatchedUser { get; private set; }
     public Guid MatchedUserId { get; private set; }
     public DateTime MatchDateTime { get; private set; }
+
+    public Guid? ConversationId { get; private set; }
+    public Conversation? Conversation { get; private set; }
+
+    public void SetConversation(Conversation conversation)
+    {
+        Conversation = conversation;
+        ConversationId = conversation.Id;
+    }
 
     private Buddy()
     {

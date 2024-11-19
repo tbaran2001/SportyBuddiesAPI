@@ -6,7 +6,6 @@ public class ChatHub : Hub<IChatClient>
 {
     public async Task SendMessage(HubMessage message)
     {
-        await Clients.User(message.RecipientId.ToString()).ReceiveMessage(message);
-        await Clients.User(message.SenderId.ToString()).ReceiveMessage(message);
+        await Clients.Users(message.Participants.Select(p => p.ToString()).ToList()).ReceiveMessage(message);
     }
 }

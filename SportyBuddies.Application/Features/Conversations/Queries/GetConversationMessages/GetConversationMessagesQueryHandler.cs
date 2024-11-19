@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using SportyBuddies.Application.Common.DTOs.Message;
+using SportyBuddies.Application.Common.DTOs.Conversation;
 using SportyBuddies.Application.Exceptions;
 using SportyBuddies.Domain.Conversations;
 

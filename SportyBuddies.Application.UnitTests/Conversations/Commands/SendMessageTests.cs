@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using FluentAssertions;
+using Microsoft.AspNetCore.SignalR;
 using NSubstitute;
-using SportyBuddies.Application.Common.DTOs.Message;
+using SportyBuddies.Application.Common.DTOs.Conversation;
 using SportyBuddies.Application.Exceptions;
 using SportyBuddies.Application.Features.Conversations.Commands.SendMessage;
+using SportyBuddies.Application.Hubs;
 using SportyBuddies.Application.Mappings;
 using SportyBuddies.Domain.Common;
 using SportyBuddies.Domain.Conversations;
@@ -16,6 +18,7 @@ public class SendMessageTests
     private readonly SendMessageCommandHandler _handler;
     private readonly IConversationsRepository _conversationsRepositoryMock;
     private readonly IUnitOfWork _unitOfWorkMock;
+    private readonly IHubContext<ChatHub, IChatClient> _hubContextMock;
 
     public SendMessageTests()
     {
@@ -24,7 +27,8 @@ public class SendMessageTests
 
         _conversationsRepositoryMock = Substitute.For<IConversationsRepository>();
         _unitOfWorkMock = Substitute.For<IUnitOfWork>();
-        _handler = new SendMessageCommandHandler(_conversationsRepositoryMock, _unitOfWorkMock, mapper);
+        _hubContextMock = Substitute.For<IHubContext<ChatHub, IChatClient>>();
+        _handler = new SendMessageCommandHandler(_conversationsRepositoryMock,_hubContextMock, _unitOfWorkMock, mapper);
     }
 
     [Fact]

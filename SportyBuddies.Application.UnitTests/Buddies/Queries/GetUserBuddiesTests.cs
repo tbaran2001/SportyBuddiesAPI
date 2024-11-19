@@ -20,6 +20,8 @@ public class GetUserBuddiesTests
         var configurationProvider = new MapperConfiguration(cfg =>
         {
             cfg.AddProfile<BuddyMappingProfile>();
+            cfg.AddProfile<ConversationMappingProfile>();
+            cfg.AddProfile<UserMappingProfile>();
         });
         var mapper = configurationProvider.CreateMapper();
 

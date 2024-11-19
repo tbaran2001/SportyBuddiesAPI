@@ -13,6 +13,8 @@ public class ConversationsRepository(SportyBuddiesDbContext dbContext) : IConver
     public async Task<Conversation?> GetByIdAsync(Guid id)
     {
         return await dbContext.Conversations
+            .Include(c=>c.Participants)
+            .ThenInclude(p=>p.User)
             .FirstOrDefaultAsync(c => c.Id == id);
     }
 
@@ -58,5 +60,11 @@ public class ConversationsRepository(SportyBuddiesDbContext dbContext) : IConver
         return conversations.Any(c =>
             c.Participants.Select(p => p.UserId).OrderBy(id => id)
                 .SequenceEqual(participantIds.OrderBy(id => id)));
+    }
+
+    public async Task<bool> ExistsAsync(Guid conversationId)
+    {
+        return await dbContext.Conversations
+            .AnyAsync(c => c.Id == conversationId);
     }
 }

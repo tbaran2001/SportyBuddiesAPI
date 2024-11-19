@@ -9,6 +9,7 @@ public class BuddiesRepository(SportyBuddiesDbContext dbContext) : IBuddiesRepos
     {
         return await dbContext.Buddies
             .Include(b=>b.MatchedUser)
+            .Include(b=>b.Conversation)
             .Where(b => b.UserId == userId)
             .ToListAsync();
     }
@@ -29,5 +30,13 @@ public class BuddiesRepository(SportyBuddiesDbContext dbContext) : IBuddiesRepos
         await dbContext.Buddies
             .Where(b => b.UserId == userId || b.MatchedUserId == userId)
             .ExecuteDeleteAsync();
+    }
+
+    public async Task<IEnumerable<Buddy>> GetRelatedBuddies(Guid userId, Guid matchedUserId)
+    {
+        return await dbContext.Buddies
+            .Include(b=>b.Conversation)
+            .Where(b => (b.UserId == userId && b.MatchedUserId == matchedUserId) || (b.UserId == matchedUserId && b.MatchedUserId == userId))
+            .ToListAsync();
     }
 }

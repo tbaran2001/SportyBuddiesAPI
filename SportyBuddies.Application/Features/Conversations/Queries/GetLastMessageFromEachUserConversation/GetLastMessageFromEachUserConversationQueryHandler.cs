@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using SportyBuddies.Application.Common.DTOs.Message;
+using SportyBuddies.Application.Common.DTOs.Conversation;
 using SportyBuddies.Domain.Conversations;
 
 namespace SportyBuddies.Application.Features.Conversations.Queries.GetLastMessageFromEachUserConversation;

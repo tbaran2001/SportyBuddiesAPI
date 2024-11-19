@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using SportyBuddies.Api.Contracts.Conversations;
 using SportyBuddies.Api.Contracts.Messages;
 using SportyBuddies.Application.Common.DTOs.Conversation;
-using SportyBuddies.Application.Common.DTOs.Message;
 using SportyBuddies.Application.Features.Conversations.Commands.CreateConversation;
 using SportyBuddies.Application.Features.Conversations.Commands.SendMessage;
+using SportyBuddies.Application.Features.Conversations.Queries.GetConversation;
 using SportyBuddies.Application.Features.Conversations.Queries.GetConversationMessages;
 using SportyBuddies.Application.Features.Conversations.Queries.GetLastMessageFromEachUserConversation;
 using SportyBuddies.Identity.Models;
@@ -22,6 +22,15 @@ namespace SportyBuddies.Api.Controllers
     public class ConversationsController(UserManager<ApplicationUser> userManager, ISender mediator)
         : ControllerBase
     {
+        [HttpGet("{conversationId}")]
+        public async Task<IActionResult> GetConversation(Guid conversationId)
+        {
+            var query = new GetConversationQuery(conversationId);
+            var result = await mediator.Send(query);
+
+            return Ok(result);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateConversation(CreateConversationRequest request)
         {
@@ -35,13 +44,13 @@ namespace SportyBuddies.Api.Controllers
             return Ok(result);
         }
 
-        [HttpPost("Messages")]
-        public async Task<IActionResult> SendMessage(SendMessageRequest request)
+        [HttpPost("{conversationId}/Messages")]
+        public async Task<IActionResult> SendMessage(Guid conversationId,SendMessageRequest request)
         {
             var userId = userManager.GetUserId(User);
             if (userId == null) return Unauthorized();
 
-            var command = new SendMessageCommand(Guid.Parse(userId), request.ConversationId, request.Content);
+            var command = new SendMessageCommand(Guid.Parse(userId), conversationId, request.Content);
             var result = await mediator.Send(command);
 
             return Ok(result);

@@ -9,4 +9,5 @@ public interface IConversationsRepository
     Task<IEnumerable<Message?>> GetLastMessageFromEachUserConversationAsync(Guid userId);
     Task<bool> AreParticipantsBuddiesAsync(ICollection<Guid> participantIds);
     Task<bool> UsersHaveConversation(ICollection<Guid> participantIds);
+    Task<bool> ExistsAsync(Guid conversationId);
 }

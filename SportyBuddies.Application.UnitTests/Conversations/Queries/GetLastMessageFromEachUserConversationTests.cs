@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using FluentAssertions;
 using NSubstitute;
-using SportyBuddies.Application.Common.DTOs.Message;
+using SportyBuddies.Application.Common.DTOs.Conversation;
 using SportyBuddies.Application.Features.Conversations.Queries.GetLastMessageFromEachUserConversation;
 using SportyBuddies.Application.Mappings;
 using SportyBuddies.Domain.Conversations;

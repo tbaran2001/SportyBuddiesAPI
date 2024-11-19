@@ -16,6 +16,7 @@ public class CreateConversationTests
 {
     private readonly CreateConversationCommandHandler _handler;
     private readonly IConversationsRepository _conversationsRepositoryMock;
+    private readonly IBuddiesRepository _buddiesRepositoryMock;
     private readonly IUnitOfWork _unitOfWorkMock;
 
     public CreateConversationTests()
@@ -24,8 +25,9 @@ public class CreateConversationTests
         var mapper = configurationProvider.CreateMapper();
 
         _conversationsRepositoryMock = Substitute.For<IConversationsRepository>();
+        _buddiesRepositoryMock = Substitute.For<IBuddiesRepository>();
         _unitOfWorkMock = Substitute.For<IUnitOfWork>();
-        _handler = new CreateConversationCommandHandler(_conversationsRepositoryMock, _unitOfWorkMock, mapper);
+        _handler = new CreateConversationCommandHandler(_conversationsRepositoryMock,_buddiesRepositoryMock, _unitOfWorkMock, mapper);
     }
 
     [Fact]
@@ -43,7 +45,7 @@ public class CreateConversationTests
         var result = await _handler.Handle(command, default);
 
         // Assert
-        result.Should().BeOfType<ConversationResponse>();
+        result.Should().BeOfType<CreateConversationResponse>();
         result.CreatorId.Should().Be(command.CreatorId);
 
         await _conversationsRepositoryMock.Received(1).AddAsync(Arg.Any<Conversation>());

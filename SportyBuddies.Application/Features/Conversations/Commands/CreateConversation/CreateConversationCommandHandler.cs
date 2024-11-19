@@ -10,11 +10,12 @@ namespace SportyBuddies.Application.Features.Conversations.Commands.CreateConver
 
 public class CreateConversationCommandHandler(
     IConversationsRepository conversationsRepository,
+    IBuddiesRepository buddiesRepository,
     IUnitOfWork unitOfWork,
     IMapper mapper)
-    : IRequestHandler<CreateConversationCommand, ConversationResponse>
+    : IRequestHandler<CreateConversationCommand, CreateConversationResponse>
 {
-    public async Task<ConversationResponse> Handle(CreateConversationCommand command, CancellationToken cancellationToken)
+    public async Task<CreateConversationResponse> Handle(CreateConversationCommand command, CancellationToken cancellationToken)
     {
         if(!await conversationsRepository.AreParticipantsBuddiesAsync(command.ParticipantIds))
             throw new BadRequestException("Participants are not buddies");
@@ -24,9 +25,15 @@ public class CreateConversationCommandHandler(
 
         var conversation = Conversation.Create(command.CreatorId, command.ParticipantIds);
 
+        var buddies=await buddiesRepository.GetRelatedBuddies(command.ParticipantIds.First(),command.ParticipantIds.Last());
+        foreach (var buddy in buddies)
+        {
+            buddy.SetConversation(conversation);
+        }
+
         await conversationsRepository.AddAsync(conversation);
         await unitOfWork.CommitChangesAsync();
 
-        return mapper.Map<ConversationResponse>(conversation);
+        return mapper.Map<CreateConversationResponse>(conversation);
     }
 }

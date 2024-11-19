@@ -1,3 +1,3 @@
 ﻿namespace SportyBuddies.Api.Contracts.Messages;
 
-public record SendMessageRequest(Guid ConversationId, string Content);
+public record SendMessageRequest(string Content);

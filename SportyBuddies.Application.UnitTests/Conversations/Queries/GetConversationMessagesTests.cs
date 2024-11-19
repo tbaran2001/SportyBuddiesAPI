@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using FluentAssertions;
 using NSubstitute;
-using SportyBuddies.Application.Common.DTOs.Message;
+using SportyBuddies.Application.Common.DTOs.Conversation;
 using SportyBuddies.Application.Exceptions;
 using SportyBuddies.Application.Features.Conversations.Queries.GetConversationMessages;
 using SportyBuddies.Application.Mappings;

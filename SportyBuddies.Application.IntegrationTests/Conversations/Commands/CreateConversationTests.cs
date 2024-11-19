@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using SportyBuddies.Application.Common.DTOs.Conversation;
 using SportyBuddies.Application.Exceptions;
 using SportyBuddies.Application.Features.Conversations.Commands.CreateConversation;
 using SportyBuddies.Application.IntegrationTests.Infrastructure;
@@ -23,7 +24,6 @@ public class CreateConversationTests(IntegrationTestWebAppFactory factory) : Bas
         var buddy2 = Buddy.Create(user2, user1,DateTime.UtcNow);
         await DbContext.Buddies.AddAsync(buddy1);
         await DbContext.Buddies.AddAsync(buddy2);
-
         await DbContext.SaveChangesAsync();
 
         var command = new CreateConversationCommand(user1.Id, new List<Guid> { user1.Id, user2.Id });
@@ -32,8 +32,15 @@ public class CreateConversationTests(IntegrationTestWebAppFactory factory) : Bas
         var result = await Sender.Send(command);
 
         // Assert
-        result.Should().NotBeNull();
+        result.Should().BeOfType<CreateConversationResponse>();
         result.CreatorId.Should().Be(user1.Id);
+
+        var conversation = await DbContext.Conversations.FindAsync(result.Id);
+        conversation.Should().NotBeNull();
+        conversation.CreatorId.Should().Be(user1.Id);
+        conversation.Participants.Should().HaveCount(2);
+        conversation.Participants.Should().Contain(p => p.UserId == user1.Id);
+        conversation.Participants.Should().Contain(p => p.UserId == user2.Id);
     }
 
     [Fact]
