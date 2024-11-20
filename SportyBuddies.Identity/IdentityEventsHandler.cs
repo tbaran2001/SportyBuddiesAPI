@@ -9,7 +9,7 @@ public class IdentityEventsHandler(SportyBuddiesDbContext context)
 {
     public async Task OnUserCreatedAsync(ApplicationUser user)
     {
-        var userEntity = User.Create(user.Id);
+        var userEntity = User.Create(user.Id,user.Name);
         await context.Users.AddAsync(userEntity);
         await context.SaveChangesAsync();
     }

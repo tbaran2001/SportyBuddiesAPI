@@ -40,11 +40,11 @@ public class User : Entity
     public ICollection<Message> Messages { get; set; }
     public ICollection<Conversation> Conversations { get; set; }
 
-    public static User Create(Guid id)
+    public static User Create(Guid id,string name)
     {
         return new User(
             id: id,
-            name: null,
+            name: name,
             description: null,
             createdOnUtc: DateTime.UtcNow,
             dateOfBirth: null,

@@ -53,7 +53,7 @@ public static class DependencyInjection
 
     public static IEndpointRouteBuilder MapIdentityApi(this IEndpointRouteBuilder endpoints)
     {
-        endpoints.MapGroup("/api").MapIdentityApi<ApplicationUser>();
+        endpoints.MapGroup("/api").MapCustomIdentityApi<ApplicationUser>();
 
         endpoints.MapPost("/api/logout", async (SignInManager<ApplicationUser> signInManager) =>
         {

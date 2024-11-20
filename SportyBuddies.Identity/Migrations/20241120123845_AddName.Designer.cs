@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SportyBuddies.Identity;
@@ -11,9 +12,11 @@ using SportyBuddies.Identity;
 namespace SportyBuddies.Identity.Migrations
 {
     [DbContext(typeof(SportyBuddiesIdentityDbContext))]
-    partial class SportyBuddiesIdentityDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241120123845_AddName")]
+    partial class AddName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
