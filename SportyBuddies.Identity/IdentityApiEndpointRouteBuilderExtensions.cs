@@ -71,6 +71,8 @@ public static class IdentityApiEndpointRouteBuilderExtensions
             var user = new TUser()
             {
                 Name = registration.Name,
+                DateOfBirth = registration.DateOfBirth,
+                Gender = registration.Gender,
             };
             await userStore.SetUserNameAsync(user, email, CancellationToken.None);
             await emailStore.SetEmailAsync(user, email, CancellationToken.None);

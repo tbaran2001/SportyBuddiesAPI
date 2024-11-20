@@ -1,4 +1,6 @@
-﻿namespace SportyBuddies.Identity;
+﻿using SportyBuddies.Domain.Users;
+
+namespace SportyBuddies.Identity;
 
 public sealed class CustomRegisterRequest
 {
@@ -13,4 +15,6 @@ public sealed class CustomRegisterRequest
     public required string Password { get; init; }
 
     public required string Name { get; init; }
+    public required DateOnly DateOfBirth { get; init; }
+    public required Gender Gender { get; init; }
 }

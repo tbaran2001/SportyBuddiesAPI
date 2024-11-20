@@ -10,20 +10,22 @@ public class User : Entity
     private User(
         Guid id,
         string? name,
-        string? description,
-        DateTime createdOnUtc,
+        Preferences preferences,
         DateOnly? dateOfBirth,
         Gender gender,
+        string? description,
+        DateTime createdOnUtc,
         UserPhoto? mainPhoto
     ) : base(id)
     {
         Name = name;
+        Preferences = preferences;
+        DateOfBirth = dateOfBirth;
+        Gender = gender;
         Description = description;
         CreatedOnUtc = createdOnUtc;
-        DateOfBirth = dateOfBirth;
         MainPhoto = mainPhoto;
         MainPhotoId = mainPhoto?.Id;
-        Gender = gender;
     }
 
     public string? Name { get; private set; }
@@ -40,15 +42,16 @@ public class User : Entity
     public ICollection<Message> Messages { get; set; }
     public ICollection<Conversation> Conversations { get; set; }
 
-    public static User Create(Guid id,string name)
+    public static User Create(Guid id, string name, DateOnly dateOfBirth, Gender gender)
     {
         return new User(
             id: id,
             name: name,
+            preferences: Preferences.Default,
+            dateOfBirth: dateOfBirth,
+            gender: gender,
             description: null,
             createdOnUtc: DateTime.UtcNow,
-            dateOfBirth: null,
-            gender: 0,
             mainPhoto: null);
     }
 

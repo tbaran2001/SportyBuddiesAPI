@@ -4,6 +4,7 @@ namespace SportyBuddies.Domain.Users;
 
 public class Preferences : ValueObject
 {
+    public static Preferences Default => new Preferences(18, 45, 50, 0);
     private Preferences(int minAge, int maxAge, int maxDistance, Gender gender)
     {
         MinAge = minAge;
