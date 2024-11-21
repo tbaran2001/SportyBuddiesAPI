@@ -55,6 +55,19 @@ public class User : Entity
             mainPhoto: null);
     }
 
+    public static User Create(Guid id)
+    {
+        return new User(
+            id: id,
+            name: null,
+            preferences: Preferences.Default,
+            dateOfBirth: null,
+            gender: 0,
+            description: null,
+            createdOnUtc: DateTime.UtcNow,
+            mainPhoto: null);
+    }
+
     public void Update(string name, string description, DateOnly dateOfBirth, Gender gender)
     {
         Name = name;
