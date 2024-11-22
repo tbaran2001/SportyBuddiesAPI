@@ -35,35 +35,6 @@ public class MatchingService(
         await unitOfWork.CommitChangesAsync();
     }
 
-    public async Task CreateBuddyRelationshipAsync(Guid matchId)
-    {
-        var userMatch = await matchesRepository.GetMatchWithUsersAsync(matchId);
-        if (userMatch == null)
-            return;
-
-        var matchedUserMatch =
-            await matchesRepository.GetMatchByUserAndMatchedUserAsync(userMatch.MatchedUser.Id, userMatch.User.Id);
-        if (matchedUserMatch == null)
-            return;
-
-        if (userMatch.Swipe == Swipe.Right && matchedUserMatch.Swipe == Swipe.Right)
-        {
-            var now = dateTimeProvider.UtcNow;
-            var userBuddy = Buddy.Create(userMatch.User, userMatch.MatchedUser, now);
-            var matchedUserBuddy = Buddy.Create(userMatch.MatchedUser, userMatch.User, now);
-
-            await buddiesRepository.AddBuddyAsync(userBuddy);
-            await buddiesRepository.AddBuddyAsync(matchedUserBuddy);
-
-            await unitOfWork.CommitChangesAsync();
-        }
-    }
-
-    public async Task<bool> AreUsersBuddiesAsync(Guid userId, Guid matchedUserId)
-    {
-        return await buddiesRepository.AreUsersBuddiesAsync(userId, matchedUserId);
-    }
-
     private void ProcessMatches(User user, List<User> allUsers, List<Match> existingMatches, List<Match> newMatches,
         List<Match> matchesToRemove)
     {

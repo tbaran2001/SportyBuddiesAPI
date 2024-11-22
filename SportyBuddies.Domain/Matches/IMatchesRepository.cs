@@ -10,5 +10,5 @@ public interface IMatchesRepository
     void RemoveMatches(IEnumerable<Match> matches);
     Task<Match?> GetRandomMatchAsync(Guid userId);
     Task RemoveRangeAsync(IEnumerable<Match> matches);
-    Task<Match?> GetMatchByUserAndMatchedUserAsync(Guid matchedUserId, Guid userId);
+    Task<Match?> GetMatchByUserAndMatchedUserAsync(Guid userId, Guid matchedUserId);
 }

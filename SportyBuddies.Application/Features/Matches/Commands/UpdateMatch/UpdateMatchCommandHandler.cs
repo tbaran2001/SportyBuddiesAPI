@@ -3,13 +3,15 @@ using SportyBuddies.Application.Common.Services;
 using SportyBuddies.Application.Exceptions;
 using SportyBuddies.Domain.Common;
 using SportyBuddies.Domain.Matches;
+using SportyBuddies.Domain.Services;
 
 namespace SportyBuddies.Application.Features.Matches.Commands.UpdateMatch;
 
 public class UpdateMatchCommandHandler(
     IMatchesRepository matchesRepository,
     IUnitOfWork unitOfWork,
-    IMatchingService matchingService)
+    IMatchingService matchingService,
+    IBuddyService buddyService)
     : IRequestHandler<UpdateMatchCommand>
 {
     public async Task Handle(UpdateMatchCommand command, CancellationToken cancellationToken)
@@ -18,14 +20,13 @@ public class UpdateMatchCommandHandler(
         if (match == null)
             throw new NotFoundException(nameof(match), command.MatchId.ToString());
 
-        if(await matchingService.AreUsersBuddiesAsync(match.UserId, match.MatchedUserId))
-            throw new BadRequestException("Users are already buddies");
-        
+        var oppositeMatch = await matchesRepository.GetMatchByUserAndMatchedUserAsync(match.MatchedUserId, match.UserId);
+        if(oppositeMatch == null)
+            throw new NotFoundException(nameof(oppositeMatch), command.MatchId.ToString());
+
         match.UpdateSwipe(command.Swipe);
         
-        if (command.Swipe == Swipe.Right)
-            await matchingService.CreateBuddyRelationshipAsync(match.Id);
-
+        await buddyService.AddBuddy(match, oppositeMatch);
         await unitOfWork.CommitChangesAsync();
     }
 }

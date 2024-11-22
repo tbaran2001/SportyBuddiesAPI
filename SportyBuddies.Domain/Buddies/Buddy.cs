@@ -1,4 +1,5 @@
-﻿using SportyBuddies.Domain.Common;
+﻿using SportyBuddies.Domain.Buddies.Events;
+using SportyBuddies.Domain.Common;
 using SportyBuddies.Domain.Conversations;
 using SportyBuddies.Domain.Users;
 
@@ -8,38 +9,40 @@ public class Buddy : Entity
 {
     private Buddy(
         Guid id,
-        User user,
-        User matchedUser,
+        Guid userId,
+        Guid matchedUserId,
         DateTime matchDateTime
     ) : base(id)
     {
-        User = user;
-        MatchedUser = matchedUser;
+        UserId = userId;
+        MatchedUserId = matchedUserId;
         MatchDateTime = matchDateTime;
-        UserId = user.Id;
-        MatchedUserId = matchedUser.Id;
-    }
-    
-    public static Buddy Create(
-        User user, 
-        User matchedUser,
-        DateTime matchDateTime)
-    {
-        return new Buddy(
-            Guid.NewGuid(), 
-            user, 
-            matchedUser, 
-            matchDateTime);
     }
 
-    public User User { get; private set; }
+    public User? User { get; private set; }
     public Guid UserId { get; private set; }
-    public User MatchedUser { get; private set; }
+    public User? MatchedUser { get; private set; }
     public Guid MatchedUserId { get; private set; }
     public DateTime MatchDateTime { get; private set; }
 
     public Guid? ConversationId { get; private set; }
     public Conversation? Conversation { get; private set; }
+
+    public static Buddy Create(
+        Guid userId,
+        Guid matchedUserId,
+        DateTime matchDateTime)
+    {
+        var buddy = new Buddy(
+            Guid.NewGuid(),
+            userId,
+            matchedUserId,
+            matchDateTime);
+
+        buddy.AddDomainEvent(new BuddyCreatedEvent(userId, matchedUserId, matchDateTime));
+
+        return buddy;
+    }
 
     public void SetConversation(Conversation conversation)
     {
