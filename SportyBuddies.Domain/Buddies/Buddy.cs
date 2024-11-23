@@ -11,37 +11,34 @@ public class Buddy : Entity
         Guid id,
         Guid userId,
         Guid matchedUserId,
-        DateTime matchDateTime
+        DateTime createdOnUtc
     ) : base(id)
     {
         UserId = userId;
         MatchedUserId = matchedUserId;
-        MatchDateTime = matchDateTime;
+        CreatedOnUtc = createdOnUtc;
     }
 
-    public User? User { get; private set; }
+    public Guid? OppositeBuddyId { get; private set; }
     public Guid UserId { get; private set; }
-    public User? MatchedUser { get; private set; }
     public Guid MatchedUserId { get; private set; }
-    public DateTime MatchDateTime { get; private set; }
-
+    public DateTime CreatedOnUtc { get; private set; }
     public Guid? ConversationId { get; private set; }
+
+    public Buddy? OppositeBuddy { get; private set; }
+    public User? User { get; private set; }
+    public User? MatchedUser { private set; get; }
     public Conversation? Conversation { get; private set; }
 
-    public static Buddy Create(
-        Guid userId,
-        Guid matchedUserId,
-        DateTime matchDateTime)
+    public static (Buddy, Buddy) CreatePair(Guid userId, Guid matchedUserId, DateTime createdOnUtc)
     {
-        var buddy = new Buddy(
-            Guid.NewGuid(),
-            userId,
-            matchedUserId,
-            matchDateTime);
+        var buddy1 = new Buddy(Guid.NewGuid(), userId, matchedUserId, createdOnUtc);
+        var buddy2 = new Buddy(Guid.NewGuid(), matchedUserId, userId, createdOnUtc);
 
-        buddy.AddDomainEvent(new BuddyCreatedEvent(userId, matchedUserId, matchDateTime));
+        buddy1.OppositeBuddyId = buddy2.Id;
+        buddy2.OppositeBuddyId = buddy1.Id;
 
-        return buddy;
+        return (buddy1, buddy2);
     }
 
     public void SetConversation(Conversation conversation)

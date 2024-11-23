@@ -7,31 +7,38 @@ public class Match : Entity
 {
     private Match(
         Guid id,
-        User user,
-        User matchedUser,
+        Guid userId,
+        Guid matchedUserId,
         DateTime matchDateTime
     ) : base(id)
     {
-        User = user;
-        MatchedUser = matchedUser;
+        UserId = userId;
+        MatchedUserId = matchedUserId;
         MatchDateTime = matchDateTime;
-        UserId = user.Id;
-        MatchedUserId = matchedUser.Id;
     }
 
-    public User User { get; private set; }
+    public Guid? OppositeMatchId { get; private set; }
     public Guid UserId { get; private set; }
-    public User MatchedUser { get; private set; }
     public Guid MatchedUserId { get; private set; }
     public DateTime MatchDateTime { get; private set; }
     public Swipe? Swipe { get; private set; }
     public DateTime? SwipeDateTime { get; private set; }
 
-    public static Match Create(User user, User matchedUser, DateTime matchDateTime)
+    public Match? OppositeMatch { get; private set; }
+    public User? User { get; private set; }
+    public User? MatchedUser { get; private set; }
+
+    public static (Match, Match) CreatePair(Guid userId, Guid matchedUserId, DateTime matchDateTime)
     {
-        return new Match(Guid.NewGuid(), user, matchedUser, matchDateTime);
+        var match1 = new Match(Guid.NewGuid(), userId, matchedUserId, matchDateTime);
+        var match2 = new Match(Guid.NewGuid(), matchedUserId, userId, matchDateTime);
+
+        match1.OppositeMatchId = match2.Id;
+        match2.OppositeMatchId = match1.Id;
+
+        return (match1, match2);
     }
-    
+
     public void UpdateSwipe(Swipe swipe)
     {
         Swipe = swipe;

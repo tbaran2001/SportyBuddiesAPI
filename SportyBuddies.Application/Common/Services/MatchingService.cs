@@ -43,10 +43,10 @@ public class MatchingService(
             if (user.Id == matchedUser.Id)
                 continue;
 
-            var now =dateTimeProvider.UtcNow;
+            var matchDateTime = dateTimeProvider.UtcNow;
 
             if (HasCommonSports(user, matchedUser))
-                AddNewMatches(user, matchedUser, existingMatches, newMatches, now);
+                AddNewMatches(user, matchedUser, existingMatches, newMatches, matchDateTime);
             else
                 RemoveExistingMatches(user, matchedUser, existingMatches, matchesToRemove);
         }
@@ -58,15 +58,17 @@ public class MatchingService(
     }
 
     private void AddNewMatches(User user, User matchedUser, IEnumerable<Match> existingMatches, List<Match> newMatches,
-        DateTime now)
+        DateTime matchDateTime)
     {
         if (existingMatches.Any(m =>
                 (m.User.Id == user.Id && m.MatchedUser.Id == matchedUser.Id) ||
                 (m.User.Id == matchedUser.Id && m.MatchedUser.Id == user.Id)))
             return;
 
-        newMatches.Add(Match.Create(user, matchedUser, now));
-        newMatches.Add(Match.Create(matchedUser, user, now));
+        var (match1, match2) = Match.CreatePair(user.Id, matchedUser.Id, matchDateTime);
+
+        newMatches.Add(match1);
+        newMatches.Add(match2);
     }
 
     private void RemoveExistingMatches(User user, User matchedUser, IEnumerable<Match> existingMatches,

@@ -9,21 +9,20 @@ public class Conversation : Entity
         Guid id,
         Guid creatorId,
         ICollection<Participant> participants,
-        ICollection<Message> messages,
         DateTime createdOnUtc
     ) : base(id)
     {
         CreatorId = creatorId;
         Participants = participants;
-        Messages = messages;
         CreatedOnUtc = createdOnUtc;
     }
 
     public Guid CreatorId { get; private set; }
-    public User? Creator { get; private set; }
-    public ICollection<Participant> Participants { get; private set; }
-    public ICollection<Message> Messages { get; private set; }
     public DateTime CreatedOnUtc { get; private set; }
+    public ICollection<Participant> Participants { get; private set; }
+    public ICollection<Message>? Messages { get; private set; }
+
+    public User? Creator { get; private set; }
 
     public static Conversation Create(Guid creatorId, ICollection<Guid> participantIds)
     {
@@ -31,7 +30,6 @@ public class Conversation : Entity
             id: Guid.NewGuid(),
             creatorId: creatorId,
             participants: participantIds.Select(id => Participant.Create(Guid.NewGuid(), id)).ToList(),
-            messages: new List<Message>(),
             createdOnUtc: DateTime.UtcNow
         );
     }

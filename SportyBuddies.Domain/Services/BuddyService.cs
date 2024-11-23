@@ -17,8 +17,7 @@ public class BuddyService(IBuddiesRepository buddiesRepository):IBuddyService
             throw new Exception("Both users must swipe right to become buddies");
 
         var now = DateTime.UtcNow;
-        var buddy = Buddy.Create(match.UserId, oppositeMatch.UserId, now);
-        var oppositeBuddy = Buddy.Create(oppositeMatch.UserId, match.UserId, now);
+        var (buddy, oppositeBuddy) = Buddy.CreatePair(match.UserId, oppositeMatch.UserId, now);
 
         await buddiesRepository.AddBuddyAsync(buddy);
         await buddiesRepository.AddBuddyAsync(oppositeBuddy);

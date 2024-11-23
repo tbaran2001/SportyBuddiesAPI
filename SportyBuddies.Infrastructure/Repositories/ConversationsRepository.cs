@@ -36,7 +36,7 @@ public class ConversationsRepository(SportyBuddiesDbContext dbContext) : IConver
             .Where(c => c.Participants.Any(p => p.UserId == userId))
             .SelectMany(c => c.Messages)
             .GroupBy(m => m.ConversationId)
-            .Select(g => g.OrderByDescending(m => m.CreatedAt).FirstOrDefault())
+            .Select(g => g.OrderByDescending(m => m.CreatedOnUtc).FirstOrDefault())
             .ToListAsync();
     }
 

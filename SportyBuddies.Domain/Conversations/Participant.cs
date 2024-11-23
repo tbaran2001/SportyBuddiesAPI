@@ -9,17 +9,17 @@ public class Participant : Entity
         Guid id,
         Guid conversationId,
         Guid userId,
-        DateTime createdAt
+        DateTime createdOnUtc
     ) : base(id)
     {
         ConversationId = conversationId;
         UserId = userId;
-        CreatedAt = createdAt;
+        CreatedOnUtc = createdOnUtc;
     }
 
     public Guid ConversationId { get; private set; }
     public Guid UserId { get; private set; }
-    public DateTime CreatedAt { get; private set; }
+    public DateTime CreatedOnUtc { get; private set; }
 
     public Conversation? Conversation { get; private set; }
     public User? User { get; private set; }
@@ -30,7 +30,7 @@ public class Participant : Entity
             id: Guid.NewGuid(),
             conversationId: conversationId,
             userId: userId,
-            createdAt: DateTime.UtcNow);
+            createdOnUtc: DateTime.UtcNow);
     }
 
     private Participant()

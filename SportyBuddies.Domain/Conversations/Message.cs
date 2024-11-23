@@ -10,19 +10,19 @@ public class Message : Entity
         Guid conversationId,
         Guid senderId,
         string content,
-        DateTime createdAt
+        DateTime createdOnUtc
     ) : base(id)
     {
         ConversationId = conversationId;
         SenderId = senderId;
         Content = content;
-        CreatedAt = createdAt;
+        CreatedOnUtc = createdOnUtc;
     }
 
     public Guid ConversationId { get; private set; }
     public Guid SenderId { get; private set; }
     public string Content { get; private set; }
-    public DateTime CreatedAt { get; private set; }
+    public DateTime CreatedOnUtc { get; private set; }
 
     public Conversation? Conversation { get; private set; }
     public User? Sender { get; private set; }

@@ -28,7 +28,7 @@ public class SendMessageCommandHandler(
         await unitOfWork.CommitChangesAsync();
 
         await hubContext.Clients.Users(conversation.Participants.Select(p => p.UserId.ToString()))
-            .ReceiveMessage(new HubMessage(conversation.Id, message.SenderId, message.Content, message.CreatedAt,
+            .ReceiveMessage(new HubMessage(conversation.Id, message.SenderId, message.Content, message.CreatedOnUtc,
                 conversation.Participants.Select(p => p.UserId).ToList()));
 
         return mapper.Map<MessageResponse>(message);

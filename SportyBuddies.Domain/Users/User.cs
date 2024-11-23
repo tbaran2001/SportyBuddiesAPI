@@ -10,12 +10,11 @@ public class User : Entity
     private User(
         Guid id,
         string? name,
-        Preferences preferences,
-        DateOnly? dateOfBirth,
-        Gender gender,
         string? description,
         DateTime createdOnUtc,
-        UserPhoto? mainPhoto
+        DateOnly? dateOfBirth,
+        Gender gender,
+        Preferences preferences
     ) : base(id)
     {
         Name = name;
@@ -24,8 +23,6 @@ public class User : Entity
         Gender = gender;
         Description = description;
         CreatedOnUtc = createdOnUtc;
-        MainPhoto = mainPhoto;
-        MainPhotoId = mainPhoto?.Id;
     }
 
     public string? Name { get; private set; }
@@ -34,13 +31,13 @@ public class User : Entity
     public DateOnly? DateOfBirth { get; private set; }
     public Gender? Gender { get; private set; }
     public Guid? MainPhotoId { get; private set; }
-    public UserPhoto? MainPhoto { get; private set; }
-    public ICollection<UserPhoto> Photos { get; private set; } = new List<UserPhoto>();
-    public ICollection<Sport> Sports { get; private set; } = new List<Sport>();
     public Preferences? Preferences { get; private set; }
+    public ICollection<UserPhoto>? Photos { get; private set; }
+    public ICollection<Sport>? Sports { get; private set; }
 
-    public ICollection<Message> Messages { get; set; }
-    public ICollection<Conversation> Conversations { get; set; }
+    public UserPhoto? MainPhoto { get; private set; }
+    public ICollection<Message>? Messages { get; private set; }
+    public ICollection<Conversation>? Conversations { get; private set; }
 
     public static User Create(Guid id, string name, DateOnly dateOfBirth, Gender gender)
     {
@@ -51,8 +48,7 @@ public class User : Entity
             dateOfBirth: dateOfBirth,
             gender: gender,
             description: null,
-            createdOnUtc: DateTime.UtcNow,
-            mainPhoto: null);
+            createdOnUtc: DateTime.UtcNow);
     }
 
     public static User Create(Guid id)
@@ -64,8 +60,7 @@ public class User : Entity
             dateOfBirth: null,
             gender: 0,
             description: null,
-            createdOnUtc: DateTime.UtcNow,
-            mainPhoto: null);
+            createdOnUtc: DateTime.UtcNow);
     }
 
     public void Update(string name, string description, DateOnly dateOfBirth, Gender gender)
