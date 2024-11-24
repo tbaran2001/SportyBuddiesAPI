@@ -19,11 +19,5 @@ public class MatchConfiguration: IEntityTypeConfiguration<Match>
             .WithMany()
             .HasForeignKey(m => m.MatchedUserId)
             .OnDelete(DeleteBehavior.Cascade);
-
-        builder
-            .HasOne(m => m.OppositeMatch)
-            .WithMany()
-            .HasForeignKey(m => m.OppositeMatchId)
-            .OnDelete(DeleteBehavior.Cascade);
     }
 }

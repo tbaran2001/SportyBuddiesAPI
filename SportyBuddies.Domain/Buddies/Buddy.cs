@@ -25,7 +25,6 @@ public class Buddy : Entity
     public DateTime CreatedOnUtc { get; private set; }
     public Guid? ConversationId { get; private set; }
 
-    public Buddy? OppositeBuddy { get; private set; }
     public User? User { get; private set; }
     public User? MatchedUser { private set; get; }
     public Conversation? Conversation { get; private set; }

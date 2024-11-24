@@ -7,6 +7,9 @@ public class BuddyService(IBuddiesRepository buddiesRepository):IBuddyService
 {
     public async Task AddBuddy(Match match, Match oppositeMatch)
     {
+        if (match.Swipe != Swipe.Right || oppositeMatch.Swipe != Swipe.Right)
+            return;
+
         if(match==oppositeMatch)
             throw new Exception("Match and opposite match cannot be the same");
 

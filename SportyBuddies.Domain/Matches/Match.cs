@@ -24,7 +24,6 @@ public class Match : Entity
     public Swipe? Swipe { get; private set; }
     public DateTime? SwipeDateTime { get; private set; }
 
-    public Match? OppositeMatch { get; private set; }
     public User? User { get; private set; }
     public User? MatchedUser { get; private set; }
 
