@@ -10,14 +10,6 @@ public class MatchesRepository(SportyBuddiesDbContext dbContext) : IMatchesRepos
         return await dbContext.Matches.FindAsync(matchId);
     }
 
-    public async Task<Match?> GetMatchWithUsersAsync(Guid matchId)
-    {
-        return await dbContext.Matches
-            .Include(m => m.User)
-            .Include(m => m.MatchedUser)
-            .FirstOrDefaultAsync(m => m.Id == matchId);
-    }
-
     public async Task<IEnumerable<Match>> GetUserMatchesAsync(Guid userId)
     {
         return await dbContext.Matches
@@ -61,13 +53,5 @@ public class MatchesRepository(SportyBuddiesDbContext dbContext) : IMatchesRepos
         dbContext.Matches.RemoveRange(matches);
 
         return Task.CompletedTask;
-    }
-
-    public async Task<Match?> GetMatchByUserAndMatchedUserAsync(Guid userId, Guid matchedUserId)
-    {
-        return await dbContext.Matches
-            .Include(m => m.User)
-            .Include(m => m.MatchedUser)
-            .FirstOrDefaultAsync(m => m.User.Id == userId && m.MatchedUser.Id == matchedUserId);
     }
 }

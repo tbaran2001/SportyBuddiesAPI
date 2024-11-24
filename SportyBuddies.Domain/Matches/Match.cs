@@ -17,7 +17,7 @@ public class Match : Entity
         MatchDateTime = matchDateTime;
     }
 
-    public Guid? OppositeMatchId { get; private set; }
+    public Guid OppositeMatchId { get; private set; }
     public Guid UserId { get; private set; }
     public Guid MatchedUserId { get; private set; }
     public DateTime MatchDateTime { get; private set; }

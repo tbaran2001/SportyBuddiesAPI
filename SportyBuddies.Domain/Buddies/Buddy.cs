@@ -19,7 +19,7 @@ public class Buddy : Entity
         CreatedOnUtc = createdOnUtc;
     }
 
-    public Guid? OppositeBuddyId { get; private set; }
+    public Guid OppositeBuddyId { get; private set; }
     public Guid UserId { get; private set; }
     public Guid MatchedUserId { get; private set; }
     public DateTime CreatedOnUtc { get; private set; }

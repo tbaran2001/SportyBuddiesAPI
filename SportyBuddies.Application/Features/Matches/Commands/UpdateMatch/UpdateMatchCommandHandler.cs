@@ -20,7 +20,7 @@ public class UpdateMatchCommandHandler(
         if (match == null)
             throw new NotFoundException(nameof(match), command.MatchId.ToString());
 
-        var oppositeMatch = await matchesRepository.GetMatchByUserAndMatchedUserAsync(match.MatchedUserId, match.UserId);
+        var oppositeMatch = await matchesRepository.GetMatchByIdAsync(match.OppositeMatchId);
         if(oppositeMatch == null)
             throw new NotFoundException(nameof(oppositeMatch), command.MatchId.ToString());
 
