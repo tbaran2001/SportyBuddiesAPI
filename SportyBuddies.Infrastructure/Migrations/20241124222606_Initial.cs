@@ -45,7 +45,7 @@ namespace SportyBuddies.Infrastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    opposite_buddy_id = table.Column<Guid>(type: "uuid", nullable: true),
+                    opposite_buddy_id = table.Column<Guid>(type: "uuid", nullable: false),
                     user_id = table.Column<Guid>(type: "uuid", nullable: false),
                     matched_user_id = table.Column<Guid>(type: "uuid", nullable: false),
                     created_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -54,12 +54,6 @@ namespace SportyBuddies.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_buddies", x => x.id);
-                    table.ForeignKey(
-                        name: "fk_buddies_buddies_opposite_buddy_id",
-                        column: x => x.opposite_buddy_id,
-                        principalTable: "buddies",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -80,7 +74,7 @@ namespace SportyBuddies.Infrastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    opposite_match_id = table.Column<Guid>(type: "uuid", nullable: true),
+                    opposite_match_id = table.Column<Guid>(type: "uuid", nullable: false),
                     user_id = table.Column<Guid>(type: "uuid", nullable: false),
                     matched_user_id = table.Column<Guid>(type: "uuid", nullable: false),
                     match_date_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -90,12 +84,6 @@ namespace SportyBuddies.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_matches", x => x.id);
-                    table.ForeignKey(
-                        name: "fk_matches_matches_opposite_match_id",
-                        column: x => x.opposite_match_id,
-                        principalTable: "matches",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -216,11 +204,6 @@ namespace SportyBuddies.Infrastructure.Migrations
                 column: "matched_user_id");
 
             migrationBuilder.CreateIndex(
-                name: "ix_buddies_opposite_buddy_id",
-                table: "buddies",
-                column: "opposite_buddy_id");
-
-            migrationBuilder.CreateIndex(
                 name: "ix_buddies_user_id",
                 table: "buddies",
                 column: "user_id");
@@ -234,11 +217,6 @@ namespace SportyBuddies.Infrastructure.Migrations
                 name: "ix_matches_matched_user_id",
                 table: "matches",
                 column: "matched_user_id");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_matches_opposite_match_id",
-                table: "matches",
-                column: "opposite_match_id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_matches_user_id",

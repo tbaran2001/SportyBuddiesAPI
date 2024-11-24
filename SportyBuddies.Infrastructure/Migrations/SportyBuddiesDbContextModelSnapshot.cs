@@ -41,7 +41,7 @@ namespace SportyBuddies.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("matched_user_id");
 
-                    b.Property<Guid?>("OppositeBuddyId")
+                    b.Property<Guid>("OppositeBuddyId")
                         .HasColumnType("uuid")
                         .HasColumnName("opposite_buddy_id");
 
@@ -170,7 +170,7 @@ namespace SportyBuddies.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("matched_user_id");
 
-                    b.Property<Guid?>("OppositeMatchId")
+                    b.Property<Guid>("OppositeMatchId")
                         .HasColumnType("uuid")
                         .HasColumnName("opposite_match_id");
 

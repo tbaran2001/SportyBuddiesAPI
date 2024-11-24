@@ -12,7 +12,7 @@ using SportyBuddies.Infrastructure;
 namespace SportyBuddies.Infrastructure.Migrations
 {
     [DbContext(typeof(SportyBuddiesDbContext))]
-    [Migration("20241123145326_Initial")]
+    [Migration("20241124222606_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -44,7 +44,7 @@ namespace SportyBuddies.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("matched_user_id");
 
-                    b.Property<Guid?>("OppositeBuddyId")
+                    b.Property<Guid>("OppositeBuddyId")
                         .HasColumnType("uuid")
                         .HasColumnName("opposite_buddy_id");
 
@@ -60,9 +60,6 @@ namespace SportyBuddies.Infrastructure.Migrations
 
                     b.HasIndex("MatchedUserId")
                         .HasDatabaseName("ix_buddies_matched_user_id");
-
-                    b.HasIndex("OppositeBuddyId")
-                        .HasDatabaseName("ix_buddies_opposite_buddy_id");
 
                     b.HasIndex("UserId")
                         .HasDatabaseName("ix_buddies_user_id");
@@ -176,7 +173,7 @@ namespace SportyBuddies.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("matched_user_id");
 
-                    b.Property<Guid?>("OppositeMatchId")
+                    b.Property<Guid>("OppositeMatchId")
                         .HasColumnType("uuid")
                         .HasColumnName("opposite_match_id");
 
@@ -197,9 +194,6 @@ namespace SportyBuddies.Infrastructure.Migrations
 
                     b.HasIndex("MatchedUserId")
                         .HasDatabaseName("ix_matches_matched_user_id");
-
-                    b.HasIndex("OppositeMatchId")
-                        .HasDatabaseName("ix_matches_opposite_match_id");
 
                     b.HasIndex("UserId")
                         .HasDatabaseName("ix_matches_user_id");
@@ -370,12 +364,6 @@ namespace SportyBuddies.Infrastructure.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_buddies_users_matched_user_id");
 
-                    b.HasOne("SportyBuddies.Domain.Buddies.Buddy", "OppositeBuddy")
-                        .WithMany()
-                        .HasForeignKey("OppositeBuddyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .HasConstraintName("fk_buddies_buddies_opposite_buddy_id");
-
                     b.HasOne("SportyBuddies.Domain.Users.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -386,8 +374,6 @@ namespace SportyBuddies.Infrastructure.Migrations
                     b.Navigation("Conversation");
 
                     b.Navigation("MatchedUser");
-
-                    b.Navigation("OppositeBuddy");
 
                     b.Navigation("User");
                 });
@@ -455,12 +441,6 @@ namespace SportyBuddies.Infrastructure.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_matches_users_matched_user_id");
 
-                    b.HasOne("SportyBuddies.Domain.Matches.Match", "OppositeMatch")
-                        .WithMany()
-                        .HasForeignKey("OppositeMatchId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .HasConstraintName("fk_matches_matches_opposite_match_id");
-
                     b.HasOne("SportyBuddies.Domain.Users.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -469,8 +449,6 @@ namespace SportyBuddies.Infrastructure.Migrations
                         .HasConstraintName("fk_matches_users_user_id");
 
                     b.Navigation("MatchedUser");
-
-                    b.Navigation("OppositeMatch");
 
                     b.Navigation("User");
                 });
