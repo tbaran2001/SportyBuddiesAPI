@@ -13,14 +13,14 @@ public class MatchesRepository(SportyBuddiesDbContext dbContext) : IMatchesRepos
     public async Task<IEnumerable<Match>> GetUserMatchesAsync(Guid userId)
     {
         return await dbContext.Matches
-            .Where(m => m.User.Id == userId)
+            .Where(m => m.UserId == userId)
             .ToListAsync();
     }
 
     public async Task<IEnumerable<Match>> GetUserExistingMatchesAsync(Guid userId)
     {
         return await dbContext.Matches
-            .Where(m => m.User.Id == userId || m.MatchedUser.Id == userId)
+            .Where(m => m.UserId == userId || m.MatchedUserId == userId)
             .ToListAsync();
     }
 
@@ -29,15 +29,10 @@ public class MatchesRepository(SportyBuddiesDbContext dbContext) : IMatchesRepos
         await dbContext.Matches.AddRangeAsync(matches);
     }
 
-    public void RemoveMatches(IEnumerable<Match> matches)
-    {
-        dbContext.Matches.RemoveRange(matches);
-    }
-
     public async Task<Match?> GetRandomMatchAsync(Guid userId)
     {
         var matches = await dbContext.Matches
-            .Where(m => m.User.Id == userId && m.Swipe == null)
+            .Where(m => m.UserId == userId && m.Swipe == null)
             .Include(m => m.User)
             .Include(m => m.MatchedUser)
             .Include(m => m.MatchedUser.Sports)
@@ -53,5 +48,23 @@ public class MatchesRepository(SportyBuddiesDbContext dbContext) : IMatchesRepos
         dbContext.Matches.RemoveRange(matches);
 
         return Task.CompletedTask;
+    }
+
+    public async Task RemoveInvalidMatchesForUserAsync(Guid userId)
+    {
+        await dbContext.Matches
+            .Where(m => (m.UserId == userId || m.MatchedUserId == userId) &&
+                        !dbContext.Users
+                            .Where(u => u.Id == m.UserId)
+                            .SelectMany(u => u.Sports)
+                            .Select(s => s.Id)
+                            .Intersect(
+                                dbContext.Users
+                                    .Where(u => u.Id == m.MatchedUserId)
+                                    .SelectMany(u => u.Sports)
+                                    .Select(s => s.Id)
+                            ).Any()
+            )
+            .ExecuteDeleteAsync();
     }
 }

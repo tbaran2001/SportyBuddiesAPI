@@ -40,15 +40,14 @@ public class UsersRepository(SportyBuddiesDbContext dbContext) : IUsersRepositor
         dbContext.Users.Remove(user);
     }
 
-    public async Task<IEnumerable<User>> GetAllUsersWithSportsAsync()
+    public async Task<IEnumerable<User>> GetPotentialMatchesAsync(Guid userId, IEnumerable<Guid> userSports)
     {
         return await dbContext.Users
-            .Include(u => u.Sports)
+            .Where(u => u.Id != userId) // Exclude the given user
+            .Where(u => u.Sports.Any(s => userSports.Contains(s.Id))) // Find users with overlapping sports
+            .Where(u => !dbContext.Matches.Any(m =>
+                (m.UserId == userId && m.MatchedUserId == u.Id) ||
+                (m.UserId == u.Id && m.MatchedUserId == userId))) // Exclude users who already have matches with the given user
             .ToListAsync();
-    }
-
-    public async Task<bool> UserExistsAsync(Guid userId)
-    {
-        return await dbContext.Users.AnyAsync(u => u.Id == userId);
     }
 }

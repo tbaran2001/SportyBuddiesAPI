@@ -10,7 +10,7 @@ namespace SportyBuddies.Application.Features.Matches.Commands.UpdateMatch;
 public class UpdateMatchCommandHandler(
     IMatchesRepository matchesRepository,
     IUnitOfWork unitOfWork,
-    IMatchingService matchingService,
+    IMatchService matchingService,
     IBuddyService buddyService)
     : IRequestHandler<UpdateMatchCommand>
 {

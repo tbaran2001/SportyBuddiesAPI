@@ -5,6 +5,7 @@ using SportyBuddies.Application.Exceptions;
 using SportyBuddies.Application.Features.Matches.Commands.UpdateMatch;
 using SportyBuddies.Domain.Common;
 using SportyBuddies.Domain.Matches;
+using SportyBuddies.Domain.Services;
 using SportyBuddies.Domain.Users;
 
 namespace SportyBuddies.Application.UnitTests.Matches.Commands;
@@ -15,13 +16,13 @@ public class UpdateMatchTests
     private readonly UpdateMatchCommandHandler _handler;
     private readonly IMatchesRepository _matchesRepositoryMock;
     private readonly IUnitOfWork _unitOfWorkMock;
-    private readonly IMatchingService _matchingServiceMock;
+    private readonly IMatchService _matchingServiceMock;
 
     public UpdateMatchTests()
     {
         _matchesRepositoryMock = Substitute.For<IMatchesRepository>();
         _unitOfWorkMock = Substitute.For<IUnitOfWork>();
-        _matchingServiceMock = Substitute.For<IMatchingService>();
+        _matchingServiceMock = Substitute.For<IMatchService>();
         _handler = new UpdateMatchCommandHandler(_matchesRepositoryMock, _unitOfWorkMock, _matchingServiceMock);
     }
 

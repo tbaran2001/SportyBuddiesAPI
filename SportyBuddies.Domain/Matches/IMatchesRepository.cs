@@ -6,7 +6,7 @@ public interface IMatchesRepository
     Task<IEnumerable<Match>> GetUserMatchesAsync(Guid userId);
     Task<IEnumerable<Match>> GetUserExistingMatchesAsync(Guid userId);
     Task AddMatchesAsync(IEnumerable<Match> matches);
-    void RemoveMatches(IEnumerable<Match> matches);
     Task<Match?> GetRandomMatchAsync(Guid userId);
     Task RemoveRangeAsync(IEnumerable<Match> matches);
+    Task RemoveInvalidMatchesForUserAsync(Guid userId);
 }
