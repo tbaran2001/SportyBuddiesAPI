@@ -35,10 +35,11 @@ public class GetUserMatchesTests
         // Arrange
         var user = User.Create(Guid.NewGuid());
         var matchedUser = User.Create(Guid.NewGuid());
+        var (match1, match2) = Match.CreatePair(user.Id, matchedUser.Id, DateTime.UtcNow);
         var matches = new List<Match>
         {
-            Match.Create(user, matchedUser, DateTime.UtcNow),
-            Match.Create(user, matchedUser, DateTime.UtcNow)
+            match1,
+            match2
         };
         _matchesRepositoryMock.GetUserMatchesAsync(_query.UserId).Returns(matches);
 

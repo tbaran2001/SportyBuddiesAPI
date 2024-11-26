@@ -37,7 +37,7 @@ public class SendMessageTests
     public async Task Handle_ShouldReturnMessage_WhenMessageIsSent()
     {
         // Arrange
-        var conversation = Conversation.Create(_command.UserId, new List<Guid> { _command.UserId, Guid.NewGuid() });
+        var conversation = Conversation.CreateOneToOne(_command.UserId, Guid.NewGuid());
         _conversationsRepositoryMock.GetByIdAsync(_command.ConversationId).Returns(conversation);
 
         // Act

@@ -8,7 +8,6 @@ public class CreateConversationCommandValidator : AbstractValidator<CreateConver
     public CreateConversationCommandValidator()
     {
         RuleFor(x => x.CreatorId).NotEmpty();
-        RuleFor(x => x.ParticipantIds).NotEmpty()
-            .Must(x => x.Count > 1);
+        RuleFor(x => x.ParticipantId).NotEmpty();
     }
 }

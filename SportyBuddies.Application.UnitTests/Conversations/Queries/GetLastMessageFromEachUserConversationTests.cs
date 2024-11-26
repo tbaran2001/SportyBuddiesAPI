@@ -29,7 +29,7 @@ public class GetLastMessageFromEachUserConversationTests
     public async Task Handle_ShouldReturnMessages_WhenConversationExists()
     {
         // Arrange
-        var conversation = Conversation.Create(Guid.NewGuid(), new List<Guid> { Guid.NewGuid(), Guid.NewGuid() });
+        var conversation = Conversation.CreateOneToOne(Guid.NewGuid(), Guid.NewGuid());
         var message1 = Message.Create(conversation.Id, conversation.Participants.First().UserId, "Hello");
         var message2 = Message.Create(conversation.Id, conversation.Participants.Last().UserId, "Hi");
         conversation.Messages.Add(message1);

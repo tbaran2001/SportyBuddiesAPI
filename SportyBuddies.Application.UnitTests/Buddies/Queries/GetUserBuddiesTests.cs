@@ -38,11 +38,12 @@ public class GetUserBuddiesTests
         var user1 = User.Create(Guid.NewGuid());
         var user2 = User.Create(Guid.NewGuid());
         var user3 = User.Create(Guid.NewGuid());
-        var buddies = new List<Buddy>
-        {
-            Buddy.Create(user1, user2, DateTime.UtcNow),
-            Buddy.Create(user1, user3, DateTime.UtcNow)
-        };
+
+        var (buddy1, buddy2) = Buddy.CreatePair(user1.Id, user2.Id, DateTime.UtcNow);
+        var (buddy3, buddy4) = Buddy.CreatePair(user1.Id, user3.Id, DateTime.UtcNow);
+
+        var buddies = new List<Buddy> { buddy1, buddy2, buddy3, buddy4 };
+
         _buddiesRepositoryMock.GetUserBuddiesAsync(_query.UserId).Returns(buddies);
 
         // Act

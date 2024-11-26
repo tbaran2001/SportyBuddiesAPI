@@ -9,7 +9,9 @@ using SportyBuddies.Domain.Buddies;
 using SportyBuddies.Domain.Common;
 using SportyBuddies.Domain.Common.Interfaces;
 using SportyBuddies.Domain.Common.Interfaces.Repositories;
+using SportyBuddies.Domain.Common.Interfaces.Services;
 using SportyBuddies.Domain.Conversations;
+using SportyBuddies.Domain.Services;
 using SportyBuddies.Domain.Users;
 
 namespace SportyBuddies.Application.UnitTests.Conversations.Commands;
@@ -17,75 +19,32 @@ namespace SportyBuddies.Application.UnitTests.Conversations.Commands;
 public class CreateConversationTests
 {
     private readonly CreateConversationCommandHandler _handler;
-    private readonly IConversationsRepository _conversationsRepositoryMock;
-    private readonly IBuddiesRepository _buddiesRepositoryMock;
     private readonly IUnitOfWork _unitOfWorkMock;
+    private readonly IConversationService _conversationServiceMock;
 
     public CreateConversationTests()
     {
         var configurationProvider = new MapperConfiguration(cfg => { cfg.AddProfile<ConversationMappingProfile>(); });
         var mapper = configurationProvider.CreateMapper();
 
-        _conversationsRepositoryMock = Substitute.For<IConversationsRepository>();
-        _buddiesRepositoryMock = Substitute.For<IBuddiesRepository>();
+        _conversationServiceMock = Substitute.For<IConversationService>();
         _unitOfWorkMock = Substitute.For<IUnitOfWork>();
-        _handler = new CreateConversationCommandHandler(_conversationsRepositoryMock,_buddiesRepositoryMock, _unitOfWorkMock, mapper);
+        _handler = new CreateConversationCommandHandler(_unitOfWorkMock, mapper, _conversationServiceMock);
     }
 
     [Fact]
-    public async Task Handle_ShouldReturnConversation_WhenConversationIsCreated()
+    public async Task Handle_Should_CreateConversation()
     {
         // Arrange
-        var creatorId = Guid.NewGuid();
-        var participantIds = new List<Guid> { creatorId, Guid.NewGuid() };
-        CreateConversationCommand command = new(creatorId, participantIds);
-
-        _conversationsRepositoryMock.AreParticipantsBuddiesAsync(Arg.Any<ICollection<Guid>>()).Returns(true);
-        _conversationsRepositoryMock.UsersHaveConversationAsync(Arg.Any<ICollection<Guid>>()).Returns(false);
+        var command = new CreateConversationCommand(Guid.NewGuid(), Guid.NewGuid());
+        var conversation = Conversation.CreateOneToOne(command.CreatorId, command.ParticipantId);
+        _conversationServiceMock.CreateConversationAsync(command.CreatorId, command.ParticipantId).Returns(conversation);
 
         // Act
         var result = await _handler.Handle(command, default);
 
         // Assert
+        result.Should().NotBeNull();
         result.Should().BeOfType<CreateConversationResponse>();
-        result.CreatorId.Should().Be(command.CreatorId);
-
-        await _conversationsRepositoryMock.Received(1).AddAsync(Arg.Any<Conversation>());
-        await _unitOfWorkMock.Received(1).CommitChangesAsync();
-    }
-
-    [Fact]
-    public async Task Handle_ShouldThrowBadRequestException_WhenParticipantsAreNotBuddies()
-    {
-        // Arrange
-        var creatorId = Guid.NewGuid();
-        var participantIds = new List<Guid> { creatorId, Guid.NewGuid() };
-        CreateConversationCommand command = new(creatorId, participantIds);
-
-        _conversationsRepositoryMock.AreParticipantsBuddiesAsync(Arg.Any<ICollection<Guid>>()).Returns(false);
-
-        // Act
-        var act = async () => await _handler.Handle(command, default);
-
-        // Assert
-        await act.Should().ThrowAsync<BadRequestException>().WithMessage("Participants are not buddies");
-    }
-
-    [Fact]
-    public async Task Handle_ShouldThrowBadRequestException_WhenUsersHaveConversation()
-    {
-        // Arrange
-        var creatorId = Guid.NewGuid();
-        var participantIds = new List<Guid> { creatorId, Guid.NewGuid() };
-        CreateConversationCommand command = new(creatorId, participantIds);
-
-        _conversationsRepositoryMock.AreParticipantsBuddiesAsync(Arg.Any<ICollection<Guid>>()).Returns(true);
-        _conversationsRepositoryMock.UsersHaveConversationAsync(Arg.Any<ICollection<Guid>>()).Returns(true);
-
-        // Act
-        var act = async () => await _handler.Handle(command, default);
-
-        // Assert
-        await act.Should().ThrowAsync<BadRequestException>().WithMessage("Conversation already exists");
     }
 }

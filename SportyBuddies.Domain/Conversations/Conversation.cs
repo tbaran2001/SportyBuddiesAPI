@@ -20,7 +20,7 @@ public class Conversation : Entity
     public Guid CreatorId { get; private set; }
     public DateTime CreatedOnUtc { get; private set; }
     public ICollection<Participant> Participants { get; private set; }
-    public ICollection<Message>? Messages { get; private set; }
+    public ICollection<Message> Messages { get; private set; } = new List<Message>();
 
     public User? Creator { get; private set; }
 

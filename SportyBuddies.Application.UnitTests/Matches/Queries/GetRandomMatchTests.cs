@@ -37,8 +37,8 @@ public class GetRandomMatchTests
         // Arrange
         var user = User.Create(Guid.NewGuid());
         var matchedUser = User.Create(Guid.NewGuid());
-        var match = Match.Create(user, matchedUser, DateTime.UtcNow);
-        _matchesRepositoryMock.GetRandomMatchAsync(_query.UserId).Returns(match);
+        var (match1,match2)= Match.CreatePair(user.Id, matchedUser.Id, DateTime.UtcNow);
+        _matchesRepositoryMock.GetRandomMatchAsync(_query.UserId).Returns(match1);
 
         // Act
         var result = await _handler.Handle(_query, default);
