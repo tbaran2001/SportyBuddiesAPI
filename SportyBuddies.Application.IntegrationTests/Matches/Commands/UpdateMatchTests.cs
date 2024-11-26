@@ -20,19 +20,20 @@ public class UpdateMatchTests(IntegrationTestWebAppFactory factory) : BaseIntegr
         await DbContext.Users.AddAsync(user);
         await DbContext.Users.AddAsync(matchedUser);
 
-        var match = Match.Create(user, matchedUser, DateTime.UtcNow);
-        await DbContext.Matches.AddAsync(match);
+        var (match1, match2) = Match.CreatePair(user.Id, matchedUser.Id, DateTime.UtcNow);
+        await DbContext.Matches.AddAsync(match1);
+        await DbContext.Matches.AddAsync(match2);
 
         await DbContext.SaveChangesAsync();
 
-        var command = new UpdateMatchCommand(match.Id, swipe);
+        var command = new UpdateMatchCommand(match1.Id, swipe);
 
         // Act
         await Sender.Send(command);
 
         // Assert
-        match.Swipe.Should().Be(swipe);
-        match.SwipeDateTime.Should().NotBeNull();
+        match1.Swipe.Should().Be(swipe);
+        match1.SwipeDateTime.Should().NotBeNull();
     }
     
     [Fact]

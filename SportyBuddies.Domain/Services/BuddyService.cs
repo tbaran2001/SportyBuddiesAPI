@@ -21,7 +21,7 @@ public class BuddyService(IBuddiesRepository buddiesRepository) : IBuddyService
             throw new Exception("Users are already buddies");
 
         if (match.Swipe != Swipe.Right || oppositeMatch.Swipe != Swipe.Right)
-            throw new Exception("Both users must swipe right to become buddies");
+            return;
 
         var now = DateTime.UtcNow;
         var (buddy, oppositeBuddy) = Buddy.CreatePair(match.UserId, oppositeMatch.UserId, now);

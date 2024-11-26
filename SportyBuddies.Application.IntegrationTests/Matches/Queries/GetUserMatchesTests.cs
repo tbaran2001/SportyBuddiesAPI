@@ -16,14 +16,16 @@ public class GetUserMatchesTests(IntegrationTestWebAppFactory factory) : BaseInt
         var user = User.Create(Guid.NewGuid());
         var matchedUser1 = User.Create(Guid.NewGuid());
         var matchedUser2 = User.Create(Guid.NewGuid());
+
         await DbContext.Users.AddAsync(user);
         await DbContext.Users.AddAsync(matchedUser1);
+        await DbContext.Users.AddAsync(matchedUser2);
+        await DbContext.SaveChangesAsync();
 
-        var match1 = Match.Create(user, matchedUser1, DateTime.UtcNow);
-        var match2 = Match.Create(user, matchedUser2, DateTime.UtcNow);
-        await DbContext.Matches.AddAsync(match1);
-        await DbContext.Matches.AddAsync(match2);
+        var (match1,match2) = Match.CreatePair(user.Id, matchedUser1.Id, DateTime.UtcNow);
+        var (match3,match4) = Match.CreatePair(user.Id, matchedUser2.Id, DateTime.UtcNow);
 
+        await DbContext.Matches.AddRangeAsync(match1, match2, match3, match4);
         await DbContext.SaveChangesAsync();
 
         var query = new GetUserMatchesQuery(user.Id);

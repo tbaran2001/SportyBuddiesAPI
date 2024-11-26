@@ -19,12 +19,11 @@ public class GetConversationMessagesTests(IntegrationTestWebAppFactory factory) 
         await DbContext.Users.AddAsync(user1);
         await DbContext.Users.AddAsync(user2);
 
-        var buddy1 = Buddy.Create(user1, user2,DateTime.UtcNow);
-        var buddy2 = Buddy.Create(user2, user1,DateTime.UtcNow);
+        var (buddy1, buddy2) = Buddy.CreatePair(user1.Id, user2.Id, DateTime.UtcNow);
         await DbContext.Buddies.AddAsync(buddy1);
         await DbContext.Buddies.AddAsync(buddy2);
 
-        var conversation = Conversation.Create(user1.Id, new List<Guid> { user1.Id, user2.Id });
+        var conversation = Conversation.CreateOneToOne(user1.Id, user2.Id);
         await DbContext.Conversations.AddAsync(conversation);
         await DbContext.SaveChangesAsync();
 

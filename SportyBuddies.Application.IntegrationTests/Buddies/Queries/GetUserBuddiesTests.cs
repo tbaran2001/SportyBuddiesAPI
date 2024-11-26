@@ -23,10 +23,12 @@ public class GetUserBuddiesTests : BaseIntegrationTest
             User.Create(Guid.NewGuid()),
             User.Create(Guid.NewGuid())
         };
+        var (buddy1, buddy2) = Buddy.CreatePair(users[0].Id, users[1].Id, DateTime.UtcNow);
+        var (buddy3, buddy4) = Buddy.CreatePair(users[0].Id, users[2].Id, DateTime.UtcNow);
+
         var buddies = new List<Buddy>
         {
-            Buddy.Create(users[0], users[1], DateTime.UtcNow),
-            Buddy.Create(users[0], users[2], DateTime.UtcNow)
+            buddy1, buddy2, buddy3, buddy4
         };
         await DbContext.Users.AddRangeAsync(users);
         await DbContext.Buddies.AddRangeAsync(buddies);

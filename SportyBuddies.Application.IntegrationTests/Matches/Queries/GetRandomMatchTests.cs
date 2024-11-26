@@ -18,7 +18,7 @@ public class GetRandomMatchTests(IntegrationTestWebAppFactory factory) : BaseInt
         await DbContext.Users.AddAsync(user);
         await DbContext.Users.AddAsync(matchedUser);
         
-        var match = Match.Create(user, matchedUser, DateTime.UtcNow);
+        var (match, _) = Match.CreatePair(user.Id, matchedUser.Id, DateTime.UtcNow);
         await DbContext.Matches.AddAsync(match);
         
         await DbContext.SaveChangesAsync();
