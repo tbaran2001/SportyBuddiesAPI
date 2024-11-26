@@ -22,6 +22,7 @@ public static class DependencyInjection
 
         services.AddScoped<IBuddyService, BuddyService>();
         services.AddScoped<IMatchService, MatchService>();
+        services.AddScoped<IConversationService, ConversationService>();
 
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 

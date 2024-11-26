@@ -35,7 +35,7 @@ public class MatchesRepository(SportyBuddiesDbContext dbContext) : IMatchesRepos
             .Where(m => m.UserId == userId && m.Swipe == null)
             .Include(m => m.User)
             .Include(m => m.MatchedUser)
-            .Include(m => m.MatchedUser.Sports)
+            .ThenInclude(u => u.Sports)
             .ToListAsync();
 
         var randomMatch = matches.MinBy(m => Guid.NewGuid());

@@ -24,12 +24,22 @@ public class Conversation : Entity
 
     public User? Creator { get; private set; }
 
-    public static Conversation Create(Guid creatorId, ICollection<Guid> participantIds)
+
+    public static Conversation CreateOneToOne(Guid creatorId, Guid participantId)
     {
+        if (creatorId == participantId)
+        {
+            throw new InvalidOperationException("A creator cannot have a one-to-one conversation with themselves.");
+        }
+
         return new Conversation(
             id: Guid.NewGuid(),
             creatorId: creatorId,
-            participants: participantIds.Select(id => Participant.Create(Guid.NewGuid(), id)).ToList(),
+            participants: new List<Participant>
+            {
+                Participant.Create(Guid.NewGuid(), creatorId),
+                Participant.Create(Guid.NewGuid(), participantId)
+            },
             createdOnUtc: DateTime.UtcNow
         );
     }

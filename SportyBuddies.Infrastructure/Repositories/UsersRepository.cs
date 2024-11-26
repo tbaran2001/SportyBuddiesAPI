@@ -43,11 +43,11 @@ public class UsersRepository(SportyBuddiesDbContext dbContext) : IUsersRepositor
     public async Task<IEnumerable<User>> GetPotentialMatchesAsync(Guid userId, IEnumerable<Guid> userSports)
     {
         return await dbContext.Users
-            .Where(u => u.Id != userId) // Exclude the given user
-            .Where(u => u.Sports.Any(s => userSports.Contains(s.Id))) // Find users with overlapping sports
+            .Where(u => u.Id != userId)
+            .Where(u => u.Sports.Any(s => userSports.Contains(s.Id)))
             .Where(u => !dbContext.Matches.Any(m =>
                 (m.UserId == userId && m.MatchedUserId == u.Id) ||
-                (m.UserId == u.Id && m.MatchedUserId == userId))) // Exclude users who already have matches with the given user
+                (m.UserId == u.Id && m.MatchedUserId == userId)))
             .ToListAsync();
     }
 }

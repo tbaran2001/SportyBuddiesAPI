@@ -38,7 +38,7 @@ namespace SportyBuddies.Api.Controllers
             if (userId == null) return Unauthorized();
 
             var command =
-                new CreateConversationCommand(Guid.Parse(userId), [Guid.Parse(userId), request.ParticipantId]);
+                new CreateConversationCommand(Guid.Parse(userId), request.ParticipantId);
             var result = await mediator.Send(command);
 
             return Ok(result);

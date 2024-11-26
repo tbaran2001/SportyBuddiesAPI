@@ -26,7 +26,7 @@ public class UpdateMatchCommandHandler(
 
         match.UpdateSwipe(command.Swipe);
         
-        await buddyService.AddBuddy(match, oppositeMatch);
+        await buddyService.AddBuddyAsync(match, oppositeMatch);
         await unitOfWork.CommitChangesAsync();
     }
 }

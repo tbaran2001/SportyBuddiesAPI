@@ -39,7 +39,7 @@ public class CreateConversationTests
         CreateConversationCommand command = new(creatorId, participantIds);
 
         _conversationsRepositoryMock.AreParticipantsBuddiesAsync(Arg.Any<ICollection<Guid>>()).Returns(true);
-        _conversationsRepositoryMock.UsersHaveConversation(Arg.Any<ICollection<Guid>>()).Returns(false);
+        _conversationsRepositoryMock.UsersHaveConversationAsync(Arg.Any<ICollection<Guid>>()).Returns(false);
 
         // Act
         var result = await _handler.Handle(command, default);
@@ -78,7 +78,7 @@ public class CreateConversationTests
         CreateConversationCommand command = new(creatorId, participantIds);
 
         _conversationsRepositoryMock.AreParticipantsBuddiesAsync(Arg.Any<ICollection<Guid>>()).Returns(true);
-        _conversationsRepositoryMock.UsersHaveConversation(Arg.Any<ICollection<Guid>>()).Returns(true);
+        _conversationsRepositoryMock.UsersHaveConversationAsync(Arg.Any<ICollection<Guid>>()).Returns(true);
 
         // Act
         var act = async () => await _handler.Handle(command, default);
