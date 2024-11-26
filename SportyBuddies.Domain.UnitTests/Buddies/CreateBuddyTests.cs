@@ -15,13 +15,19 @@ public class CreateBuddyTests
         var matchDateTime = DateTime.UtcNow;
         
         // Act
-        var buddy = Buddy.Create(user, matchedUser, matchDateTime);
+        var (buddy1,buddy2) = Buddy.CreatePair(user.Id, matchedUser.Id, matchDateTime);
         
         // Assert
-        buddy.User.Should().Be(user);
-        buddy.UserId.Should().Be(user.Id);
-        buddy.MatchedUser.Should().Be(matchedUser);
-        buddy.MatchedUserId.Should().Be(matchedUser.Id);
-        buddy.MatchDateTime.Should().Be(matchDateTime);
+        buddy1.UserId.Should().Be(user.Id);
+        buddy1.MatchedUserId.Should().Be(matchedUser.Id);
+        buddy1.CreatedOnUtc.Should().Be(matchDateTime);
+        buddy1.OppositeBuddyId.Should().Be(buddy2.Id);
+        buddy1.ConversationId.Should().BeNull();
+
+        buddy2.UserId.Should().Be(matchedUser.Id);
+        buddy2.MatchedUserId.Should().Be(user.Id);
+        buddy2.CreatedOnUtc.Should().Be(matchDateTime);
+        buddy2.OppositeBuddyId.Should().Be(buddy1.Id);
+        buddy2.ConversationId.Should().BeNull();
     }
 }

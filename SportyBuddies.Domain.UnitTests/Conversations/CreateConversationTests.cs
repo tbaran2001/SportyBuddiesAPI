@@ -10,15 +10,15 @@ public class CreateConversationTests
     {
         // Arrange
         var creatorId = Guid.NewGuid();
-        var participantIds = new List<Guid> { creatorId, Guid.NewGuid() };
+        var participantId = Guid.NewGuid();
 
         // Act
-        var conversation = Conversation.Create(creatorId, participantIds);
+        var conversation = Conversation.CreateOneToOne(creatorId, participantId);
 
         // Assert
         conversation.CreatorId.Should().Be(creatorId);
         conversation.Participants.Should().HaveCount(2);
-        conversation.Participants.First().UserId.Should().Be(creatorId);
-        conversation.Messages.Should().BeEmpty();
+        conversation.Participants.Should().ContainSingle(p => p.UserId == creatorId);
+        conversation.Participants.Should().ContainSingle(p => p.UserId == participantId);
     }
 }

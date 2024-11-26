@@ -11,7 +11,7 @@ public class BuddyService(IBuddiesRepository buddiesRepository) : IBuddyService
 {
     public async Task AddBuddyAsync(Match match, Match oppositeMatch)
     {
-        if (match.Swipe != Swipe.Right || oppositeMatch.Swipe != Swipe.Right)
+        if (match.Swipe == Swipe.Left || oppositeMatch.Swipe == Swipe.Left)
             return;
 
         if (match == oppositeMatch)

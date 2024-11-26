@@ -15,15 +15,21 @@ public class CreateMatchTests
         var matchDateTime = DateTime.UtcNow;
         
         // Act
-        var match = Match.Create(user, matchedUser, matchDateTime);
-        
+        var (match1, match2) = Match.CreatePair(user.Id, matchedUser.Id, matchDateTime);
+
         // Assert
-        match.User.Should().Be(user);
-        match.UserId.Should().Be(user.Id);
-        match.MatchedUser.Should().Be(matchedUser);
-        match.MatchedUserId.Should().Be(matchedUser.Id);
-        match.MatchDateTime.Should().Be(matchDateTime);
-        match.Swipe.Should().BeNull();
-        match.SwipeDateTime.Should().BeNull();
+        match1.UserId.Should().Be(user.Id);
+        match1.MatchedUserId.Should().Be(matchedUser.Id);
+        match1.MatchDateTime.Should().Be(matchDateTime);
+        match1.OppositeMatchId.Should().Be(match2.Id);
+        match1.Swipe.Should().BeNull();
+        match1.SwipeDateTime.Should().BeNull();
+
+        match2.UserId.Should().Be(matchedUser.Id);
+        match2.MatchedUserId.Should().Be(user.Id);
+        match2.MatchDateTime.Should().Be(matchDateTime);
+        match2.OppositeMatchId.Should().Be(match1.Id);
+        match2.Swipe.Should().BeNull();
+        match2.SwipeDateTime.Should().BeNull();
     }
 }

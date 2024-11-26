@@ -10,17 +10,15 @@ public class UpdateSwipeTests
     public void UpdateSwipe_Should_SetSwipeAndSwipeDateTime()
     {
         // Arrange
-        var user = User.Create(Guid.NewGuid());
-        var matchedUser = User.Create(Guid.NewGuid());
-        var matchDateTime = DateTime.UtcNow;
-        var match = Match.Create(user, matchedUser, matchDateTime);
+        var (match1, _) = Match.CreatePair(Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow);
+
         var swipe = Swipe.Left;
 
         // Act
-        match.UpdateSwipe(swipe);
+        match1.UpdateSwipe(swipe);
 
         // Assert
-        match.Swipe.Should().Be(swipe);
-        match.SwipeDateTime.Should().NotBeNull();
+        match1.Swipe.Should().Be(swipe);
+        match1.SwipeDateTime.Should().NotBeNull();
     }
 }

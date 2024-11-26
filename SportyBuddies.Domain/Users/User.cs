@@ -32,8 +32,8 @@ public class User : Entity
     public Gender? Gender { get; private set; }
     public Guid? MainPhotoId { get; private set; }
     public Preferences? Preferences { get; private set; }
-    public ICollection<UserPhoto>? Photos { get; private set; }
-    public ICollection<Sport>? Sports { get; private set; }
+    public ICollection<UserPhoto> Photos { get; private set; }= new List<UserPhoto>();
+    public ICollection<Sport> Sports { get; private set; }= new List<Sport>();
 
     public UserPhoto? MainPhoto { get; private set; }
     public ICollection<Message>? Messages { get; private set; }
