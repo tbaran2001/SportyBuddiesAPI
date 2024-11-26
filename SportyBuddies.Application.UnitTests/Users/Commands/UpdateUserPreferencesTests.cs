@@ -3,6 +3,8 @@ using NSubstitute;
 using SportyBuddies.Application.Exceptions;
 using SportyBuddies.Application.Features.Users.Commands.UpdateUserPreferences;
 using SportyBuddies.Domain.Common;
+using SportyBuddies.Domain.Common.Interfaces;
+using SportyBuddies.Domain.Common.Interfaces.Repositories;
 using SportyBuddies.Domain.Users;
 
 namespace SportyBuddies.Application.UnitTests.Users.Commands;

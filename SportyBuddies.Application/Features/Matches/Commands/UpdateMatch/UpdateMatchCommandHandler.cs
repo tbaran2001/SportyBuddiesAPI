@@ -2,6 +2,9 @@ using MediatR;
 using SportyBuddies.Application.Common.Services;
 using SportyBuddies.Application.Exceptions;
 using SportyBuddies.Domain.Common;
+using SportyBuddies.Domain.Common.Interfaces;
+using SportyBuddies.Domain.Common.Interfaces.Repositories;
+using SportyBuddies.Domain.Common.Interfaces.Services;
 using SportyBuddies.Domain.Matches;
 using SportyBuddies.Domain.Services;
 

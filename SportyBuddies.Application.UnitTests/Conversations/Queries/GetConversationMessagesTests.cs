@@ -5,6 +5,8 @@ using SportyBuddies.Application.Common.DTOs.Conversation;
 using SportyBuddies.Application.Exceptions;
 using SportyBuddies.Application.Features.Conversations.Queries.GetConversationMessages;
 using SportyBuddies.Application.Mappings;
+using SportyBuddies.Domain.Common.Interfaces;
+using SportyBuddies.Domain.Common.Interfaces.Repositories;
 using SportyBuddies.Domain.Conversations;
 
 namespace SportyBuddies.Application.UnitTests.Conversations.Queries;

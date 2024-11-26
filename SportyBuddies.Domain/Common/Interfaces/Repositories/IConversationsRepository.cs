@@ -1,4 +1,6 @@
-namespace SportyBuddies.Domain.Conversations;
+using SportyBuddies.Domain.Conversations;
+
+namespace SportyBuddies.Domain.Common.Interfaces.Repositories;
 
 public interface IConversationsRepository
 {

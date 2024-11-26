@@ -4,6 +4,8 @@ using SportyBuddies.Application.Common.DTOs.Conversation;
 using SportyBuddies.Application.Exceptions;
 using SportyBuddies.Domain.Buddies;
 using SportyBuddies.Domain.Common;
+using SportyBuddies.Domain.Common.Interfaces;
+using SportyBuddies.Domain.Common.Interfaces.Services;
 using SportyBuddies.Domain.Conversations;
 using SportyBuddies.Domain.Services;
 

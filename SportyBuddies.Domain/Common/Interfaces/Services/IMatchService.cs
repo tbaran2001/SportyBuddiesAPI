@@ -1,4 +1,4 @@
-namespace SportyBuddies.Domain.Services;
+namespace SportyBuddies.Domain.Common.Interfaces.Services;
 
 public interface IMatchService
 {

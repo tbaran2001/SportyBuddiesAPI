@@ -5,6 +5,8 @@ using SportyBuddies.Application.Common.DTOs.Sport;
 using SportyBuddies.Application.Exceptions;
 using SportyBuddies.Application.Features.UserSports.Queries.GetUserSports;
 using SportyBuddies.Application.Mappings;
+using SportyBuddies.Domain.Common.Interfaces;
+using SportyBuddies.Domain.Common.Interfaces.Repositories;
 using SportyBuddies.Domain.Sports;
 using SportyBuddies.Domain.Users;
 

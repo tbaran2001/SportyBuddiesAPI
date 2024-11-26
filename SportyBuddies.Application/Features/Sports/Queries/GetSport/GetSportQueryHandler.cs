@@ -2,6 +2,8 @@
 using MediatR;
 using SportyBuddies.Application.Common.DTOs.Sport;
 using SportyBuddies.Application.Exceptions;
+using SportyBuddies.Domain.Common.Interfaces;
+using SportyBuddies.Domain.Common.Interfaces.Repositories;
 using SportyBuddies.Domain.Sports;
 
 namespace SportyBuddies.Application.Features.Sports.Queries.GetSport;

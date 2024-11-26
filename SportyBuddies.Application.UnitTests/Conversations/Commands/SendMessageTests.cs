@@ -8,6 +8,8 @@ using SportyBuddies.Application.Features.Conversations.Commands.SendMessage;
 using SportyBuddies.Application.Hubs;
 using SportyBuddies.Application.Mappings;
 using SportyBuddies.Domain.Common;
+using SportyBuddies.Domain.Common.Interfaces;
+using SportyBuddies.Domain.Common.Interfaces.Repositories;
 using SportyBuddies.Domain.Conversations;
 
 namespace SportyBuddies.Application.UnitTests.Conversations.Commands;

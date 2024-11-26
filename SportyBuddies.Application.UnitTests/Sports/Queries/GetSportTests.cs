@@ -4,6 +4,8 @@ using NSubstitute;
 using SportyBuddies.Application.Exceptions;
 using SportyBuddies.Application.Features.Sports.Queries.GetSport;
 using SportyBuddies.Application.Mappings;
+using SportyBuddies.Domain.Common.Interfaces;
+using SportyBuddies.Domain.Common.Interfaces.Repositories;
 using SportyBuddies.Domain.Sports;
 
 namespace SportyBuddies.Application.UnitTests.Sports.Queries;

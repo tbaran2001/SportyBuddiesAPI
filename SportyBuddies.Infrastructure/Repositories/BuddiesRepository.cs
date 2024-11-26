@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SportyBuddies.Domain.Buddies;
+using SportyBuddies.Domain.Common.Interfaces;
+using SportyBuddies.Domain.Common.Interfaces.Repositories;
 
 namespace SportyBuddies.Infrastructure.Repositories;
 

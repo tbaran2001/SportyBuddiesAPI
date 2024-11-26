@@ -1,4 +1,6 @@
-﻿namespace SportyBuddies.Domain.Buddies;
+﻿using SportyBuddies.Domain.Buddies;
+
+namespace SportyBuddies.Domain.Common.Interfaces.Repositories;
 
 public interface IBuddiesRepository
 {

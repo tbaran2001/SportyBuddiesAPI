@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using SportyBuddies.Application.Common.DTOs.User;
 using SportyBuddies.Application.Exceptions;
+using SportyBuddies.Domain.Common.Interfaces;
+using SportyBuddies.Domain.Common.Interfaces.Repositories;
 using SportyBuddies.Domain.Users;
 
 namespace SportyBuddies.Application.Features.Users.Queries.GetUserPhotos;

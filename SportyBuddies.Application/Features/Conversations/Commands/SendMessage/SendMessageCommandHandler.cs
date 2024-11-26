@@ -5,6 +5,8 @@ using SportyBuddies.Application.Common.DTOs.Conversation;
 using SportyBuddies.Application.Exceptions;
 using SportyBuddies.Application.Hubs;
 using SportyBuddies.Domain.Common;
+using SportyBuddies.Domain.Common.Interfaces;
+using SportyBuddies.Domain.Common.Interfaces.Repositories;
 using SportyBuddies.Domain.Conversations;
 
 namespace SportyBuddies.Application.Features.Conversations.Commands.SendMessage;

@@ -2,6 +2,8 @@
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using SportyBuddies.Application.Common.Behaviors;
+using SportyBuddies.Domain.Common.Interfaces;
+using SportyBuddies.Domain.Common.Interfaces.Services;
 using SportyBuddies.Domain.Services;
 
 namespace SportyBuddies.Application;

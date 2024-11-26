@@ -1,6 +1,8 @@
 ﻿using NSubstitute;
 using SportyBuddies.Application.Features.Users.Commands.DeleteUser;
 using SportyBuddies.Domain.Common;
+using SportyBuddies.Domain.Common.Interfaces;
+using SportyBuddies.Domain.Common.Interfaces.Repositories;
 using SportyBuddies.Domain.Users;
 
 namespace SportyBuddies.Application.UnitTests.Users.Commands;

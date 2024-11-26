@@ -7,6 +7,8 @@ using SportyBuddies.Application.Features.Conversations.Commands.CreateConversati
 using SportyBuddies.Application.Mappings;
 using SportyBuddies.Domain.Buddies;
 using SportyBuddies.Domain.Common;
+using SportyBuddies.Domain.Common.Interfaces;
+using SportyBuddies.Domain.Common.Interfaces.Repositories;
 using SportyBuddies.Domain.Conversations;
 using SportyBuddies.Domain.Users;
 

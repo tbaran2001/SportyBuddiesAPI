@@ -2,6 +2,8 @@
 using MediatR;
 using SportyBuddies.Application.Common.DTOs.Buddy;
 using SportyBuddies.Domain.Buddies;
+using SportyBuddies.Domain.Common.Interfaces;
+using SportyBuddies.Domain.Common.Interfaces.Repositories;
 
 namespace SportyBuddies.Application.Features.Buddies.Queries.GetUserBuddies;
 

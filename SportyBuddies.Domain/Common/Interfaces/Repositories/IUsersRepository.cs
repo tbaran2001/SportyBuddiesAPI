@@ -1,4 +1,6 @@
-namespace SportyBuddies.Domain.Users;
+using SportyBuddies.Domain.Users;
+
+namespace SportyBuddies.Domain.Common.Interfaces.Repositories;
 
 public interface IUsersRepository
 {
