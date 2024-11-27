@@ -33,16 +33,20 @@ public class MatchesRepository(SportyBuddiesDbContext dbContext) : IMatchesRepos
 
     public async Task<Match?> GetRandomMatchAsync(Guid userId)
     {
-        var matches = await dbContext.Matches
+        var count = await dbContext.Matches.CountAsync(m => m.UserId == userId && m.Swipe == null);
+        if (count == 0)
+            return null;
+
+        var randomIndex = new Random().Next(count);
+
+        return await dbContext.Matches
             .Where(m => m.UserId == userId && m.Swipe == null)
             .Include(m => m.User)
             .Include(m => m.MatchedUser)
             .ThenInclude(u => u.Sports)
-            .ToListAsync();
-
-        var randomMatch = matches.MinBy(m => Guid.NewGuid());
-
-        return randomMatch;
+            .Skip(randomIndex)
+            .Take(1)
+            .FirstOrDefaultAsync();
     }
 
     public Task RemoveRangeAsync(IEnumerable<Match> matches)
