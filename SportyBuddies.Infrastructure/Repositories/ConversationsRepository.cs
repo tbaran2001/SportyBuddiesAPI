@@ -42,26 +42,11 @@ public class ConversationsRepository(SportyBuddiesDbContext dbContext) : IConver
             .ToListAsync();
     }
 
-    public async Task<bool> AreParticipantsBuddiesAsync(ICollection<Guid> participantIds)
-    {
-        var first = participantIds.First();
-        var last = participantIds.Last();
-        return await dbContext.Buddies
-            .AnyAsync(b =>
-                b.UserId == first && b.MatchedUserId == last || b.UserId == last && b.MatchedUserId == first);
-    }
-
     public async Task<bool> UsersHaveConversationAsync(Guid firstUserId, Guid secondUserId)
     {
         return await dbContext.Conversations
             .Where(c => c.Participants.Any(p => p.UserId == firstUserId))
             .Where(c => c.Participants.Any(p => p.UserId == secondUserId))
             .AnyAsync();
-    }
-
-    public async Task<bool> ExistsAsync(Guid conversationId)
-    {
-        return await dbContext.Conversations
-            .AnyAsync(c => c.Id == conversationId);
     }
 }
