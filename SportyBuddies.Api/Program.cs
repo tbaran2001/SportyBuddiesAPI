@@ -12,7 +12,6 @@ builder.Host.UseSerilog((context, loggerConfig) =>
     loggerConfig.ReadFrom.Configuration(context.Configuration));
 
 builder.Services.AddControllers();
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -22,7 +21,6 @@ builder.Services
     .AddIdentity(builder.Configuration);
 
 builder.Services.AddHttpContextAccessor();
-
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddCors(options =>
@@ -51,17 +49,19 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseMiddleware<RequestContextLoggingMiddleware>();
 app.UseSerilogRequestLogging();
+app.UseStaticFiles();
+
+app.UseMiddleware<RequestContextLoggingMiddleware>();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-app.MapIdentityApi();
-
 app.UseCors("React");
-app.UseStaticFiles();
+
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
+app.MapIdentityApi();
 app.MapHub<ChatHub>("chatHub");
 
 app.Run();
