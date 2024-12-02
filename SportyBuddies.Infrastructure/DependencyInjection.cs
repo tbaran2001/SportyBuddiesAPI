@@ -1,4 +1,8 @@
 ﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +18,7 @@ using SportyBuddies.Domain.Matches;
 using SportyBuddies.Domain.Sports;
 using SportyBuddies.Domain.Users;
 using SportyBuddies.Infrastructure.Clock;
+using SportyBuddies.Infrastructure.Identity;
 using SportyBuddies.Infrastructure.Outbox;
 using SportyBuddies.Infrastructure.Repositories;
 using SportyBuddies.Infrastructure.Services;
@@ -92,5 +97,49 @@ public static class DependencyInjection
         services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
 
         services.ConfigureOptions<ProcessOutboxMessagesJobSetup>();
+    }
+
+    public static IServiceCollection AddIdentity(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddAuthentication(IdentityConstants.ApplicationScheme)
+            .AddIdentityCookies();
+
+        services.ConfigureApplicationCookie(options =>
+        {
+            options.Cookie.HttpOnly = false;
+            options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            options.Cookie.SameSite = SameSiteMode.None;
+        });
+
+        services.AddAuthorizationBuilder();
+
+        services.AddIdentityCore<ApplicationUser>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredLength = 3;
+            })
+            .AddEntityFrameworkStores<SportyBuddiesDbContext>()
+            .AddApiEndpoints();
+
+        services.AddScoped<UserManager<ApplicationUser>, CustomUserManager>();
+        services.AddScoped<IdentityEventsHandler>();
+
+        return services;
+    }
+
+    public static IEndpointRouteBuilder MapIdentityApi(this IEndpointRouteBuilder endpoints)
+    {
+        endpoints.MapGroup("/api").MapCustomIdentityApi<ApplicationUser>();
+
+        endpoints.MapPost("/api/logout", async (SignInManager<ApplicationUser> signInManager) =>
+        {
+            await signInManager.SignOutAsync();
+            return TypedResults.Ok();
+        });
+
+        return endpoints;
     }
 }

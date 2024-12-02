@@ -1,7 +1,7 @@
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using SportyBuddies.Domain.Users;
 
-namespace SportyBuddies.Identity.Models;
+namespace SportyBuddies.Infrastructure.Identity;
 
 public class ApplicationUser : IdentityUser<Guid>
 {

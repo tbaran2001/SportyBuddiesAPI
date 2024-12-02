@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SportyBuddies.Infrastructure;
@@ -11,9 +12,11 @@ using SportyBuddies.Infrastructure;
 namespace SportyBuddies.Infrastructure.Migrations
 {
     [DbContext(typeof(SportyBuddiesDbContext))]
-    partial class SportyBuddiesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241202143836_AddIdentity")]
+    partial class AddIdentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -414,12 +417,12 @@ namespace SportyBuddies.Infrastructure.Migrations
                         .HasColumnName("name");
 
                     b.HasKey("Id")
-                        .HasName("pk_users");
+                        .HasName("pk_domain_users");
 
                     b.HasIndex("MainPhotoId")
-                        .HasDatabaseName("ix_users_main_photo_id");
+                        .HasDatabaseName("ix_domain_users_main_photo_id");
 
-                    b.ToTable("users", (string)null);
+                    b.ToTable("domain_users", (string)null);
                 });
 
             modelBuilder.Entity("SportyBuddies.Domain.Users.UserPhoto", b =>
@@ -672,14 +675,14 @@ namespace SportyBuddies.Infrastructure.Migrations
                         .HasForeignKey("MatchedUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_buddies_users_matched_user_id");
+                        .HasConstraintName("fk_buddies_domain_users_matched_user_id");
 
                     b.HasOne("SportyBuddies.Domain.Users.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_buddies_users_user_id");
+                        .HasConstraintName("fk_buddies_domain_users_user_id");
 
                     b.Navigation("Conversation");
 
@@ -695,7 +698,7 @@ namespace SportyBuddies.Infrastructure.Migrations
                         .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_conversations_users_creator_id");
+                        .HasConstraintName("fk_conversations_domain_users_creator_id");
 
                     b.Navigation("Creator");
                 });
@@ -714,7 +717,7 @@ namespace SportyBuddies.Infrastructure.Migrations
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_messages_users_sender_id");
+                        .HasConstraintName("fk_messages_domain_users_sender_id");
 
                     b.Navigation("Conversation");
 
@@ -735,7 +738,7 @@ namespace SportyBuddies.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_participants_users_user_id");
+                        .HasConstraintName("fk_participants_domain_users_user_id");
 
                     b.Navigation("Conversation");
 
@@ -749,14 +752,14 @@ namespace SportyBuddies.Infrastructure.Migrations
                         .HasForeignKey("MatchedUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_matches_users_matched_user_id");
+                        .HasConstraintName("fk_matches_domain_users_matched_user_id");
 
                     b.HasOne("SportyBuddies.Domain.Users.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_matches_users_user_id");
+                        .HasConstraintName("fk_matches_domain_users_user_id");
 
                     b.Navigation("MatchedUser");
 
@@ -769,7 +772,7 @@ namespace SportyBuddies.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("MainPhotoId")
                         .OnDelete(DeleteBehavior.SetNull)
-                        .HasConstraintName("fk_users_user_photos_main_photo_id");
+                        .HasConstraintName("fk_domain_users_user_photos_main_photo_id");
 
                     b.OwnsOne("SportyBuddies.Domain.Users.Preferences", "Preferences", b1 =>
                         {
@@ -795,11 +798,11 @@ namespace SportyBuddies.Infrastructure.Migrations
 
                             b1.HasKey("UserId");
 
-                            b1.ToTable("users");
+                            b1.ToTable("domain_users");
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId")
-                                .HasConstraintName("fk_users_users_id");
+                                .HasConstraintName("fk_domain_users_domain_users_id");
                         });
 
                     b.Navigation("MainPhoto");
@@ -814,7 +817,7 @@ namespace SportyBuddies.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_user_photos_users_user_id");
+                        .HasConstraintName("fk_user_photos_domain_users_user_id");
 
                     b.Navigation("User");
                 });
@@ -833,7 +836,7 @@ namespace SportyBuddies.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_user_sports_users_user_id");
+                        .HasConstraintName("fk_user_sports_domain_users_user_id");
                 });
 
             modelBuilder.Entity("SportyBuddies.Domain.Conversations.Conversation", b =>

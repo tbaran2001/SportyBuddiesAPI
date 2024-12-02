@@ -8,7 +8,7 @@ using SportyBuddies.Application.Features.Users.Commands.DeleteUser;
 using SportyBuddies.Application.Features.Users.Commands.UpdateUser;
 using SportyBuddies.Application.Features.Users.Commands.UpdateUserPreferences;
 using SportyBuddies.Application.Features.Users.Queries.GetUser;
-using SportyBuddies.Identity.Models;
+using SportyBuddies.Infrastructure.Identity;
 
 namespace SportyBuddies.Api.Controllers
 {

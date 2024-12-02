@@ -3,7 +3,6 @@ using SportyBuddies.Api.Extensions;
 using SportyBuddies.Api.Middlewares;
 using SportyBuddies.Application;
 using SportyBuddies.Application.Hubs;
-using SportyBuddies.Identity;
 using SportyBuddies.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,9 +42,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     
     app.ApplyMigrations();
-    //app.ApplyIdentityMigrations();
-    
-    //app.SeedData();
+
+    app.SeedData();
 }
 
 app.UseHttpsRedirection();

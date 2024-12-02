@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using SportyBuddies.Api.Contracts.Matches;
 using SportyBuddies.Application.Features.Matches.Commands.UpdateMatch;
 using SportyBuddies.Application.Features.Matches.Queries.GetRandomMatch;
-using SportyBuddies.Identity.Models;
+using SportyBuddies.Infrastructure.Identity;
 
 namespace SportyBuddies.Api.Controllers
 {

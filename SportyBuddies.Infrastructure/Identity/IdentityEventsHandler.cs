@@ -1,9 +1,6 @@
-using SportyBuddies.Domain.Sports;
 using SportyBuddies.Domain.Users;
-using SportyBuddies.Identity.Models;
-using SportyBuddies.Infrastructure;
 
-namespace SportyBuddies.Identity;
+namespace SportyBuddies.Infrastructure.Identity;
 
 public class IdentityEventsHandler(SportyBuddiesDbContext context)
 {

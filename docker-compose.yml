@@ -5,10 +5,9 @@
       context: .
       dockerfile: SportyBuddies.Api/Dockerfile
     ports:
-      - "8080:8080"
+      - "8082:8080"
     depends_on:
       - sportybuddies.db
-      - sportybuddiesidentity.db
       - sportybuddies.redis
 
   sportybuddies.db:
@@ -22,18 +21,6 @@
       - ./.containers/database/sportybuddies:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-
-  sportybuddiesidentity.db:
-    image: postgres:latest
-    container_name: sportybuddiesidentity.db
-    environment:
-      - POSTGRES_DB=sportybuddiesidentity
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=123
-    volumes:
-      - ./.containers/database/sportybuddiesidentity:/var/lib/postgresql/data
-    ports:
-      - "5433:5432"
         
   sportybuddies.seq:
     image: datalust/seq:latest

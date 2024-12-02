@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SportyBuddies.Application.Features.Users.Commands.UploadPhoto;
 using SportyBuddies.Application.Features.Users.Queries.GetUserMainPhoto;
-using SportyBuddies.Identity.Models;
+using SportyBuddies.Infrastructure.Identity;
 
 namespace SportyBuddies.Api.Controllers
 {

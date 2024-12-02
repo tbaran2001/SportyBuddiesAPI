@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using SportyBuddies.Identity.Models;
 
-namespace SportyBuddies.Identity;
+namespace SportyBuddies.Infrastructure.Identity;
 
 public class CustomUserManager : UserManager<ApplicationUser>
 {

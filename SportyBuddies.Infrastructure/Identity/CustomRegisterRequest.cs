@@ -1,6 +1,6 @@
 ﻿using SportyBuddies.Domain.Users;
 
-namespace SportyBuddies.Identity;
+namespace SportyBuddies.Infrastructure.Identity;
 
 public sealed class CustomRegisterRequest
 {

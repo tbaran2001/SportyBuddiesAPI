@@ -22,7 +22,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\SportyBuddies.Application\SportyBuddies.Application.csproj" />
-      <ProjectReference Include="..\SportyBuddies.Identity\SportyBuddies.Identity.csproj" />
       <ProjectReference Include="..\SportyBuddies.Infrastructure\SportyBuddies.Infrastructure.csproj" />
     </ItemGroup>
 

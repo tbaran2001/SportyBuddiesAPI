@@ -1,18 +1,16 @@
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SportyBuddies.Api.Contracts.Conversations;
 using SportyBuddies.Api.Contracts.Messages;
-using SportyBuddies.Application.Common.DTOs.Conversation;
 using SportyBuddies.Application.Features.Conversations.Commands.CreateConversation;
 using SportyBuddies.Application.Features.Conversations.Commands.SendMessage;
 using SportyBuddies.Application.Features.Conversations.Queries.GetConversation;
 using SportyBuddies.Application.Features.Conversations.Queries.GetConversationMessages;
 using SportyBuddies.Application.Features.Conversations.Queries.GetLastMessageFromEachUserConversation;
-using SportyBuddies.Identity.Models;
+using SportyBuddies.Infrastructure.Identity;
 
 namespace SportyBuddies.Api.Controllers
 {

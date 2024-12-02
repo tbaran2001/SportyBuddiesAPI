@@ -7,7 +7,7 @@ using SportyBuddies.Application.Features.Sports.Queries.GetSports;
 using SportyBuddies.Application.Features.UserSports.Commands.AddUserSport;
 using SportyBuddies.Application.Features.UserSports.Commands.RemoveUserSport;
 using SportyBuddies.Application.Features.UserSports.Queries.GetUserSports;
-using SportyBuddies.Identity.Models;
+using SportyBuddies.Infrastructure.Identity;
 
 namespace SportyBuddies.Api.Controllers
 {

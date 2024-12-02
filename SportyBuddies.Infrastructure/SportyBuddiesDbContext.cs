@@ -1,5 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using SportyBuddies.Application.Common.Interfaces;
@@ -9,6 +11,7 @@ using SportyBuddies.Domain.Conversations;
 using SportyBuddies.Domain.Matches;
 using SportyBuddies.Domain.Sports;
 using SportyBuddies.Domain.Users;
+using SportyBuddies.Infrastructure.Identity;
 using SportyBuddies.Infrastructure.Outbox;
 
 namespace SportyBuddies.Infrastructure;
@@ -16,7 +19,7 @@ namespace SportyBuddies.Infrastructure;
 public class SportyBuddiesDbContext(
     DbContextOptions<SportyBuddiesDbContext> options,
     IDateTimeProvider dateTimeProvider)
-    : DbContext(options), IUnitOfWork
+    : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>(options), IUnitOfWork
 {
     private static readonly JsonSerializerSettings JsonSerializerSettings = new()
     {
@@ -24,7 +27,7 @@ public class SportyBuddiesDbContext(
     };
 
     public DbSet<Sport> Sports { get; set; }
-    public DbSet<User> Users { get; set; }
+    public new DbSet<User> Users { get; set; }
     public DbSet<UserPhoto> UserPhotos { get; set; }
     public DbSet<Match> Matches { get; set; }
     public DbSet<Buddy> Buddies { get; set; }

@@ -1,8 +1,5 @@
 ﻿using Bogus;
-using Microsoft.AspNetCore.Identity;
 using SportyBuddies.Domain.Sports;
-using SportyBuddies.Identity;
-using SportyBuddies.Identity.Models;
 using SportyBuddies.Infrastructure;
 
 namespace SportyBuddies.Api.Extensions;

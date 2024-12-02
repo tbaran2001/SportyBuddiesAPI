@@ -14,9 +14,8 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using SportyBuddies.Identity.Models;
 
-namespace SportyBuddies.Identity;
+namespace SportyBuddies.Infrastructure.Identity;
 
 public static class IdentityApiEndpointRouteBuilderExtensions
 {
