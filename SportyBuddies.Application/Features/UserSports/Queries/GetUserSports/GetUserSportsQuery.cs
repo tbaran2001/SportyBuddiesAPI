@@ -3,4 +3,4 @@ using SportyBuddies.Application.Common.DTOs.Sport;
 
 namespace SportyBuddies.Application.Features.UserSports.Queries.GetUserSports;
 
-public record GetUserSportsQuery(Guid UserId) : IRequest<List<SportResponse>>;
+public record GetUserSportsQuery() : IRequest<List<SportResponse>>;

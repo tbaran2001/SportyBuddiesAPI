@@ -41,7 +41,7 @@ namespace SportyBuddies.Api.Controllers
             return Ok(users);
         }
 
-        [HttpPost("AddRandomSportsToUsers")]
+        /*[HttpPost("AddRandomSportsToUsers")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> AddRandomSportsToUsers()
         {
@@ -72,6 +72,6 @@ namespace SportyBuddies.Api.Controllers
             }
 
             return NoContent();
-        }
+        }*/
     }
 }

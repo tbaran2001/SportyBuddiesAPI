@@ -4,4 +4,4 @@ using SportyBuddies.Domain.Conversations;
 
 namespace SportyBuddies.Application.Features.Conversations.Commands.SendMessage;
 
-public record SendMessageCommand(Guid UserId, Guid ConversationId, string Content):IRequest<MessageResponse>;
+public record SendMessageCommand(Guid ConversationId, string Content):IRequest<MessageResponse>;

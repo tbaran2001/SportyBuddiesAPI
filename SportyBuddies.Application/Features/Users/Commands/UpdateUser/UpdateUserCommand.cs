@@ -4,5 +4,5 @@ using SportyBuddies.Domain.Users;
 
 namespace SportyBuddies.Application.Features.Users.Commands.UpdateUser;
 
-public record UpdateUserCommand(Guid UserId, string Name, string Description, Gender Gender, DateOnly DateOfBirth)
+public record UpdateUserCommand(string Name, string Description, Gender Gender, DateOnly DateOfBirth)
     : IRequest<UserResponse>;

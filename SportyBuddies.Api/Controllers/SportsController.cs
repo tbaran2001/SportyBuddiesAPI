@@ -1,21 +1,18 @@
-using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SportyBuddies.Application.Common.DTOs.Sport;
 using SportyBuddies.Application.Features.Sports.Queries.GetSports;
 using SportyBuddies.Application.Features.UserSports.Commands.AddUserSport;
 using SportyBuddies.Application.Features.UserSports.Commands.RemoveUserSport;
 using SportyBuddies.Application.Features.UserSports.Queries.GetUserSports;
-using SportyBuddies.Infrastructure.Identity;
 
 namespace SportyBuddies.Api.Controllers
 {
     [ApiController]
     [Authorize]
     [Route("api/[controller]")]
-    public class SportsController(UserManager<ApplicationUser> userManager, ISender mediator, IMapper mapper) : ControllerBase
+    public class SportsController(ISender mediator) : ControllerBase
     {
         [HttpGet("All")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -32,10 +29,7 @@ namespace SportyBuddies.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<SportResponse>>> GetUserSports()
         {
-            var userId = userManager.GetUserId(User);
-            if (userId == null) return Unauthorized();
-
-            var query = new GetUserSportsQuery(Guid.Parse(userId));
+            var query = new GetUserSportsQuery();
 
             var userSportsResult = await mediator.Send(query);
 
@@ -46,10 +40,7 @@ namespace SportyBuddies.Api.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> AddSportToUser(Guid sportId)
         {
-            var userId = userManager.GetUserId(User);
-            if (userId == null) return Unauthorized();
-
-            var command = new AddUserSportCommand(Guid.Parse(userId), sportId);
+            var command = new AddUserSportCommand(sportId);
 
             await mediator.Send(command);
 
@@ -60,10 +51,7 @@ namespace SportyBuddies.Api.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> RemoveSportFromUser(Guid sportId)
         {
-            var userId = userManager.GetUserId(User);
-            if (userId == null) return Unauthorized();
-
-            var command = new RemoveUserSportCommand(Guid.Parse(userId), sportId);
+            var command = new RemoveUserSportCommand(sportId);
 
             await mediator.Send(command);
 
