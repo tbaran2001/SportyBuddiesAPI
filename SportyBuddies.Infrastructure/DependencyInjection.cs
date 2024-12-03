@@ -101,9 +101,6 @@ public static class DependencyInjection
 
     public static IServiceCollection AddIdentity(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddAuthentication(IdentityConstants.ApplicationScheme)
-            .AddIdentityCookies();
-
         services.ConfigureApplicationCookie(options =>
         {
             options.Cookie.HttpOnly = false;
@@ -113,7 +110,7 @@ public static class DependencyInjection
 
         services.AddAuthorizationBuilder();
 
-        services.AddIdentityCore<ApplicationUser>(options =>
+        services.AddIdentityApiEndpoints<ApplicationUser>(options =>
             {
                 options.Password.RequireDigit = false;
                 options.Password.RequireLowercase = false;
@@ -121,8 +118,7 @@ public static class DependencyInjection
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequiredLength = 3;
             })
-            .AddEntityFrameworkStores<SportyBuddiesDbContext>()
-            .AddApiEndpoints();
+            .AddEntityFrameworkStores<SportyBuddiesDbContext>();
 
         services.AddScoped<UserManager<ApplicationUser>, CustomUserManager>();
         services.AddScoped<IdentityEventsHandler>();
