@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SportyBuddies.Application.Common.DTOs.Sport;
 using SportyBuddies.Application.Features.Sports.Queries.GetSports;
 using SportyBuddies.Application.Features.UserSports.Commands.AddUserSport;
 using SportyBuddies.Application.Features.UserSports.Commands.RemoveUserSport;
@@ -17,7 +18,8 @@ namespace SportyBuddies.Api.Controllers
     public class SportsController(UserManager<ApplicationUser> userManager, ISender mediator, IMapper mapper) : ControllerBase
     {
         [HttpGet("All")]
-        public async Task<IActionResult> GetSports()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<SportResponse>>> GetSports()
         {
             var query = new GetSportsQuery();
 
@@ -27,7 +29,8 @@ namespace SportyBuddies.Api.Controllers
         }
         
         [HttpGet]
-        public async Task<IActionResult> GetUserSports()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<SportResponse>>> GetUserSports()
         {
             var userId = userManager.GetUserId(User);
             if (userId == null) return Unauthorized();
@@ -40,7 +43,8 @@ namespace SportyBuddies.Api.Controllers
         }
 
         [HttpPost("{sportId:guid}")]
-        public async Task<IActionResult> AddSportToUser(Guid sportId)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> AddSportToUser(Guid sportId)
         {
             var userId = userManager.GetUserId(User);
             if (userId == null) return Unauthorized();
@@ -53,6 +57,7 @@ namespace SportyBuddies.Api.Controllers
         }
 
         [HttpDelete("{sportId:guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> RemoveSportFromUser(Guid sportId)
         {
             var userId = userManager.GetUserId(User);

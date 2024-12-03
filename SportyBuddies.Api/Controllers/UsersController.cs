@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SportyBuddies.Api.Contracts.Users;
+using SportyBuddies.Application.Common.DTOs.User;
 using SportyBuddies.Application.Features.Users.Commands.DeleteUser;
 using SportyBuddies.Application.Features.Users.Commands.UpdateUser;
 using SportyBuddies.Application.Features.Users.Commands.UpdateUserPreferences;
@@ -20,7 +21,8 @@ namespace SportyBuddies.Api.Controllers
         : ControllerBase
     {
         [HttpGet("{userId:guid}")]
-        public async Task<IActionResult> GetUser(Guid userId)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<UserWithSportsResponse>> GetUser(Guid userId)
         {
             var query = new GetUserQuery(userId);
 
@@ -30,7 +32,8 @@ namespace SportyBuddies.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetCurrentUser()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<UserWithSportsResponse>> GetCurrentUser()
         {
             var userId = userManager.GetUserId(User);
             if (userId == null) return Unauthorized();
@@ -43,7 +46,8 @@ namespace SportyBuddies.Api.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateCurrentUser(UpdateUserRequest userRequest)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<UserResponse>> UpdateCurrentUser(UpdateUserRequest userRequest)
         {
             var userId = userManager.GetUserId(User);
             if (userId == null) return Unauthorized();
@@ -57,7 +61,8 @@ namespace SportyBuddies.Api.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteCurrentUser()
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> DeleteCurrentUser()
         {
             var userId = userManager.GetUserId(User);
             if (userId == null) return Unauthorized();
@@ -70,7 +75,8 @@ namespace SportyBuddies.Api.Controllers
         }
 
         [HttpPut("Preferences")]
-        public async Task<IActionResult> UpdateUserPreferences(UpdateUserPreferencesRequest preferencesRequest)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> UpdateUserPreferences(UpdateUserPreferencesRequest preferencesRequest)
         {
             var userId = userManager.GetUserId(User);
             if (userId == null) return Unauthorized();

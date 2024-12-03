@@ -1,6 +1,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SportyBuddies.Api.Contracts.Sports;
+using SportyBuddies.Application.Common.DTOs.Sport;
+using SportyBuddies.Application.Common.DTOs.User;
 using SportyBuddies.Application.Features.Sports.Commands.CreateSport;
 using SportyBuddies.Application.Features.Sports.Queries.GetSports;
 using SportyBuddies.Application.Features.Users.Queries.GetUsers;
@@ -13,7 +15,8 @@ namespace SportyBuddies.Api.Controllers
     public class AdminController(ISender mediator) : ControllerBase
     {
         [HttpPost("Sports")]
-        public async Task<IActionResult> AddSport(CreateSportRequest request)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> AddSport(CreateSportRequest request)
         {
             var command = new CreateSportCommand(request.Name, request.Description);
             await mediator.Send(command);
@@ -21,7 +24,8 @@ namespace SportyBuddies.Api.Controllers
         }
 
         [HttpGet("Sports")]
-        public async Task<IActionResult> GetSports()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<SportResponse>>> GetSports()
         {
             var query = new GetSportsQuery();
             var sports = await mediator.Send(query);
@@ -29,7 +33,8 @@ namespace SportyBuddies.Api.Controllers
         }
 
         [HttpGet("Users")]
-        public async Task<IActionResult> GetUsers()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<UserWithSportsResponse>>> GetUsers()
         {
             var query = new GetUsersQuery();
             var users = await mediator.Send(query);
@@ -37,7 +42,8 @@ namespace SportyBuddies.Api.Controllers
         }
 
         [HttpPost("AddRandomSportsToUsers")]
-        public async Task<IActionResult> AddRandomSportsToUsers()
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> AddRandomSportsToUsers()
         {
             var usersQuery = new GetUsersQuery();
             var users = await mediator.Send(usersQuery);

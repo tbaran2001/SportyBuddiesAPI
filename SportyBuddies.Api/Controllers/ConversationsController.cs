@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SportyBuddies.Api.Contracts.Conversations;
 using SportyBuddies.Api.Contracts.Messages;
+using SportyBuddies.Application.Common.DTOs.Conversation;
 using SportyBuddies.Application.Features.Conversations.Commands.CreateConversation;
 using SportyBuddies.Application.Features.Conversations.Commands.SendMessage;
 using SportyBuddies.Application.Features.Conversations.Queries.GetConversation;
@@ -21,7 +22,8 @@ namespace SportyBuddies.Api.Controllers
         : ControllerBase
     {
         [HttpGet("{conversationId}")]
-        public async Task<IActionResult> GetConversation(Guid conversationId)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<ConversationResponse>> GetConversation(Guid conversationId)
         {
             var query = new GetConversationQuery(conversationId);
             var result = await mediator.Send(query);
@@ -30,7 +32,8 @@ namespace SportyBuddies.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateConversation(CreateConversationRequest request)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<CreateConversationResponse>> CreateConversation(CreateConversationRequest request)
         {
             var userId = userManager.GetUserId(User);
             if (userId == null) return Unauthorized();
@@ -43,7 +46,8 @@ namespace SportyBuddies.Api.Controllers
         }
 
         [HttpPost("{conversationId}/Messages")]
-        public async Task<IActionResult> SendMessage(Guid conversationId,SendMessageRequest request)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<MessageResponse>> SendMessage(Guid conversationId, SendMessageRequest request)
         {
             var userId = userManager.GetUserId(User);
             if (userId == null) return Unauthorized();
@@ -55,7 +59,8 @@ namespace SportyBuddies.Api.Controllers
         }
 
         [HttpGet("{conversationId}/Messages")]
-        public async Task<IActionResult> GetConversationMessages(Guid conversationId)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<MessageResponse>>> GetConversationMessages(Guid conversationId)
         {
             var userId = userManager.GetUserId(User);
             if (userId == null) return Unauthorized();
@@ -67,7 +72,8 @@ namespace SportyBuddies.Api.Controllers
         }
 
         [HttpGet("LastMessages")]
-        public async Task<IActionResult> GetLastMessageFromEachUserConversation()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<MessageResponse>>> GetLastMessageFromEachUserConversation()
         {
             var userId = userManager.GetUserId(User);
             if (userId == null) return Unauthorized();
