@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using SportyBuddies.Application.Authentication;
 using SportyBuddies.Application.Common.Behaviors;
-using SportyBuddies.Domain.Common.Interfaces;
 using SportyBuddies.Domain.Common.Interfaces.Services;
 using SportyBuddies.Domain.Services;
 
@@ -27,6 +27,9 @@ public static class DependencyInjection
         services.AddScoped<IConversationService, ConversationService>();
 
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+        services.AddScoped<IUserContext, UserContext>();
+        services.AddHttpContextAccessor();
 
         return services;
     }

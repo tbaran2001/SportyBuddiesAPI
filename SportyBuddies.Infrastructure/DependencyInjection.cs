@@ -51,16 +51,16 @@ public static class DependencyInjection
 
         services.AddScoped<IUnitOfWork>(serviceProvider =>
             serviceProvider.GetRequiredService<SportyBuddiesDbContext>());
-        
+
         AddCaching(services, configuration);
-        
+
         //AddApiVersioning(services);
-        
+
         AddBackgroundJobs(services, configuration);
 
         return services;
     }
-    
+
     private static void AddCaching(IServiceCollection services, IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("Cache") ??
@@ -87,11 +87,11 @@ public static class DependencyInjection
                 options.SubstituteApiVersionInUrl = true;
             });
     }
-    
+
     private static void AddBackgroundJobs(IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<OutboxOptions>(configuration.GetSection("Outbox"));
-        
+
         services.AddQuartz();
 
         services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
@@ -128,13 +128,16 @@ public static class DependencyInjection
 
     public static IEndpointRouteBuilder MapIdentityApi(this IEndpointRouteBuilder endpoints)
     {
-        endpoints.MapGroup("/api").MapCustomIdentityApi<ApplicationUser>();
+        endpoints.MapGroup("/api")
+            .WithTags("Identity")
+            .MapCustomIdentityApi<ApplicationUser>();
 
         endpoints.MapPost("/api/logout", async (SignInManager<ApplicationUser> signInManager) =>
         {
             await signInManager.SignOutAsync();
             return TypedResults.Ok();
-        });
+        })
+            .WithTags("Identity");
 
         return endpoints;
     }
