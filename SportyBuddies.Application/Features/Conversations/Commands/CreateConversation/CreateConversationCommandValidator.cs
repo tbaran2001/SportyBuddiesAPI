@@ -7,7 +7,6 @@ public class CreateConversationCommandValidator : AbstractValidator<CreateConver
 {
     public CreateConversationCommandValidator()
     {
-        RuleFor(x => x.CreatorId).NotEmpty();
         RuleFor(x => x.ParticipantId).NotEmpty();
     }
 }
