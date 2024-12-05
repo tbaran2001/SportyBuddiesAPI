@@ -118,6 +118,7 @@ public static class DependencyInjection
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequiredLength = 3;
             })
+            .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<SportyBuddiesDbContext>();
 
         services.AddScoped<UserManager<ApplicationUser>, CustomUserManager>();

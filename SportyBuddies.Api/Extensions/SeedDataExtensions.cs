@@ -1,4 +1,6 @@
 ﻿using Bogus;
+using Microsoft.AspNetCore.Identity;
+using SportyBuddies.Domain.Constants;
 using SportyBuddies.Domain.Sports;
 using SportyBuddies.Infrastructure;
 
@@ -12,6 +14,30 @@ public static class SeedDataExtensions
         var dbContext = scope.ServiceProvider.GetRequiredService<SportyBuddiesDbContext>();
 
         SeedSports(dbContext);
+        SeedRoles(dbContext);
+    }
+
+    private static void SeedRoles(SportyBuddiesDbContext dbContext)
+    {
+        var roles = new List<IdentityRole<Guid>>()
+        {
+            new(UserRoles.User)
+            {
+                NormalizedName = UserRoles.User.ToUpper()
+            },
+            new(UserRoles.Owner)
+            {
+                NormalizedName = UserRoles.Owner.ToUpper()
+            },
+            new(UserRoles.Admin)
+            {
+                NormalizedName = UserRoles.Admin.ToUpper()
+            },
+        };
+
+
+        dbContext.Roles.AddRange(roles);
+        dbContext.SaveChanges();
     }
 
     private static void SeedSports(SportyBuddiesDbContext dbContext)
