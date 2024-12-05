@@ -1,18 +1,19 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
+using SportyBuddies.Application.Exceptions;
 
 namespace SportyBuddies.Application.Authentication;
 
 public class UserContext(IHttpContextAccessor httpContextAccessor) : IUserContext
 {
-    public CurrentUser? GetCurrentUser()
+    public CurrentUser GetCurrentUser()
     {
-        var user = httpContextAccessor?.HttpContext?.User;
+        var user = httpContextAccessor.HttpContext?.User;
         if (user == null)
             throw new InvalidOperationException("User Context is not available");
 
         if (user.Identity == null || !user.Identity.IsAuthenticated)
-            return null;
+            throw new UnauthorizedException("User is not authenticated");
 
         var userId = user.FindFirst(ClaimTypes.NameIdentifier)!.Value;
         var email = user.FindFirst(ClaimTypes.Email)!.Value;
