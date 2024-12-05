@@ -1,5 +1,4 @@
 using FluentValidation;
-using SportyBuddies.Domain.Buddies;
 
 namespace SportyBuddies.Application.Features.Conversations.Commands.CreateConversation;
 

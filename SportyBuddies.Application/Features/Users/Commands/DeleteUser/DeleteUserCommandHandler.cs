@@ -13,7 +13,7 @@ public class DeleteUserCommandHandler(IUsersRepository sportsRepository, IUnitOf
     {
         var currentUser = userContext.GetCurrentUser();
 
-        var user = await sportsRepository.GetUserByIdAsync(currentUser!.Id);
+        var user = await sportsRepository.GetUserByIdAsync(currentUser.Id);
         if (user == null)
             throw new NotFoundException(nameof(user), currentUser.Id.ToString());
 

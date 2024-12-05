@@ -6,7 +6,6 @@ using SportyBuddies.Application.Common.DTOs.User;
 using SportyBuddies.Application.Features.Sports.Commands.CreateSport;
 using SportyBuddies.Application.Features.Sports.Queries.GetSports;
 using SportyBuddies.Application.Features.Users.Queries.GetUsers;
-using SportyBuddies.Application.Features.UserSports.Commands.AddUserSport;
 
 namespace SportyBuddies.Api.Controllers
 {

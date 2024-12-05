@@ -3,7 +3,6 @@ using MediatR;
 using SportyBuddies.Application.Common.DTOs.Sport;
 using SportyBuddies.Application.Exceptions;
 using SportyBuddies.Domain.Common;
-using SportyBuddies.Domain.Common.Interfaces;
 using SportyBuddies.Domain.Common.Interfaces.Repositories;
 using SportyBuddies.Domain.Sports;
 

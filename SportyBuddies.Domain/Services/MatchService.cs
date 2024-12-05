@@ -1,9 +1,7 @@
 using SportyBuddies.Domain.Common;
-using SportyBuddies.Domain.Common.Interfaces;
 using SportyBuddies.Domain.Common.Interfaces.Repositories;
 using SportyBuddies.Domain.Common.Interfaces.Services;
 using SportyBuddies.Domain.Matches;
-using SportyBuddies.Domain.Users;
 
 namespace SportyBuddies.Domain.Services;
 
@@ -18,7 +16,7 @@ public class MatchService(
         var user = await usersRepository.GetUserByIdWithSportsAsync(userId);
         if (user == null)
             throw new Exception("User not found");
-        if (user.Sports == null || user.Sports.Count == 0)
+        if (user.Sports.Count == 0)
             return;
 
         var potentialMatches = await usersRepository.GetPotentialMatchesAsync(userId, user.Sports.Select(s => s.Id));

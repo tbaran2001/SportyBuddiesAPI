@@ -14,7 +14,7 @@ public class GetUserBuddiesQueryHandler(IBuddiesRepository buddiesRepository, IM
     {
         var currentUser = userContext.GetCurrentUser();
 
-        var buddies = await buddiesRepository.GetUserBuddiesAsync(currentUser!.Id);
+        var buddies = await buddiesRepository.GetUserBuddiesAsync(currentUser.Id);
 
         return mapper.Map<List<BuddyResponse>>(buddies);
     }

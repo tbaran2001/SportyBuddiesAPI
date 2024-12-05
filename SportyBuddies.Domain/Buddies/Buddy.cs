@@ -1,5 +1,4 @@
-﻿using SportyBuddies.Domain.Buddies.Events;
-using SportyBuddies.Domain.Common;
+﻿using SportyBuddies.Domain.Common;
 using SportyBuddies.Domain.Conversations;
 using SportyBuddies.Domain.Users;
 

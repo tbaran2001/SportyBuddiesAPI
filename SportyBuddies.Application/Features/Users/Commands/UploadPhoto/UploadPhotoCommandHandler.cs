@@ -19,7 +19,7 @@ public class UploadPhotoCommandHandler(
     {
         var currentUser = userContext.GetCurrentUser();
 
-        var user = await usersRepository.GetUserByIdWithPhotosAsync(currentUser!.Id);
+        var user = await usersRepository.GetUserByIdWithPhotosAsync(currentUser.Id);
         if (user == null)
             throw new NotFoundException(nameof(user), currentUser.Id.ToString());
 

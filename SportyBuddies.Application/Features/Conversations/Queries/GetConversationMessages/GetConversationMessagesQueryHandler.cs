@@ -2,7 +2,6 @@
 using MediatR;
 using SportyBuddies.Application.Common.DTOs.Conversation;
 using SportyBuddies.Application.Exceptions;
-using SportyBuddies.Domain.Common.Interfaces;
 using SportyBuddies.Domain.Common.Interfaces.Repositories;
 using SportyBuddies.Domain.Conversations;
 

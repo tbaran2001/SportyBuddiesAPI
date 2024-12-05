@@ -1,5 +1,3 @@
-﻿using SportyBuddies.Application.Common.DTOs.User;
-
-namespace SportyBuddies.Application.Common.DTOs.Conversation;
+﻿namespace SportyBuddies.Application.Common.DTOs.Conversation;
 
 public record ConversationResponse(Guid Id, Guid CreatorId, List<ParticipantResponse> Participants);

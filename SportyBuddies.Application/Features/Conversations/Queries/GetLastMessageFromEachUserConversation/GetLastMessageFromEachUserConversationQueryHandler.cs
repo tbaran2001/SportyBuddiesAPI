@@ -17,7 +17,7 @@ public class GetLastMessageFromEachUserConversationQueryHandler(
     {
         var currentUser = userContext.GetCurrentUser();
 
-        var messages = await conversationsRepository.GetLastMessageFromEachUserConversationAsync(currentUser!.Id);
+        var messages = await conversationsRepository.GetLastMessageFromEachUserConversationAsync(currentUser.Id);
         return mapper.Map<IEnumerable<MessageResponse>>(messages);
     }
 }

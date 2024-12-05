@@ -18,7 +18,7 @@ public class CreateConversationCommandHandler(
         CancellationToken cancellationToken)
     {
         var currentUser = userContext.GetCurrentUser();
-        var conversation = await conversationService.CreateConversationAsync(currentUser!.Id, command.ParticipantId);
+        var conversation = await conversationService.CreateConversationAsync(currentUser.Id, command.ParticipantId);
 
         await unitOfWork.CommitChangesAsync();
 

@@ -14,7 +14,7 @@ public class GetRandomMatchQueryHandler(IMatchesRepository matchesRepository, IM
     {
         var currentUser = userContext.GetCurrentUser();
 
-        var match = await matchesRepository.GetRandomMatchAsync(currentUser!.Id);
+        var match = await matchesRepository.GetRandomMatchAsync(currentUser.Id);
 
         return mapper.Map<RandomMatchResponse>(match);
     }

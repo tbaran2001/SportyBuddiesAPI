@@ -1,5 +1,4 @@
 ﻿using SportyBuddies.Domain.Common;
-using SportyBuddies.Domain.Users;
 
 namespace SportyBuddies.Domain.Sports;
 

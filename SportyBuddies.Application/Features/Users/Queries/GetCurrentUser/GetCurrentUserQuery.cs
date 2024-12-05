@@ -3,4 +3,4 @@ using SportyBuddies.Application.Common.DTOs.User;
 
 namespace SportyBuddies.Application.Features.Users.Queries.GetCurrentUser;
 
-public record GetCurrentUserQuery() : IRequest<UserWithSportsResponse>;
+public record GetCurrentUserQuery : IRequest<UserWithSportsResponse>;

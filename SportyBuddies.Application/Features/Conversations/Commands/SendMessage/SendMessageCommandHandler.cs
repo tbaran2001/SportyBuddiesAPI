@@ -27,7 +27,7 @@ public class SendMessageCommandHandler(
         if (conversation is null)
             throw new NotFoundException(nameof(Conversation), command.ConversationId.ToString());
 
-        var message = Message.Create(command.ConversationId, currentUser!.Id, command.Content);
+        var message = Message.Create(command.ConversationId, currentUser.Id, command.Content);
 
         await conversationsRepository.AddMessageAsync(message);
         await unitOfWork.CommitChangesAsync();

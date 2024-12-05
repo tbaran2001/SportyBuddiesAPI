@@ -15,7 +15,7 @@ public class GetUserSportsQueryHandler(IUsersRepository usersRepository, IMapper
     {
         var currentUser = userContext.GetCurrentUser();
 
-        var user = await usersRepository.GetUserByIdWithSportsAsync(currentUser!.Id);
+        var user = await usersRepository.GetUserByIdWithSportsAsync(currentUser.Id);
         if (user is null)
             throw new NotFoundException(nameof(user), currentUser.Id.ToString());
 
