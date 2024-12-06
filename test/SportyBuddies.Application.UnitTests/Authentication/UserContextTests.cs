@@ -25,7 +25,7 @@ public class UserContextTests
             new(ClaimTypes.Role, UserRoles.Admin),
             new(ClaimTypes.Role, UserRoles.User),
             new("Nationality", "German"),
-            new("DateOfBirth", dateOfBirth.ToString("yyyy-MM-dd"))
+            new("DateOfBirth", dateOfBirth.ToString("MM/dd/yyyy"))
         };
 
         var user = new ClaimsPrincipal(new ClaimsIdentity(claims, "Test"));
