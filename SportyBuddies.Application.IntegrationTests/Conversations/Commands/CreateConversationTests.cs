@@ -15,7 +15,7 @@ public class CreateConversationTests(IntegrationTestWebAppFactory factory) : Bas
     public async Task CreateConversation_ShouldCreateConversation()
     {
         // Arrange
-        var user1 = User.Create(Guid.NewGuid());
+        var user1 = User.Create(CurrentUserId);
         var user2 = User.Create(Guid.NewGuid());
         await DbContext.Users.AddAsync(user1);
         await DbContext.Users.AddAsync(user2);
@@ -25,7 +25,7 @@ public class CreateConversationTests(IntegrationTestWebAppFactory factory) : Bas
         await DbContext.Buddies.AddAsync(buddy2);
         await DbContext.SaveChangesAsync();
 
-        var command = new CreateConversationCommand(user1.Id, user2.Id);
+        var command = new CreateConversationCommand(user2.Id);
 
         // Act
         var result = await Sender.Send(command);

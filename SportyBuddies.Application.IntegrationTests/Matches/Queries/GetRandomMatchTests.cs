@@ -13,7 +13,7 @@ public class GetRandomMatchTests(IntegrationTestWebAppFactory factory) : BaseInt
     public async Task GetRandomMatch_ShouldReturnMatch_WhenMatchExists()
     {
         // Arrange
-        var user = User.Create(Guid.NewGuid());
+        var user = User.Create(CurrentUserId);
         var matchedUser = User.Create(Guid.NewGuid());
         await DbContext.Users.AddAsync(user);
         await DbContext.Users.AddAsync(matchedUser);
@@ -23,7 +23,7 @@ public class GetRandomMatchTests(IntegrationTestWebAppFactory factory) : BaseInt
         
         await DbContext.SaveChangesAsync();
         
-        var query = new GetRandomMatchQuery(user.Id);
+        var query = new GetRandomMatchQuery();
         
         // Act
         var result = await Sender.Send(query);
@@ -37,11 +37,11 @@ public class GetRandomMatchTests(IntegrationTestWebAppFactory factory) : BaseInt
     public async Task GetRandomMatch_ShouldReturnNull_WhenMatchDoesNotExist()
     {
         // Arrange
-        var user = User.Create(Guid.NewGuid());
+        var user = User.Create(CurrentUserId);
         await DbContext.Users.AddAsync(user);
         await DbContext.SaveChangesAsync();
         
-        var query = new GetRandomMatchQuery(user.Id);
+        var query = new GetRandomMatchQuery();
         
         // Act
         var result = await Sender.Send(query);

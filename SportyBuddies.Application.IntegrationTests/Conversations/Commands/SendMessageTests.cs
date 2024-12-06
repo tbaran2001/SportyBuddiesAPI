@@ -14,7 +14,7 @@ public class SendMessageTests(IntegrationTestWebAppFactory factory) : BaseIntegr
     public async Task SendMessage_ShouldSendMessage()
     {
         // Arrange
-        var user1 = User.Create(Guid.NewGuid());
+        var user1 = User.Create(CurrentUserId);
         var user2 = User.Create(Guid.NewGuid());
         await DbContext.Users.AddAsync(user1);
         await DbContext.Users.AddAsync(user2);
@@ -27,7 +27,7 @@ public class SendMessageTests(IntegrationTestWebAppFactory factory) : BaseIntegr
         await DbContext.Conversations.AddAsync(conversation);
         await DbContext.SaveChangesAsync();
 
-        var command = new SendMessageCommand(user1.Id, conversation.Id, "Hello");
+        var command = new SendMessageCommand(conversation.Id, "Hello");
 
         // Act
         var result = await Sender.Send(command);
@@ -42,11 +42,11 @@ public class SendMessageTests(IntegrationTestWebAppFactory factory) : BaseIntegr
     public async Task SendMessage_ShouldThrowNotFoundException_WhenDoesntExists()
     {
         // Arrange
-        var user1 = User.Create(Guid.NewGuid());
+        var user1 = User.Create(CurrentUserId);
         await DbContext.Users.AddAsync(user1);
         await DbContext.SaveChangesAsync();
 
-        var command = new SendMessageCommand(user1.Id, Guid.NewGuid(), "Hello");
+        var command = new SendMessageCommand(Guid.NewGuid(), "Hello");
 
         // Act
         Func<Task> act = async () => await Sender.Send(command);

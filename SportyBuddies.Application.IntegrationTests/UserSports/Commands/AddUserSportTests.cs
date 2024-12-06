@@ -14,13 +14,13 @@ public class AddUserSportTests(IntegrationTestWebAppFactory factory) : BaseInteg
     public async Task AddUserSport_ShouldAddSportToUser()
     {
         // Arrange
-        var user = User.Create(Guid.NewGuid());
+        var user = User.Create(CurrentUserId);
         var sport = Sport.Create("Football", "Football description");
         await DbContext.Users.AddAsync(user);
         await DbContext.Sports.AddAsync(sport);
         await DbContext.SaveChangesAsync();
         
-        var command = new AddUserSportCommand(user.Id, sport.Id);
+        var command = new AddUserSportCommand(sport.Id);
 
         // Act
         await Sender.Send(command);
@@ -33,14 +33,14 @@ public class AddUserSportTests(IntegrationTestWebAppFactory factory) : BaseInteg
     public async Task AddUserSport_ShouldThrowException_WhenUserAlreadyHasSport()
     {
         // Arrange
-        var user = User.Create(Guid.NewGuid());
+        var user = User.Create(CurrentUserId);
         var sport = Sport.Create("Football", "Football description");
         user.AddSport(sport);
         await DbContext.Users.AddAsync(user);
         await DbContext.Sports.AddAsync(sport);
         await DbContext.SaveChangesAsync();
         
-        var command = new AddUserSportCommand(user.Id, sport.Id);
+        var command = new AddUserSportCommand(sport.Id);
 
         // Act
         Func<Task> act = async () => await Sender.Send(command);
@@ -57,7 +57,7 @@ public class AddUserSportTests(IntegrationTestWebAppFactory factory) : BaseInteg
         await DbContext.Sports.AddAsync(sport);
         await DbContext.SaveChangesAsync();
         
-        var command = new AddUserSportCommand(Guid.NewGuid(), sport.Id);
+        var command = new AddUserSportCommand(sport.Id);
 
         // Act
         Func<Task> act = async () => await Sender.Send(command);
@@ -70,11 +70,11 @@ public class AddUserSportTests(IntegrationTestWebAppFactory factory) : BaseInteg
     public async Task AddUserSport_ShouldThrowNotFoundException_WhenSportDoesNotExist()
     {
         // Arrange
-        var user = User.Create(Guid.NewGuid());
+        var user = User.Create(CurrentUserId);
         await DbContext.Users.AddAsync(user);
         await DbContext.SaveChangesAsync();
         
-        var command = new AddUserSportCommand(user.Id, Guid.NewGuid());
+        var command = new AddUserSportCommand(Guid.NewGuid());
 
         // Act
         Func<Task> act = async () => await Sender.Send(command);

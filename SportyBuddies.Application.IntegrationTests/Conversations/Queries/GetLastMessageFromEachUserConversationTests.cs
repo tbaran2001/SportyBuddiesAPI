@@ -14,7 +14,7 @@ public class GetLastMessageFromEachUserConversationTests(IntegrationTestWebAppFa
     public async Task GetLastMessageFromEachUserConversation_ShouldReturnLastMessageFromEachUserConversation()
     {
         // Arrange
-        var user1 = User.Create(Guid.NewGuid());
+        var user1 = User.Create(CurrentUserId);
         var user2 = User.Create(Guid.NewGuid());
         await DbContext.Users.AddAsync(user1);
         await DbContext.Users.AddAsync(user2);
@@ -33,7 +33,7 @@ public class GetLastMessageFromEachUserConversationTests(IntegrationTestWebAppFa
         await DbContext.Messages.AddAsync(message2);
         await DbContext.SaveChangesAsync();
 
-        var query = new GetLastMessageFromEachUserConversationQuery(user1.Id);
+        var query = new GetLastMessageFromEachUserConversationQuery();
 
         // Act
         var result = await Sender.Send(query);

@@ -14,7 +14,7 @@ public class GetUserSportsTests(IntegrationTestWebAppFactory factory) : BaseInte
     public async Task GetUserSports_ShouldReturnListOfSports()
     {
         // Arrange
-        var user = User.Create(Guid.NewGuid());
+        var user = User.Create(CurrentUserId);
         var sport1 = Sport.Create("Football", "Football description");
         var sport2 = Sport.Create("Basketball", "Basketball description");
         user.AddSport(sport1);
@@ -22,7 +22,7 @@ public class GetUserSportsTests(IntegrationTestWebAppFactory factory) : BaseInte
         await DbContext.Users.AddAsync(user);
         await DbContext.SaveChangesAsync();
         
-        var query = new GetUserSportsQuery(user.Id);
+        var query = new GetUserSportsQuery();
 
         // Act
         var result = await Sender.Send(query);
@@ -38,11 +38,11 @@ public class GetUserSportsTests(IntegrationTestWebAppFactory factory) : BaseInte
     public async Task GetUserSports_ShouldReturnEmptyList_WhenUserHasNoSports()
     {
         // Arrange
-        var user = User.Create(Guid.NewGuid());
+        var user = User.Create(CurrentUserId);
         await DbContext.Users.AddAsync(user);
         await DbContext.SaveChangesAsync();
         
-        var query = new GetUserSportsQuery(user.Id);
+        var query = new GetUserSportsQuery();
 
         // Act
         var result = await Sender.Send(query);
@@ -56,7 +56,7 @@ public class GetUserSportsTests(IntegrationTestWebAppFactory factory) : BaseInte
     public async Task GetUserSports_ShouldThrowNotFoundException_WhenUserDoesNotExist()
     {
         // Arrange
-        var query = new GetUserSportsQuery(Guid.NewGuid());
+        var query = new GetUserSportsQuery();
 
         // Act
         Func<Task> act = async () => await Sender.Send(query);

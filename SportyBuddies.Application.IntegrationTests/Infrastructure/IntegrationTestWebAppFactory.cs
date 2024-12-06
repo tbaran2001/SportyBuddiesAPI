@@ -5,7 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using NSubstitute;
 using SportyBuddies.Api;
+using SportyBuddies.Application.Authentication;
 using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Infrastructure;
 using Testcontainers.PostgreSql;
@@ -31,14 +33,15 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<IApiMarker>, I
         builder.ConfigureTestServices(services =>
         {
             services.RemoveAll(typeof(DbContextOptions<SportyBuddiesDbContext>));
-            
             services.AddDbContext<SportyBuddiesDbContext>(options =>
                 options
                     .UseNpgsql(_dbContainer.GetConnectionString())
                     .UseSnakeCaseNamingConvention());
+
+            var userContextMock=Substitute.For<IUserContext>();
+            services.AddSingleton(userContextMock);
             
             services.RemoveAll(typeof(ISqlConnectionFactory));
-            
             services.AddSingleton<ISqlConnectionFactory>(_ =>
                 new SqlConnectionFactory(_dbContainer.GetConnectionString()));
 

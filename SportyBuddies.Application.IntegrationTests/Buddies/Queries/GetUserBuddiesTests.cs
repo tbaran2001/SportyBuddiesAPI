@@ -1,4 +1,7 @@
 ﻿using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
+using NSubstitute;
+using SportyBuddies.Application.Authentication;
 using SportyBuddies.Application.Common.DTOs.Buddy;
 using SportyBuddies.Application.Features.Buddies.Queries.GetUserBuddies;
 using SportyBuddies.Application.IntegrationTests.Infrastructure;
@@ -7,19 +10,15 @@ using SportyBuddies.Domain.Users;
 
 namespace SportyBuddies.Application.IntegrationTests.Buddies.Queries;
 
-public class GetUserBuddiesTests : BaseIntegrationTest
+public class GetUserBuddiesTests(IntegrationTestWebAppFactory factory) : BaseIntegrationTest(factory)
 {
-    public GetUserBuddiesTests(IntegrationTestWebAppFactory factory) : base(factory)
-    {
-    }
-
     [Fact]
     public async Task GetUserBuddies_ShouldReturnBuddies_WhenUserHasBuddies()
     {
         // Arrange
         var users = new List<User>
         {
-            User.Create(Guid.NewGuid()),
+            User.Create(CurrentUserId),
             User.Create(Guid.NewGuid()),
             User.Create(Guid.NewGuid())
         };
@@ -33,31 +32,31 @@ public class GetUserBuddiesTests : BaseIntegrationTest
         await DbContext.Users.AddRangeAsync(users);
         await DbContext.Buddies.AddRangeAsync(buddies);
         await DbContext.SaveChangesAsync();
-        
-        var query = new GetUserBuddiesQuery(users[0].Id);
-        
+
+        var query = new GetUserBuddiesQuery();
+
         // Act
         var result = await Sender.Send(query);
-        
+
         // Assert
         result.Should().NotBeNull();
         result.Should().BeOfType<List<BuddyResponse>>();
         result.Count.Should().Be(2);
     }
-    
+
     [Fact]
     public async Task GetUserBuddies_ShouldReturnEmptyList_WhenUserDoesNotHaveBuddies()
     {
         // Arrange
-        var user = User.Create(Guid.NewGuid());
+        var user = User.Create(CurrentUserId);
         await DbContext.Users.AddAsync(user);
         await DbContext.SaveChangesAsync();
-        
-        var query = new GetUserBuddiesQuery(user.Id);
-        
+
+        var query = new GetUserBuddiesQuery();
+
         // Act
         var result = await Sender.Send(query);
-        
+
         // Assert
         result.Should().BeEmpty();
     }

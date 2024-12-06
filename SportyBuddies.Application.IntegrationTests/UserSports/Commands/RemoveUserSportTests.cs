@@ -13,14 +13,14 @@ public class RemoveUserSportTests(IntegrationTestWebAppFactory factory) : BaseIn
     public async Task RemoveUserSport_ShouldRemoveSportFromUser()
     {
         // Arrange
-        var user = User.Create(Guid.NewGuid());
+        var user = User.Create(CurrentUserId);
         var sport = Sport.Create("Football", "Football description");
         user.AddSport(sport);
         await DbContext.Users.AddAsync(user);
         await DbContext.Sports.AddAsync(sport);
         await DbContext.SaveChangesAsync();
 
-        var command = new RemoveUserSportCommand(user.Id, sport.Id);
+        var command = new RemoveUserSportCommand(sport.Id);
 
         // Act
         await Sender.Send(command);
@@ -33,13 +33,13 @@ public class RemoveUserSportTests(IntegrationTestWebAppFactory factory) : BaseIn
     public async Task RemoveUserSport_ShouldThrowException_WhenUserDoesNotHaveSport()
     {
         // Arrange
-        var user = User.Create(Guid.NewGuid());
+        var user = User.Create(CurrentUserId);
         var sport = Sport.Create("Football", "Football description");
         await DbContext.Users.AddAsync(user);
         await DbContext.Sports.AddAsync(sport);
         await DbContext.SaveChangesAsync();
 
-        var command = new RemoveUserSportCommand(user.Id, sport.Id);
+        var command = new RemoveUserSportCommand(sport.Id);
 
         // Act
         Func<Task> act = async () => await Sender.Send(command);
@@ -56,7 +56,7 @@ public class RemoveUserSportTests(IntegrationTestWebAppFactory factory) : BaseIn
         await DbContext.Sports.AddAsync(sport);
         await DbContext.SaveChangesAsync();
 
-        var command = new RemoveUserSportCommand(Guid.NewGuid(), sport.Id);
+        var command = new RemoveUserSportCommand(sport.Id);
 
         // Act
         Func<Task> act = async () => await Sender.Send(command);
@@ -69,11 +69,11 @@ public class RemoveUserSportTests(IntegrationTestWebAppFactory factory) : BaseIn
     public async Task RemoveUserSport_ShouldThrowNotFoundException_WhenSportDoesNotExist()
     {
         // Arrange
-        var user = User.Create(Guid.NewGuid());
+        var user = User.Create(CurrentUserId);
         await DbContext.Users.AddAsync(user);
         await DbContext.SaveChangesAsync();
 
-        var command = new RemoveUserSportCommand(user.Id, Guid.NewGuid());
+        var command = new RemoveUserSportCommand(Guid.NewGuid());
 
         // Act
         Func<Task> act = async () => await Sender.Send(command);

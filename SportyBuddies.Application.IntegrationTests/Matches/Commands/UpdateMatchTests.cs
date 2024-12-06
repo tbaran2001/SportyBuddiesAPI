@@ -15,7 +15,7 @@ public class UpdateMatchTests(IntegrationTestWebAppFactory factory) : BaseIntegr
     public async Task UpdateMatch_ShouldUpdateMatch_WhenValidRequest(Swipe swipe)
     {
         // Arrange
-        var user = User.Create(Guid.NewGuid());
+        var user = User.Create(CurrentUserId);
         var matchedUser = User.Create(Guid.NewGuid());
         await DbContext.Users.AddAsync(user);
         await DbContext.Users.AddAsync(matchedUser);

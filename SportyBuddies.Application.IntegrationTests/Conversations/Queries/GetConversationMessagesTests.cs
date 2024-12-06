@@ -14,7 +14,7 @@ public class GetConversationMessagesTests(IntegrationTestWebAppFactory factory) 
     public async Task GetConversationMessages_ShouldReturnMessages()
     {
         // Arrange
-        var user1 = User.Create(Guid.NewGuid());
+        var user1 = User.Create(CurrentUserId);
         var user2 = User.Create(Guid.NewGuid());
         await DbContext.Users.AddAsync(user1);
         await DbContext.Users.AddAsync(user2);
@@ -49,7 +49,7 @@ public class GetConversationMessagesTests(IntegrationTestWebAppFactory factory) 
     public async Task GetConversationMessages_ShouldThrowNotFoundException_WhenConversationDoesntExists()
     {
         // Arrange
-        var query = new GetConversationMessagesQuery(Guid.NewGuid());
+        var query = new GetConversationMessagesQuery(CurrentUserId);
 
         // Act
         Func<Task> act = async () => await Sender.Send(query);
