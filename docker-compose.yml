@@ -3,7 +3,7 @@
     image: sportybuddies.api
     build:
       context: .
-      dockerfile: SportyBuddies.Api/Dockerfile
+      dockerfile: src/SportyBuddies.Api/Dockerfile
     ports:
       - "8082:8080"
     depends_on:

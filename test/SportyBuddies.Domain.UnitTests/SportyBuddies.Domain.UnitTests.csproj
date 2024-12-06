@@ -23,7 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\SportyBuddies.Domain\SportyBuddies.Domain.csproj"/>
+        <ProjectReference Include="..\..\src\SportyBuddies.Domain\SportyBuddies.Domain.csproj"/>
     </ItemGroup>
 
 </Project>

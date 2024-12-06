@@ -22,7 +22,7 @@ public class UserContext(IHttpContextAccessor httpContextAccessor) : IUserContex
 
         var dateOfBirth = dateOfBirthString == null
             ? (DateOnly?)null
-            : DateOnly.ParseExact(dateOfBirthString, "yyyy-MM-dd");
+            : DateOnly.ParseExact(dateOfBirthString, "MM/dd/yyyy");
 
         return new CurrentUser(Guid.Parse(userId), email, roles, dateOfBirth);
     }
