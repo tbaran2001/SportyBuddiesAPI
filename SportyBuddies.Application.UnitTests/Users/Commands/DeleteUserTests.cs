@@ -1,4 +1,5 @@
 ﻿using NSubstitute;
+using SportyBuddies.Application.Authentication;
 using SportyBuddies.Application.Features.Users.Commands.DeleteUser;
 using SportyBuddies.Domain.Common;
 using SportyBuddies.Domain.Common.Interfaces;
@@ -9,24 +10,31 @@ namespace SportyBuddies.Application.UnitTests.Users.Commands;
 
 public class DeleteUserTests
 {
-    private readonly DeleteUserCommand _command = new(Guid.NewGuid());
+    private readonly DeleteUserCommand _command = new();
     private readonly DeleteUserCommandHandler _handler;
     private readonly IUsersRepository _usersRepositoryMock;
     private readonly IUnitOfWork _unitOfWorkMock;
+    private readonly IUserContext _userContextMock;
     
     public DeleteUserTests()
     {
         _usersRepositoryMock = Substitute.For<IUsersRepository>();
         _unitOfWorkMock = Substitute.For<IUnitOfWork>();
-        _handler = new DeleteUserCommandHandler(_usersRepositoryMock, _unitOfWorkMock);
+        _userContextMock = Substitute.For<IUserContext>();
+
+        _handler = new DeleteUserCommandHandler(_usersRepositoryMock, _unitOfWorkMock, _userContextMock);
     }
     
     [Fact]
     public async Task Handle_ShouldDeleteUser_WhenValidRequest()
     {
         // Arrange
-        var user = User.Create(_command.UserId);
-        _usersRepositoryMock.GetUserByIdAsync(_command.UserId).Returns(user);
+        var user = User.Create(Guid.NewGuid());
+
+        var currentUser = new CurrentUser(user.Id, "", [], null);
+        _userContextMock.GetCurrentUser().Returns(currentUser);
+
+        _usersRepositoryMock.GetUserByIdAsync(currentUser.Id).Returns(user);
         
         // Act
         await _handler.Handle(_command, default);

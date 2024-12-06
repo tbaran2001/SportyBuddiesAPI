@@ -1,5 +1,6 @@
 using FluentAssertions;
 using NSubstitute;
+using SportyBuddies.Application.Authentication;
 using SportyBuddies.Application.Exceptions;
 using SportyBuddies.Application.Features.Matches.Commands.UpdateMatch;
 using SportyBuddies.Domain.Common;
@@ -24,7 +25,8 @@ public class UpdateMatchTests
         _unitOfWorkMock = Substitute.For<IUnitOfWork>();
         _matchServiceMock = Substitute.For<IMatchService>();
         _buddyServiceMock = Substitute.For<IBuddyService>();
-        _handler = new UpdateMatchCommandHandler(_matchesRepositoryMock, _unitOfWorkMock, _matchServiceMock,
+
+        _handler = new UpdateMatchCommandHandler(_matchesRepositoryMock, _unitOfWorkMock,
             _buddyServiceMock);
     }
 

@@ -1,6 +1,7 @@
 using AutoMapper;
 using FluentAssertions;
 using NSubstitute;
+using SportyBuddies.Application.Authentication;
 using SportyBuddies.Application.Common.DTOs.Buddy;
 using SportyBuddies.Application.Features.Buddies.Queries.GetUserBuddies;
 using SportyBuddies.Application.Mappings;
@@ -13,9 +14,10 @@ namespace SportyBuddies.Application.UnitTests.Buddies.Queries;
 
 public class GetUserBuddiesTests
 {
-    private readonly GetUserBuddiesQuery _query = new(Guid.NewGuid());
+    private readonly GetUserBuddiesQuery _query = new();
     private readonly GetUserBuddiesQueryHandler _handler;
     private readonly IBuddiesRepository _buddiesRepositoryMock;
+    private readonly IUserContext _userContextMock;
     
     public GetUserBuddiesTests()
     {
@@ -28,7 +30,8 @@ public class GetUserBuddiesTests
         var mapper = configurationProvider.CreateMapper();
 
         _buddiesRepositoryMock = Substitute.For<IBuddiesRepository>();
-        _handler = new GetUserBuddiesQueryHandler(_buddiesRepositoryMock, mapper);
+        _userContextMock = Substitute.For<IUserContext>();
+        _handler = new GetUserBuddiesQueryHandler(_buddiesRepositoryMock, mapper, _userContextMock);
     }
     
     [Fact]
@@ -44,7 +47,10 @@ public class GetUserBuddiesTests
 
         var buddies = new List<Buddy> { buddy1, buddy2, buddy3, buddy4 };
 
-        _buddiesRepositoryMock.GetUserBuddiesAsync(_query.UserId).Returns(buddies);
+        var currentUser = new CurrentUser(user1.Id, "", [], null);
+        _userContextMock.GetCurrentUser().Returns(currentUser);
+
+        _buddiesRepositoryMock.GetUserBuddiesAsync(currentUser.Id).Returns(buddies);
 
         // Act
         var result = await _handler.Handle(_query, default);
