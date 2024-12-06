@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -11,6 +12,8 @@ using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Application.Common.Services;
 using SportyBuddies.Domain.Common;
 using SportyBuddies.Domain.Common.Interfaces.Repositories;
+using SportyBuddies.Infrastructure.Authorization;
+using SportyBuddies.Infrastructure.Authorization.Requirements;
 using SportyBuddies.Infrastructure.Clock;
 using SportyBuddies.Infrastructure.Identity;
 using SportyBuddies.Infrastructure.Outbox;
@@ -112,11 +115,20 @@ public static class DependencyInjection
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequiredLength = 3;
             })
-            .AddRoles<IdentityRole>()
+            .AddRoles<IdentityRole<Guid>>()
+            .AddClaimsPrincipalFactory<ApplicationUserClaimsPrincipalFactory>()
             .AddEntityFrameworkStores<SportyBuddiesDbContext>();
 
         services.AddScoped<UserManager<ApplicationUser>, CustomUserManager>();
         services.AddScoped<IdentityEventsHandler>();
+
+        services.AddAuthorizationBuilder()
+            .AddPolicy(PolicyNames.HasDateOfBirth, policy => policy.RequireClaim(AppClaimTypes.DateOfBirth))
+            .AddPolicy(PolicyNames.HasDescription, policy => policy.RequireClaim(AppClaimTypes.Description))
+            .AddPolicy(PolicyNames.IsAtLeast20YearsOld,
+                policy => policy.AddRequirements(new MinimumAgeRequirement(20)));
+
+        services.AddScoped<IAuthorizationHandler, MinimumAgeRequirementHandler>();
 
         return services;
     }
@@ -128,10 +140,10 @@ public static class DependencyInjection
             .MapCustomIdentityApi<ApplicationUser>();
 
         endpoints.MapPost("/api/logout", async (SignInManager<ApplicationUser> signInManager) =>
-        {
-            await signInManager.SignOutAsync();
-            return TypedResults.Ok();
-        })
+            {
+                await signInManager.SignOutAsync();
+                return TypedResults.Ok();
+            })
             .WithTags("Identity");
 
         return endpoints;
