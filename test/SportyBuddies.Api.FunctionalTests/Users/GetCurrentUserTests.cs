@@ -24,4 +24,16 @@ public class GetCurrentUserTests(FunctionalTestWebAppFactory factory) : BaseFunc
         user.Sports.Should().NotBeNull();
         user.Gender.Should().BeDefined();
     }
+
+    [Fact]
+    public async Task GetCurrentUser_ShouldReturn200Ok_WhenValidRequest()
+    {
+        // Arrange
+
+        // Act
+        var response = await HttpClient.GetAsync("api/users");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+    }
 }

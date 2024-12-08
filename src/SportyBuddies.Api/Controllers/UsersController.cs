@@ -17,22 +17,22 @@ namespace SportyBuddies.Api.Controllers
     public class UsersController(ISender mediator)
         : ControllerBase
     {
-        [HttpGet("{userId:guid}")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<UserWithSportsResponse>> GetUser(Guid userId)
+        public async Task<ActionResult<UserWithSportsResponse>> GetCurrentUser()
         {
-            var query = new GetUserQuery(userId);
+            var query = new GetCurrentUserQuery();
 
             var userResult = await mediator.Send(query);
 
             return Ok(userResult);
         }
 
-        [HttpGet]
+        [HttpGet("{userId:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<UserWithSportsResponse>> GetCurrentUser()
+        public async Task<ActionResult<UserWithSportsResponse>> GetUser(Guid userId)
         {
-            var query = new GetCurrentUserQuery();
+            var query = new GetUserQuery(userId);
 
             var userResult = await mediator.Send(query);
 
