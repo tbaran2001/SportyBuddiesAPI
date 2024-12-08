@@ -14,7 +14,6 @@ namespace SportyBuddies.Api.Controllers
     [ApiController]
     [Authorize]
     [Route("api/[controller]")]
-    [ApiExplorerSettings(GroupName = "v1")]
     public class UsersController(ISender mediator)
         : ControllerBase
     {

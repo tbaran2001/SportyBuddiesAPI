@@ -1,4 +1,6 @@
 ﻿using System.Net.Http.Json;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization.Policy;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -38,15 +40,17 @@ public class FunctionalTestWebAppFactory:WebApplicationFactory<IApiMarker>, IAsy
                     .UseNpgsql(_dbContainer.GetConnectionString())
                     .UseSnakeCaseNamingConvention());
 
-            var userContextMock=Substitute.For<IUserContext>();
-            services.AddSingleton(userContextMock);
-
             services.RemoveAll(typeof(ISqlConnectionFactory));
             services.AddSingleton<ISqlConnectionFactory>(_ =>
                 new SqlConnectionFactory(_dbContainer.GetConnectionString()));
 
             services.Configure<RedisCacheOptions>(redisCacheOptions =>
                 redisCacheOptions.Configuration = _redisContainer.GetConnectionString());
+
+            services.AddAuthentication((TestAuthHandler.SchemeName))
+                .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(TestAuthHandler.SchemeName, _ => { });
+
+            services.AddScoped(_ => new AuthClaimsProvider());
         });
     }
 
@@ -54,20 +58,11 @@ public class FunctionalTestWebAppFactory:WebApplicationFactory<IApiMarker>, IAsy
     {
         await _dbContainer.StartAsync();
         await _redisContainer.StartAsync();
-
-        await InitializeTestUserAsync();
     }
 
     public new async Task DisposeAsync()
     {
         await _dbContainer.DisposeAsync();
         await _redisContainer.DisposeAsync();
-    }
-
-    private async Task InitializeTestUserAsync()
-    {
-        var httpClient = CreateClient();
-
-        await httpClient.PostAsJsonAsync("api/register", UserData.RegisterTestUserRequest);
     }
 }

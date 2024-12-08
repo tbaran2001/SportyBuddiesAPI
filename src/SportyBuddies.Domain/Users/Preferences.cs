@@ -1,10 +1,12 @@
-﻿using SportyBuddies.Domain.Common;
+﻿using System.Text.Json.Serialization;
+using SportyBuddies.Domain.Common;
 
 namespace SportyBuddies.Domain.Users;
 
 public class Preferences : ValueObject
 {
     public static Preferences Default => new Preferences(18, 45, 50, 0);
+    [JsonConstructor]
     private Preferences(int minAge, int maxAge, int maxDistance, Gender gender)
     {
         MinAge = minAge;

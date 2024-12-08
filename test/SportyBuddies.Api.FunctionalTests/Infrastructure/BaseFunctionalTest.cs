@@ -12,16 +12,4 @@ public class BaseFunctionalTest : IClassFixture<FunctionalTestWebAppFactory>
     {
         HttpClient = factory.CreateClient();
     }
-
-    protected async Task GetAccessToken()
-    {
-        HttpResponseMessage loginResponse = await HttpClient.PostAsJsonAsync(
-            "api/v1/users/login?useCookies=true",
-            new LoginRequest()
-            {
-                Email = UserData.RegisterTestUserRequest.Email,
-                Password = UserData.RegisterTestUserRequest.Password,
-            });
-
-    }
 }
