@@ -1,5 +1,7 @@
 ﻿services:
   sportybuddies.api:
+    environment:
+      - DOTNET_ENVIRONMENT=Docker
     image: sportybuddies.api
     build:
       context: .

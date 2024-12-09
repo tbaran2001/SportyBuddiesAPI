@@ -37,15 +37,8 @@ var app = builder.Build();
 
 app.SeedData();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-    
-    //app.ApplyMigrations();
-
-    //app.SeedData();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 app.UseSerilogRequestLogging();
