@@ -11,10 +11,12 @@ public class GetSportsTests(IntegrationTestWebAppFactory factory) : BaseIntegrat
     public async Task GetSports_ShouldReturnSports_WhenSportsExist()
     {
         // Arrange
+        DbContext.Sports.RemoveRange(DbContext.Sports);
+        await DbContext.SaveChangesAsync();
         var sports= new List<Sport>
         {
-            Sport.Create("Football", "A sport played by two teams of eleven players on a rectangular field with goalposts at each end."),
-            Sport.Create("Basketball", "A sport played by two teams of five players on a rectangular court with a hoop at each end.")
+            Sport.Create("Test1", "Test description"),
+            Sport.Create("Test2", "Test description")
         };
         
         DbContext.Sports.AddRange(sports);
@@ -28,8 +30,8 @@ public class GetSportsTests(IntegrationTestWebAppFactory factory) : BaseIntegrat
         // Assert
         result.Should().NotBeEmpty();
         result.Should().HaveCount(2);
-        result.Should().Contain(s => s.Name == "Football");
-        result.Should().Contain(s => s.Name == "Basketball");
+        result.Should().Contain(s => s.Name == "Test1");
+        result.Should().Contain(s => s.Name == "Test2");
         
         // Clean up
         DbContext.Sports.RemoveRange(sports);
@@ -40,6 +42,8 @@ public class GetSportsTests(IntegrationTestWebAppFactory factory) : BaseIntegrat
     public async Task GetSports_ShouldReturnEmptyList_WhenNoSportsExist()
     {
         // Arrange
+        DbContext.Sports.RemoveRange(DbContext.Sports);
+        await DbContext.SaveChangesAsync();
         var query = new GetSportsQuery();
 
         // Act

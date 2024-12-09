@@ -1,5 +1,6 @@
 ﻿using Bogus;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using SportyBuddies.Domain.Constants;
 using SportyBuddies.Domain.Sports;
 using SportyBuddies.Infrastructure;
@@ -13,13 +14,21 @@ public static class SeedDataExtensions
         var scope = app.ApplicationServices.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<SportyBuddiesDbContext>();
 
-        SeedSports(dbContext);
-        SeedRoles(dbContext);
+        if (dbContext.Database.GetPendingMigrations().Any())
+            dbContext.Database.Migrate();
+
+        if (!dbContext.Database.CanConnect())
+            return;
+
+        if (!dbContext.Sports.Any())
+            SeedSports(dbContext);
+        if (!dbContext.Roles.Any())
+            SeedRoles(dbContext);
     }
 
     private static void SeedRoles(SportyBuddiesDbContext dbContext)
     {
-        var roles = new List<IdentityRole<Guid>>()
+        var roles = new List<IdentityRole<Guid>>
         {
             new(UserRoles.User)
             {
@@ -44,7 +53,7 @@ public static class SeedDataExtensions
     {
         var faker = new Faker();
 
-        var sports = new List<Sport>()
+        var sports = new List<Sport>
         {
             Sport.Create("Football", faker.Lorem.Sentence()),
             Sport.Create("Basketball", faker.Lorem.Sentence()),
@@ -67,7 +76,7 @@ public static class SeedDataExtensions
             Sport.Create("Snowboarding", faker.Lorem.Sentence()),
             Sport.Create("Surfing", faker.Lorem.Sentence()),
         };
-        
+
         dbContext.Sports.AddRange(sports);
         dbContext.SaveChanges();
     }

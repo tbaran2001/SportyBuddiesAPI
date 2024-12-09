@@ -12,6 +12,9 @@ public class GetSportsTests(FunctionalTestWebAppFactory factory) : BaseFunctiona
     public async Task GetSports_ShouldReturnSports_WhenValidRequest()
     {
         // Arrange
+        DbContext.Sports.RemoveRange(DbContext.Sports);
+        await DbContext.SaveChangesAsync();
+
         var sport1=Sport.Create("Football", "Football description");
         var sport2=Sport.Create("Basketball", "Basketball description");
         DbContext.Sports.Add(sport1);

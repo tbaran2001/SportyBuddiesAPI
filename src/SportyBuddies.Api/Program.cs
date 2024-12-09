@@ -35,13 +35,14 @@ builder.Services.AddSignalR();
 
 var app = builder.Build();
 
+app.SeedData();
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
     
-    app.ApplyMigrations();
+    //app.ApplyMigrations();
 
     //app.SeedData();
 }
