@@ -41,7 +41,7 @@ public class SendMessageTests
     public async Task Handle_ShouldReturnMessage_WhenMessageIsSent()
     {
         // Arrange
-        var currentUser = new CurrentUser(Guid.NewGuid(), "", [], null);
+        var currentUser = new CurrentUser(Guid.NewGuid(), "", []);
         _userContextMock.GetCurrentUser().Returns(currentUser);
 
         var conversation = Conversation.CreateOneToOne(currentUser.Id, Guid.NewGuid());

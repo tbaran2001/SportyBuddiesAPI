@@ -22,7 +22,7 @@ public abstract class BaseIntegrationTest : IClassFixture<IntegrationTestWebAppF
 
         var userContextMock = _scope.ServiceProvider.GetRequiredService<IUserContext>();
 
-        var currentUser = new CurrentUser(Guid.NewGuid(), "", [], null);
+        var currentUser = new CurrentUser(Guid.NewGuid(), "", []);
         userContextMock.GetCurrentUser().Returns(currentUser);
 
         CurrentUserId = currentUser.Id;

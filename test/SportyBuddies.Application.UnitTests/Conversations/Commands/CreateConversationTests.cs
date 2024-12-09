@@ -42,7 +42,7 @@ public class CreateConversationTests
         // Arrange
         var command = new CreateConversationCommand(Guid.NewGuid());
 
-        var currentUser = new CurrentUser(Guid.NewGuid(), "", [], null);
+        var currentUser = new CurrentUser(Guid.NewGuid(), "", []);
         _userContextMock.GetCurrentUser().Returns(currentUser);
 
         var conversation = Conversation.CreateOneToOne(currentUser.Id, command.ParticipantId);

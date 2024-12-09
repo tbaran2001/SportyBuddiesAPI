@@ -128,8 +128,6 @@ public static class DependencyInjection
             .AddPolicy(PolicyNames.IsAtLeast20YearsOld,
                 policy => policy.AddRequirements(new MinimumAgeRequirement(20)));
 
-        services.AddScoped<IAuthorizationHandler, MinimumAgeRequirementHandler>();
-
         return services;
     }
 

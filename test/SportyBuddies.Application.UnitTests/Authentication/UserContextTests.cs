@@ -46,7 +46,6 @@ public class UserContextTests
         currentUser.Id.Should().Be(userId);
         currentUser.Email.Should().Be("test@test.com");
         currentUser.Roles.Should().ContainInOrder(UserRoles.Admin, UserRoles.User);
-        currentUser.DateOfBirth.Should().Be(dateOfBirth);
     }
 
     [Fact]

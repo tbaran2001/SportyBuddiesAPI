@@ -13,7 +13,7 @@ public class CurrentUserTests
     public void IsInRole_WithMatchingRole_ShouldReturnTrue(string roleName)
     {
         // arrange
-        var currentUser = new CurrentUser(Guid.NewGuid(), "test@test.com", [UserRoles.Admin, UserRoles.User], null);
+        var currentUser = new CurrentUser(Guid.NewGuid(), "test@test.com", [UserRoles.Admin, UserRoles.User]);
 
         // act
         var isInRole = currentUser.IsInRole(roleName);
@@ -27,7 +27,7 @@ public class CurrentUserTests
     public void IsInRole_WithNoMatchingRole_ShouldReturnFalse()
     {
         // arrange
-        var currentUser = new CurrentUser(Guid.NewGuid(), "test@test.com", [UserRoles.Admin, UserRoles.User], null);
+        var currentUser = new CurrentUser(Guid.NewGuid(), "test@test.com", [UserRoles.Admin, UserRoles.User]);
 
         // act
         var isInRole = currentUser.IsInRole(UserRoles.Owner);
@@ -41,7 +41,7 @@ public class CurrentUserTests
     public void IsInRole_WithNoMatchingRoleCase_ShouldReturnFalse()
     {
         // arrange
-        var currentUser = new CurrentUser(Guid.NewGuid(), "test@test.com", [UserRoles.Admin, UserRoles.User], null);
+        var currentUser = new CurrentUser(Guid.NewGuid(), "test@test.com", [UserRoles.Admin, UserRoles.User]);
 
         // act
         var isInRole = currentUser.IsInRole(UserRoles.Admin.ToLower());

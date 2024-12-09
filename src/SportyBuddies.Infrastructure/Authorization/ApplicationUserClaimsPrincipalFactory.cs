@@ -18,8 +18,6 @@ public class ApplicationUserClaimsPrincipalFactory(
         var claimsIdentity = await GenerateClaimsAsync(user);
         var dbUser = await usersRepository.GetUserByIdAsync(user.Id);
 
-        claimsIdentity.AddClaim(new Claim(AppClaimTypes.DateOfBirth, user.DateOfBirth.ToString()));
-
         if(dbUser?.Description != null)
             claimsIdentity.AddClaim(new Claim(AppClaimTypes.Description, dbUser.Description));
 

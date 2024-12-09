@@ -42,7 +42,7 @@ public class GetRandomMatchTests
         var matchedUser = User.Create(Guid.NewGuid());
         var (match1, match2) = Match.CreatePair(user.Id, matchedUser.Id, DateTime.UtcNow);
 
-        var currentUser = new CurrentUser(user.Id, "", [], null);
+        var currentUser = new CurrentUser(user.Id, "", []);
         _userContextMock.GetCurrentUser().Returns(currentUser);
 
         _matchesRepositoryMock.GetRandomMatchAsync(currentUser.Id).Returns(match1);
@@ -59,7 +59,7 @@ public class GetRandomMatchTests
     public async Task Handle_Should_ReturnNull_WhenMatchNotFound()
     {
         // Arrange
-        var currentUser = new CurrentUser(Guid.NewGuid(), "", [], null);
+        var currentUser = new CurrentUser(Guid.NewGuid(), "", []);
         _userContextMock.GetCurrentUser().Returns(currentUser);
 
         _matchesRepositoryMock.GetRandomMatchAsync(Guid.NewGuid()).ReturnsNull();

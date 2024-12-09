@@ -31,7 +31,7 @@ public class DeleteUserTests
         // Arrange
         var user = User.Create(Guid.NewGuid());
 
-        var currentUser = new CurrentUser(user.Id, "", [], null);
+        var currentUser = new CurrentUser(user.Id, "", []);
         _userContextMock.GetCurrentUser().Returns(currentUser);
 
         _usersRepositoryMock.GetUserByIdAsync(currentUser.Id).Returns(user);

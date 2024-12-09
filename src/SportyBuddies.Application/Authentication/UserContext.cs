@@ -18,12 +18,7 @@ public class UserContext(IHttpContextAccessor httpContextAccessor) : IUserContex
         var userId = user.FindFirst(ClaimTypes.NameIdentifier)!.Value;
         var email = user.FindFirst(ClaimTypes.Email)!.Value;
         var roles = user.FindAll(ClaimTypes.Role).Select(c => c.Value);
-        var dateOfBirthString = user.FindFirst("DateOfBirth")?.Value;
 
-        var dateOfBirth = dateOfBirthString == null
-            ? (DateOnly?)null
-            : DateOnly.ParseExact(dateOfBirthString, "MM/dd/yyyy");
-
-        return new CurrentUser(Guid.Parse(userId), email, roles, dateOfBirth);
+        return new CurrentUser(Guid.Parse(userId), email, roles);
     }
 }

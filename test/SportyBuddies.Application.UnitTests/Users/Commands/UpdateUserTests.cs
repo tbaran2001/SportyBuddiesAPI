@@ -41,7 +41,7 @@ public class UpdateUserTests
         // Arrange
         var user = User.Create(Guid.NewGuid());
 
-        var currentUser = new CurrentUser(user.Id, "", [], null);
+        var currentUser = new CurrentUser(user.Id, "", []);
         _userContextMock.GetCurrentUser().Returns(currentUser);
 
         _usersRepositoryMock.GetUserByIdAsync(currentUser.Id).Returns(user);
@@ -63,7 +63,7 @@ public class UpdateUserTests
     public async Task Handle_ShouldThrowNotFoundException_WhenUserDoesNotExist()
     {
         // Arrange
-        var currentUser = new CurrentUser(Guid.NewGuid(), "", [], null);
+        var currentUser = new CurrentUser(Guid.NewGuid(), "", []);
         _userContextMock.GetCurrentUser().Returns(currentUser);
 
         _usersRepositoryMock.GetUserByIdAsync(currentUser.Id).Returns((User?)null);

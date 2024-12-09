@@ -47,7 +47,7 @@ public class GetUserBuddiesTests
 
         var buddies = new List<Buddy> { buddy1, buddy2, buddy3, buddy4 };
 
-        var currentUser = new CurrentUser(user1.Id, "", [], null);
+        var currentUser = new CurrentUser(user1.Id, "", []);
         _userContextMock.GetCurrentUser().Returns(currentUser);
 
         _buddiesRepositoryMock.GetUserBuddiesAsync(currentUser.Id).Returns(buddies);

@@ -37,7 +37,7 @@ public class GetUserSportsTests
         // Arrange
         var user = User.Create(Guid.NewGuid());
 
-        var currentUser = new CurrentUser(user.Id, "", [], null);
+        var currentUser = new CurrentUser(user.Id, "", []);
         _userContextMock.GetCurrentUser().Returns(currentUser);
 
         var sport1 = Sport.Create("Football", "Description");
@@ -63,7 +63,7 @@ public class GetUserSportsTests
         // Arrange
         var user = User.Create(Guid.NewGuid());
 
-        var currentUser = new CurrentUser(user.Id, "", [], null);
+        var currentUser = new CurrentUser(user.Id, "", []);
         _userContextMock.GetCurrentUser().Returns(currentUser);
 
         _usersRepositoryMock.GetUserByIdWithSportsAsync(currentUser.Id).Returns(user);
@@ -80,7 +80,7 @@ public class GetUserSportsTests
     public async Task Handle_Should_ThrowNotFoundException_WhenUserNotFound()
     {
         // Arrange
-        var currentUser = new CurrentUser(Guid.NewGuid(), "", [], null);
+        var currentUser = new CurrentUser(Guid.NewGuid(), "", []);
         _userContextMock.GetCurrentUser().Returns(currentUser);
 
         _usersRepositoryMock.GetUserByIdWithSportsAsync(currentUser.Id).Returns((User?)null);

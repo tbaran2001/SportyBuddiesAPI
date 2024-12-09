@@ -33,7 +33,7 @@ public class GetLastMessageFromEachUserConversationTests
     public async Task Handle_ShouldReturnMessages_WhenConversationExists()
     {
         // Arrange
-        var currentUser = new CurrentUser(Guid.NewGuid(), "", [], null);
+        var currentUser = new CurrentUser(Guid.NewGuid(), "", []);
         _userContextMock.GetCurrentUser().Returns(currentUser);
 
         var conversation = Conversation.CreateOneToOne(currentUser.Id, Guid.NewGuid());
