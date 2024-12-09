@@ -18,6 +18,6 @@ public class MatchConfiguration: IEntityTypeConfiguration<Match>
             .HasOne(m => m.MatchedUser)
             .WithMany()
             .HasForeignKey(m => m.MatchedUserId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

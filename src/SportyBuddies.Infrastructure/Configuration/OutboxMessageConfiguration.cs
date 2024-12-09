@@ -12,6 +12,7 @@ internal sealed class OutboxMessageConfiguration : IEntityTypeConfiguration<Outb
 
         builder.HasKey(outboxMessage => outboxMessage.Id);
 
-        builder.Property(outboxMessage => outboxMessage.Content).HasColumnType("jsonb");
+        builder.Property(outboxMessage => outboxMessage.Content)
+            .HasColumnType("NVARCHAR(MAX)");
     }
 }

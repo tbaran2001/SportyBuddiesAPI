@@ -11,6 +11,13 @@ public class MessageConfiguration: IEntityTypeConfiguration<Message>
         builder
             .HasOne(m => m.Conversation)
             .WithMany(c => c.Messages)
-            .HasForeignKey(m => m.ConversationId);
+            .HasForeignKey(m => m.ConversationId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder
+            .HasOne(m => m.Sender)
+            .WithMany()
+            .HasForeignKey(m => m.SenderId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

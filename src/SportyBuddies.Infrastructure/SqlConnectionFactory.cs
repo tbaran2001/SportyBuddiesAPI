@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using Microsoft.Data.SqlClient;
 using Npgsql;
 using SportyBuddies.Application.Common.Interfaces;
 
@@ -15,7 +16,7 @@ internal sealed class SqlConnectionFactory : ISqlConnectionFactory
 
     public IDbConnection CreateConnection()
     {
-        var connection = new NpgsqlConnection(_connectionString);
+        var connection = new SqlConnection(_connectionString);
         connection.Open();
 
         return connection;

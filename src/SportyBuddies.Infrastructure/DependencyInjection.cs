@@ -30,7 +30,8 @@ public static class DependencyInjection
                                throw new ArgumentNullException(nameof(configuration));
         services.AddDbContext<SportyBuddiesDbContext>(options =>
         {
-            options.UseNpgsql(connectionString).UseSnakeCaseNamingConvention();
+            options.UseSqlServer(connectionString)
+                .UseSnakeCaseNamingConvention();
         });
 
         services.AddSingleton<ISqlConnectionFactory>(_ =>

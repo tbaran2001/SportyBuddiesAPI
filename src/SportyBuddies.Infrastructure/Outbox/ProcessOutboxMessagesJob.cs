@@ -81,16 +81,16 @@ internal sealed class ProcessOutboxMessagesJob : IJob
         IDbConnection connection,
         IDbTransaction transaction)
     {
-        var sql = $"""                
-            SELECT id, content
-            FROM outbox_messages
-            WHERE processed_on_utc IS NULL
-            ORDER BY occurred_on_utc
-            LIMIT {_outboxOptions.BatchSize}
-            FOR UPDATE
-            """;
+        const string sql = @"
+        SELECT TOP (@BatchSize) id, content
+        FROM outbox_messages WITH (UPDLOCK, ROWLOCK)
+        WHERE processed_on_utc IS NULL
+        ORDER BY occurred_on_utc";
 
-        var outboxMessages = await connection.QueryAsync<OutboxMessageResponse>(sql, transaction: transaction);
+        var outboxMessages = await connection.QueryAsync<OutboxMessageResponse>(
+            sql,
+            new { BatchSize = _outboxOptions.BatchSize },
+            transaction: transaction);
 
         return outboxMessages.ToList();
     }

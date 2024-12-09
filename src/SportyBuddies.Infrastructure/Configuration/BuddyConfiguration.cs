@@ -16,6 +16,6 @@ public class BuddyConfiguration: IEntityTypeConfiguration<Buddy>
         builder.HasOne(b => b.MatchedUser)
             .WithMany()
             .HasForeignKey(b => b.MatchedUserId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

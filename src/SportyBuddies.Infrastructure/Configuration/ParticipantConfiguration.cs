@@ -11,11 +11,13 @@ public class ParticipantConfiguration: IEntityTypeConfiguration<Participant>
         builder
             .HasOne(p => p.Conversation)
             .WithMany(c => c.Participants)
-            .HasForeignKey(p => p.ConversationId);
+            .HasForeignKey(p => p.ConversationId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder
             .HasOne(p => p.User)
             .WithMany()
-            .HasForeignKey(p => p.UserId);
+            .HasForeignKey(p => p.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }
