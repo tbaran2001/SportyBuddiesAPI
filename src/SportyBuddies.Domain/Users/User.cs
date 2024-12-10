@@ -30,12 +30,10 @@ public class User : Entity
     public DateTime CreatedOnUtc { get; private set; }
     public DateOnly? DateOfBirth { get; private set; }
     public Gender? Gender { get; private set; }
-    public Guid? MainPhotoId { get; private set; }
+    public string? MainPhotoUrl { get; private set; }
     public Preferences? Preferences { get; private set; }
-    public ICollection<UserPhoto> Photos { get; private set; }= new List<UserPhoto>();
     public ICollection<Sport> Sports { get; private set; }= new List<Sport>();
 
-    public UserPhoto? MainPhoto { get; private set; }
     public ICollection<Message>? Messages { get; private set; }
     public ICollection<Conversation>? Conversations { get; private set; }
 
@@ -104,23 +102,14 @@ public class User : Entity
         Sports.Clear();
     }
 
-    public void AddPhoto(UserPhoto photo)
+    public void AddMainPhoto(string url)
     {
-        if (photo.IsMain)
-        {
-            MainPhoto = photo;
-            MainPhotoId = photo.Id;
-        }
-        else
-        {
-            Photos.Add(photo);
-        }
+        MainPhotoUrl = url;
     }
 
     public void RemoveMainPhoto()
     {
-        MainPhoto = null;
-        MainPhotoId = null;
+        MainPhotoUrl = null;
     }
 
     private User()

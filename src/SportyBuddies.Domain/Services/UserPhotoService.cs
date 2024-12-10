@@ -9,12 +9,11 @@ public class UserPhotoService(IBlobStorageService blobStorageService, IUsersRepo
 {
     public async Task<string> UploadAndAssignPhotoAsync(User user, Stream file, string fileName, bool isMain)
     {
-        if (isMain && user.MainPhoto != null)
+        if (isMain && user.MainPhotoUrl != null)
         {
-            var response= await blobStorageService.DeleteBlobAsync(user.MainPhoto.Url);
+            var response= await blobStorageService.DeleteBlobAsync(user.MainPhotoUrl);
             if (!response)
                 throw new Exception("Error deleting main photo");
-            usersRepository.DeletePhotoAsync(user.MainPhoto);
             user.RemoveMainPhoto();
         }
 
@@ -23,10 +22,7 @@ public class UserPhotoService(IBlobStorageService blobStorageService, IUsersRepo
 
         var photoUrl = await blobStorageService.UploadToBlobAsync(file, fullFileName);
 
-        var userPhoto = UserPhoto.Create(user, photoUrl, isMain);
-        user.AddPhoto(userPhoto);
-
-        await usersRepository.AddPhotoAsync(userPhoto);
+        user.AddMainPhoto(photoUrl);
 
         return photoUrl;
     }

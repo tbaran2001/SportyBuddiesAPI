@@ -44,7 +44,7 @@ public class UploadPhotoTests
         var currentUser = new CurrentUser(user.Id, "", []);
         _userContextMock.GetCurrentUser().Returns(currentUser);
 
-        _usersRepositoryMock.GetUserByIdWithPhotosAsync(currentUser.Id).Returns(user);
+        _usersRepositoryMock.GetUserByIdAsync(currentUser.Id).Returns(user);
         _userPhotoServiceMock.UploadAndAssignPhotoAsync(user, Arg.Any<Stream>(), _command.FileName, true)
             .Returns("url");
 
@@ -63,7 +63,7 @@ public class UploadPhotoTests
         var currentUser = new CurrentUser(Guid.NewGuid(), "", []);
         _userContextMock.GetCurrentUser().Returns(currentUser);
 
-        _usersRepositoryMock.GetUserByIdWithPhotosAsync(currentUser.Id).Returns((User?)null);
+        _usersRepositoryMock.GetUserByIdAsync(currentUser.Id).Returns((User?)null);
 
         // Act
         var act = async () => await _handler.Handle(_command, default);

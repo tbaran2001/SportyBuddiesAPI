@@ -2,7 +2,6 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SportyBuddies.Application.Features.Users.Commands.UploadPhoto;
-using SportyBuddies.Application.Features.Users.Queries.GetUserMainPhoto;
 
 namespace SportyBuddies.Api.Controllers
 {
@@ -21,17 +20,6 @@ namespace SportyBuddies.Api.Controllers
             var result = await mediator.Send(command);
 
             return Ok(result);
-        }
-
-        [HttpGet("Main")]
-        public async Task<IActionResult> GetUserMainPhoto()
-        {
-            var query = new GetUserMainPhotoQuery();
-
-            var photoResult = await mediator.Send(query);
-
-            var stream = System.IO.File.OpenRead(photoResult);
-            return File(stream, "image/jpeg");
         }
     }
 }

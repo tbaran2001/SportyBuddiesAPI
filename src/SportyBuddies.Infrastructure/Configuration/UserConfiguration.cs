@@ -25,16 +25,6 @@ public class UserConfiguration:IEntityTypeConfiguration<User>
             );
 
         builder
-            .HasMany(u => u.Photos)
-            .WithOne(p => p.User)
-            .HasForeignKey(p => p.UserId);
-
-        builder
-            .HasOne(u => u.MainPhoto)
-            .WithMany()
-            .HasForeignKey(u => u.MainPhotoId);
-
-        builder
             .Property(up => up.Id)
             .ValueGeneratedNever();
 

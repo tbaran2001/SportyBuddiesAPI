@@ -7,6 +7,7 @@ using SportyBuddies.Application.Features.Users.Queries.GetUser;
 using SportyBuddies.Application.Mappings;
 using SportyBuddies.Domain.Common.Interfaces;
 using SportyBuddies.Domain.Common.Interfaces.Repositories;
+using SportyBuddies.Domain.Common.Interfaces.Services;
 using SportyBuddies.Domain.Users;
 
 namespace SportyBuddies.Application.UnitTests.Users.Queries;
@@ -16,14 +17,16 @@ public class GetUserTests
     private readonly GetUserQuery _query= new(Guid.NewGuid());
     private readonly GetUserQueryHandler _handler;
     private readonly IUsersRepository _usersRepositoryMock;
+    private readonly IBlobStorageService _blobStorageServiceMock;
 
     public GetUserTests()
     {
         var configurationProvider = new MapperConfiguration(cfg => { cfg.AddProfile<UserMappingProfile>(); });
         var mapper = configurationProvider.CreateMapper();
+        _blobStorageServiceMock = Substitute.For<IBlobStorageService>();
     
         _usersRepositoryMock = Substitute.For<IUsersRepository>();
-        _handler = new GetUserQueryHandler(_usersRepositoryMock, mapper);
+        _handler = new GetUserQueryHandler(_usersRepositoryMock, mapper, _blobStorageServiceMock);
     }
 
     [Fact]

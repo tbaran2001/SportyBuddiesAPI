@@ -26,7 +26,6 @@ public class SportyBuddiesDbContext(
 
     public DbSet<Sport> Sports { get; set; }
     public new DbSet<User> Users { get; set; }
-    public DbSet<UserPhoto> UserPhotos { get; set; }
     public DbSet<Match> Matches { get; set; }
     public DbSet<Buddy> Buddies { get; set; }
     public DbSet<Conversation> Conversations { get; set; }

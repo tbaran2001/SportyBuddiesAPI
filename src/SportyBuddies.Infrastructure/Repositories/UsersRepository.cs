@@ -18,14 +18,6 @@ public class UsersRepository(SportyBuddiesDbContext dbContext) : IUsersRepositor
             .FirstOrDefaultAsync(u => u.Id == userId);
     }
 
-    public async Task<User?> GetUserByIdWithPhotosAsync(Guid userId)
-    {
-        return await dbContext.Users
-            .Include(u => u.MainPhoto)
-            .Include(u => u.Photos)
-            .FirstOrDefaultAsync(u => u.Id == userId);
-    }
-
     public async Task<IEnumerable<User>> GetAllUsersAsync()
     {
         return await dbContext.Users.ToListAsync();
@@ -50,15 +42,5 @@ public class UsersRepository(SportyBuddiesDbContext dbContext) : IUsersRepositor
                 (m.UserId == userId && m.MatchedUserId == u.Id) ||
                 (m.UserId == u.Id && m.MatchedUserId == userId)))
             .ToListAsync();
-    }
-
-    public async Task AddPhotoAsync(UserPhoto userPhoto)
-    {
-        await dbContext.UserPhotos.AddAsync(userPhoto);
-    }
-
-    public void DeletePhotoAsync(UserPhoto userPhoto)
-    {
-        dbContext.UserPhotos.Remove(userPhoto);
     }
 }

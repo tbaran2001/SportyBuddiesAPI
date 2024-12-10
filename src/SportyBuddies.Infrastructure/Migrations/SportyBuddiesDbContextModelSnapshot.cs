@@ -406,9 +406,9 @@ namespace SportyBuddies.Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasColumnName("gender");
 
-                    b.Property<Guid?>("MainPhotoId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("main_photo_id");
+                    b.Property<string>("MainPhotoUrl")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("main_photo_url");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)")
@@ -417,43 +417,7 @@ namespace SportyBuddies.Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("pk_users");
 
-                    b.HasIndex("MainPhotoId")
-                        .HasDatabaseName("ix_users_main_photo_id");
-
                     b.ToTable("users", (string)null);
-                });
-
-            modelBuilder.Entity("SportyBuddies.Domain.Users.UserPhoto", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("id");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("created_at");
-
-                    b.Property<bool>("IsMain")
-                        .HasColumnType("bit")
-                        .HasColumnName("is_main");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("url");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_user_photos");
-
-                    b.HasIndex("UserId")
-                        .HasDatabaseName("ix_user_photos_user_id");
-
-                    b.ToTable("user_photos", (string)null);
                 });
 
             modelBuilder.Entity("SportyBuddies.Infrastructure.Identity.ApplicationUser", b =>
@@ -767,11 +731,6 @@ namespace SportyBuddies.Infrastructure.Migrations
 
             modelBuilder.Entity("SportyBuddies.Domain.Users.User", b =>
                 {
-                    b.HasOne("SportyBuddies.Domain.Users.UserPhoto", "MainPhoto")
-                        .WithMany()
-                        .HasForeignKey("MainPhotoId")
-                        .HasConstraintName("fk_users_user_photos_main_photo_id");
-
                     b.OwnsOne("SportyBuddies.Domain.Users.Preferences", "Preferences", b1 =>
                         {
                             b1.Property<Guid>("UserId")
@@ -803,21 +762,7 @@ namespace SportyBuddies.Infrastructure.Migrations
                                 .HasConstraintName("fk_users_users_id");
                         });
 
-                    b.Navigation("MainPhoto");
-
                     b.Navigation("Preferences");
-                });
-
-            modelBuilder.Entity("SportyBuddies.Domain.Users.UserPhoto", b =>
-                {
-                    b.HasOne("SportyBuddies.Domain.Users.User", "User")
-                        .WithMany("Photos")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_user_photos_users_user_id");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("UserSports", b =>
@@ -849,8 +794,6 @@ namespace SportyBuddies.Infrastructure.Migrations
                     b.Navigation("Conversations");
 
                     b.Navigation("Messages");
-
-                    b.Navigation("Photos");
                 });
 #pragma warning restore 612, 618
         }

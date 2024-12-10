@@ -83,6 +83,27 @@ namespace SportyBuddies.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "users",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    created_on_utc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    date_of_birth = table.Column<DateOnly>(type: "date", nullable: true),
+                    gender = table.Column<int>(type: "int", nullable: true),
+                    main_photo_url = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    preferences_min_age = table.Column<int>(type: "int", nullable: true),
+                    preferences_max_age = table.Column<int>(type: "int", nullable: true),
+                    preferences_max_distance = table.Column<int>(type: "int", nullable: true),
+                    preferences_gender = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_users", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -189,22 +210,6 @@ namespace SportyBuddies.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "buddies",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    opposite_buddy_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    user_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    matched_user_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    created_on_utc = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    conversation_id = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_buddies", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "conversations",
                 columns: table => new
                 {
@@ -215,6 +220,12 @@ namespace SportyBuddies.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_conversations", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_conversations_users_creator_id",
+                        column: x => x.creator_id,
+                        principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -232,88 +243,18 @@ namespace SportyBuddies.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_matches", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "messages",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    conversation_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    sender_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    created_on_utc = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_messages", x => x.id);
                     table.ForeignKey(
-                        name: "fk_messages_conversations_conversation_id",
-                        column: x => x.conversation_id,
-                        principalTable: "conversations",
+                        name: "fk_matches_users_matched_user_id",
+                        column: x => x.matched_user_id,
+                        principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "fk_matches_users_user_id",
+                        column: x => x.user_id,
+                        principalTable: "users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "participants",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    conversation_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    user_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    created_on_utc = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_participants", x => x.id);
-                    table.ForeignKey(
-                        name: "fk_participants_conversations_conversation_id",
-                        column: x => x.conversation_id,
-                        principalTable: "conversations",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "user_photos",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    user_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    url = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    is_main = table.Column<bool>(type: "bit", nullable: false),
-                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_user_photos", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "users",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    created_on_utc = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    date_of_birth = table.Column<DateOnly>(type: "date", nullable: true),
-                    gender = table.Column<int>(type: "int", nullable: true),
-                    main_photo_id = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    preferences_min_age = table.Column<int>(type: "int", nullable: true),
-                    preferences_max_age = table.Column<int>(type: "int", nullable: true),
-                    preferences_max_distance = table.Column<int>(type: "int", nullable: true),
-                    preferences_gender = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_users", x => x.id);
-                    table.ForeignKey(
-                        name: "fk_users_user_photos_main_photo_id",
-                        column: x => x.main_photo_id,
-                        principalTable: "user_photos",
-                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -338,6 +279,92 @@ namespace SportyBuddies.Infrastructure.Migrations
                         principalTable: "users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "buddies",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    opposite_buddy_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    user_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    matched_user_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    created_on_utc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    conversation_id = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_buddies", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_buddies_conversations_conversation_id",
+                        column: x => x.conversation_id,
+                        principalTable: "conversations",
+                        principalColumn: "id");
+                    table.ForeignKey(
+                        name: "fk_buddies_users_matched_user_id",
+                        column: x => x.matched_user_id,
+                        principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "fk_buddies_users_user_id",
+                        column: x => x.user_id,
+                        principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "messages",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    conversation_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    sender_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    created_on_utc = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_messages", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_messages_conversations_conversation_id",
+                        column: x => x.conversation_id,
+                        principalTable: "conversations",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "fk_messages_users_sender_id",
+                        column: x => x.sender_id,
+                        principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "participants",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    conversation_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    user_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    created_on_utc = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_participants", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_participants_conversations_conversation_id",
+                        column: x => x.conversation_id,
+                        principalTable: "conversations",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "fk_participants_users_user_id",
+                        column: x => x.user_id,
+                        principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -430,99 +457,14 @@ namespace SportyBuddies.Infrastructure.Migrations
                 column: "user_id");
 
             migrationBuilder.CreateIndex(
-                name: "ix_user_photos_user_id",
-                table: "user_photos",
-                column: "user_id");
-
-            migrationBuilder.CreateIndex(
                 name: "ix_user_sports_user_id",
                 table: "user_sports",
                 column: "user_id");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_users_main_photo_id",
-                table: "users",
-                column: "main_photo_id");
-
-            migrationBuilder.AddForeignKey(
-                name: "fk_buddies_conversations_conversation_id",
-                table: "buddies",
-                column: "conversation_id",
-                principalTable: "conversations",
-                principalColumn: "id");
-
-            migrationBuilder.AddForeignKey(
-                name: "fk_buddies_users_matched_user_id",
-                table: "buddies",
-                column: "matched_user_id",
-                principalTable: "users",
-                principalColumn: "id",
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "fk_buddies_users_user_id",
-                table: "buddies",
-                column: "user_id",
-                principalTable: "users",
-                principalColumn: "id",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "fk_conversations_users_creator_id",
-                table: "conversations",
-                column: "creator_id",
-                principalTable: "users",
-                principalColumn: "id",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "fk_matches_users_matched_user_id",
-                table: "matches",
-                column: "matched_user_id",
-                principalTable: "users",
-                principalColumn: "id",
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "fk_matches_users_user_id",
-                table: "matches",
-                column: "user_id",
-                principalTable: "users",
-                principalColumn: "id",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "fk_messages_users_sender_id",
-                table: "messages",
-                column: "sender_id",
-                principalTable: "users",
-                principalColumn: "id",
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "fk_participants_users_user_id",
-                table: "participants",
-                column: "user_id",
-                principalTable: "users",
-                principalColumn: "id",
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "fk_user_photos_users_user_id",
-                table: "user_photos",
-                column: "user_id",
-                principalTable: "users",
-                principalColumn: "id",
-                onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "fk_user_photos_users_user_id",
-                table: "user_photos");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -570,9 +512,6 @@ namespace SportyBuddies.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "users");
-
-            migrationBuilder.DropTable(
-                name: "user_photos");
         }
     }
 }
