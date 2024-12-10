@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using SportyBuddies.Application.Authentication;
-using SportyBuddies.Application.Common.Services;
 using SportyBuddies.Application.Exceptions;
 using SportyBuddies.Domain.Common;
 using SportyBuddies.Domain.Common.Interfaces.Repositories;
@@ -10,11 +9,10 @@ using SportyBuddies.Domain.Users;
 namespace SportyBuddies.Application.Features.Users.Commands.UploadPhoto;
 
 public class UploadPhotoCommandHandler(
-    IFileStorageService fileStorageService,
     IUsersRepository usersRepository,
     IUnitOfWork unitOfWork,
     IUserContext userContext,
-    IBlobStorageService blobStorageService)
+    IUserPhotoService userPhotoService)
     : IRequestHandler<UploadPhotoCommand, string>
 {
     public async Task<string> Handle(UploadPhotoCommand command, CancellationToken cancellationToken)
@@ -25,14 +23,10 @@ public class UploadPhotoCommandHandler(
         if (user == null)
             throw new NotFoundException(nameof(user), currentUser.Id.ToString());
 
-        var logoUrl = await blobStorageService.UploadToBlobAsync(command.File, command.FileName);
+        var photoUrl = await userPhotoService.UploadAndAssignPhotoAsync(user, command.File, command.FileName, true);
 
-        var userPhoto = UserPhoto.Create(user, logoUrl, true);
-        user.AddPhoto(userPhoto);
-
-        await usersRepository.AddPhotoAsync(userPhoto);
         await unitOfWork.CommitChangesAsync();
 
-        return logoUrl;
+        return photoUrl;
     }
 }

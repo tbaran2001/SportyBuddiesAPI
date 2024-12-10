@@ -1,5 +1,4 @@
 ﻿using Asp.Versioning;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -9,7 +8,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Quartz;
 using SportyBuddies.Application.Common.Interfaces;
-using SportyBuddies.Application.Common.Services;
 using SportyBuddies.Domain.Common;
 using SportyBuddies.Domain.Common.Interfaces.Repositories;
 using SportyBuddies.Domain.Common.Interfaces.Services;
@@ -44,8 +42,6 @@ public static class DependencyInjection
         services.AddScoped<IMatchesRepository, MatchesRepository>();
         services.AddScoped<IBuddiesRepository, BuddiesRepository>();
         services.AddScoped<IConversationsRepository, ConversationsRepository>();
-
-        services.AddScoped<IFileStorageService, FileStorageService>();
 
         services.AddTransient<IDateTimeProvider, DateTimeProvider>();
 

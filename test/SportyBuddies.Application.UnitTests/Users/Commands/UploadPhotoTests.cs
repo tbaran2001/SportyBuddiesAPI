@@ -2,35 +2,35 @@
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
 using SportyBuddies.Application.Authentication;
-using SportyBuddies.Application.Common.Services;
 using SportyBuddies.Application.Exceptions;
 using SportyBuddies.Application.Features.Users.Commands.UploadPhoto;
 using SportyBuddies.Domain.Common;
 using SportyBuddies.Domain.Common.Interfaces;
 using SportyBuddies.Domain.Common.Interfaces.Repositories;
+using SportyBuddies.Domain.Common.Interfaces.Services;
 using SportyBuddies.Domain.Users;
 
 namespace SportyBuddies.Application.UnitTests.Users.Commands;
 
 public class UploadPhotoTests
 {
-    private readonly UploadPhotoCommand _command = new(false, null!);
+    private readonly UploadPhotoCommand _command = new(new MemoryStream(),"url");
     private readonly UploadPhotoCommandHandler _handler;
-    private readonly IFileStorageService _fileStorageServiceMock;
     private readonly IUsersRepository _usersRepositoryMock;
     private readonly IUnitOfWork _unitOfWorkMock;
     private readonly IFormFile _fileMock;
     private readonly IUserContext _userContextMock;
+    private readonly IUserPhotoService _userPhotoServiceMock;
 
     public UploadPhotoTests()
     {
-        _fileStorageServiceMock = Substitute.For<IFileStorageService>();
         _usersRepositoryMock = Substitute.For<IUsersRepository>();
         _unitOfWorkMock = Substitute.For<IUnitOfWork>();
         _userContextMock = Substitute.For<IUserContext>();
+        _userPhotoServiceMock = Substitute.For<IUserPhotoService>();
 
-        _handler = new UploadPhotoCommandHandler(_fileStorageServiceMock, _usersRepositoryMock, _unitOfWorkMock,
-            _userContextMock);
+        _handler = new UploadPhotoCommandHandler(_usersRepositoryMock, _unitOfWorkMock,
+            _userContextMock, _userPhotoServiceMock);
 
         _fileMock = Substitute.For<IFormFile>();
     }
@@ -45,14 +45,14 @@ public class UploadPhotoTests
         _userContextMock.GetCurrentUser().Returns(currentUser);
 
         _usersRepositoryMock.GetUserByIdWithPhotosAsync(currentUser.Id).Returns(user);
-        _fileStorageServiceMock.SaveFileAsync(user.Id, _fileMock, Arg.Any<Guid>()).Returns("url");
+        _userPhotoServiceMock.UploadAndAssignPhotoAsync(user, Arg.Any<Stream>(), _command.FileName, true)
+            .Returns("url");
 
         // Act
         var result = await _handler.Handle(_command, default);
 
         // Assert
-        user.Photos.Should().HaveCount(1);
-
+        result.Should().Be("url");
         await _unitOfWorkMock.Received(1).CommitChangesAsync();
     }
 

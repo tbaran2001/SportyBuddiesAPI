@@ -56,4 +56,9 @@ public class UsersRepository(SportyBuddiesDbContext dbContext) : IUsersRepositor
     {
         await dbContext.UserPhotos.AddAsync(userPhoto);
     }
+
+    public void DeletePhotoAsync(UserPhoto userPhoto)
+    {
+        dbContext.UserPhotos.Remove(userPhoto);
+    }
 }

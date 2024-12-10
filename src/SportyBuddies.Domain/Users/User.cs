@@ -117,6 +117,12 @@ public class User : Entity
         }
     }
 
+    public void RemoveMainPhoto()
+    {
+        MainPhoto = null;
+        MainPhotoId = null;
+    }
+
     private User()
     {
     }

@@ -17,6 +17,18 @@ public class BlobStorageService(IOptions<BlobStorageSettings> blobStorageSetting
 
         await blobClient.UploadAsync(file, true);
 
-        return blobClient.Uri.ToString();
+        return $"{fileName}";
+    }
+
+    public async Task<bool> DeleteBlobAsync(string blobUrl)
+    {
+        var blobServiceClient = new BlobServiceClient(_blobStorageSettings.ConnectionString);
+        var containerClient = blobServiceClient.GetBlobContainerClient(_blobStorageSettings.ProfilePicturesContainer);
+
+        var blobClient = containerClient.GetBlobClient(blobUrl);
+
+        var response= await blobClient.DeleteIfExistsAsync();
+
+        return response.Value;
     }
 }
