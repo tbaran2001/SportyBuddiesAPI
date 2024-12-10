@@ -12,6 +12,7 @@ using NSubstitute;
 using SportyBuddies.Application.Authentication;
 using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Infrastructure;
+using Testcontainers.MsSql;
 using Testcontainers.PostgreSql;
 using Testcontainers.Redis;
 
@@ -19,11 +20,8 @@ namespace SportyBuddies.Api.FunctionalTests.Infrastructure;
 
 public class FunctionalTestWebAppFactory:WebApplicationFactory<IApiMarker>, IAsyncLifetime
 {
-    private readonly PostgreSqlContainer _dbContainer = new PostgreSqlBuilder()
-        .WithImage("postgres:latest")
-        .WithDatabase("sportybuddies")
-        .WithUsername("sportybuddies")
-        .WithPassword("sportybuddies")
+    private readonly MsSqlContainer _dbContainer = new MsSqlBuilder()
+        .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
         .Build();
 
     private readonly RedisContainer _redisContainer = new RedisBuilder()
@@ -37,7 +35,7 @@ public class FunctionalTestWebAppFactory:WebApplicationFactory<IApiMarker>, IAsy
             services.RemoveAll(typeof(DbContextOptions<SportyBuddiesDbContext>));
             services.AddDbContext<SportyBuddiesDbContext>(options =>
                 options
-                    .UseNpgsql(_dbContainer.GetConnectionString())
+                    .UseSqlServer(_dbContainer.GetConnectionString())
                     .UseSnakeCaseNamingConvention());
 
             services.RemoveAll(typeof(ISqlConnectionFactory));
