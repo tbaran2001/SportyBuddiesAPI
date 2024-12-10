@@ -19,6 +19,7 @@
     <ItemGroup>
       <PackageReference Include="Asp.Versioning.Mvc" Version="8.1.0" />
       <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
+      <PackageReference Include="Azure.Storage.Blobs" Version="12.23.0" />
       <PackageReference Include="Dapper" Version="2.1.35" />
       <PackageReference Include="EntityFrameworkCore.NamingConventions" Version="8.0.0" />
       <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.2" />

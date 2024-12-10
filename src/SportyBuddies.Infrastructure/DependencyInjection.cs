@@ -12,8 +12,10 @@ using SportyBuddies.Application.Common.Interfaces;
 using SportyBuddies.Application.Common.Services;
 using SportyBuddies.Domain.Common;
 using SportyBuddies.Domain.Common.Interfaces.Repositories;
+using SportyBuddies.Domain.Common.Interfaces.Services;
 using SportyBuddies.Infrastructure.Authorization;
 using SportyBuddies.Infrastructure.Authorization.Requirements;
+using SportyBuddies.Infrastructure.BlobStorage;
 using SportyBuddies.Infrastructure.Clock;
 using SportyBuddies.Infrastructure.Identity;
 using SportyBuddies.Infrastructure.Outbox;
@@ -56,7 +58,15 @@ public static class DependencyInjection
 
         AddBackgroundJobs(services, configuration);
 
+        AddBlobStorage(services, configuration);
+
         return services;
+    }
+
+    private static void AddBlobStorage(IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<BlobStorageSettings>(configuration.GetSection("BlobStorage"));
+        services.AddScoped<IBlobStorageService, BlobStorageService>();
     }
 
     private static void AddCaching(IServiceCollection services, IConfiguration configuration)

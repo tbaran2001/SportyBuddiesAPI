@@ -11,4 +11,5 @@ public interface IUsersRepository
     Task AddUserAsync(User user);
     void RemoveUser(User user);
     Task<IEnumerable<User>> GetPotentialMatchesAsync(Guid userId,IEnumerable<Guid> userSports);
+    Task AddPhotoAsync(UserPhoto userPhoto);
 }

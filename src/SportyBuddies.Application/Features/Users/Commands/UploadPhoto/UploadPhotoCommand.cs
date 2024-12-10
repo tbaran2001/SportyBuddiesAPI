@@ -3,4 +3,4 @@ using Microsoft.AspNetCore.Http;
 
 namespace SportyBuddies.Application.Features.Users.Commands.UploadPhoto;
 
-public record UploadPhotoCommand(bool IsMain, IFormFile File) : IRequest<string>;
+public record UploadPhotoCommand(Stream File, string FileName) : IRequest<string>;

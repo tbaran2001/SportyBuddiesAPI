@@ -51,4 +51,9 @@ public class UsersRepository(SportyBuddiesDbContext dbContext) : IUsersRepositor
                 (m.UserId == u.Id && m.MatchedUserId == userId)))
             .ToListAsync();
     }
+
+    public async Task AddPhotoAsync(UserPhoto userPhoto)
+    {
+        await dbContext.UserPhotos.AddAsync(userPhoto);
+    }
 }

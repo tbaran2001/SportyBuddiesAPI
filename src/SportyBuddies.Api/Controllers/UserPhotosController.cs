@@ -12,13 +12,15 @@ namespace SportyBuddies.Api.Controllers
     public class UserPhotosController(ISender mediator) : ControllerBase
     {
         [HttpPost]
-        public async Task<IActionResult> UploadPhoto([FromForm] IFormFile file, bool isMain = false)
+        public async Task<IActionResult> UploadPhoto(IFormFile file)
         {
-            var command = new UploadPhotoCommand(isMain, file);
+            await using var stream = file.OpenReadStream();
 
-            var photoResult = await mediator.Send(command);
+            var command = new UploadPhotoCommand(stream, file.FileName);
 
-            return Ok(photoResult);
+            var result = await mediator.Send(command);
+
+            return Ok(result);
         }
 
         [HttpGet("Main")]
