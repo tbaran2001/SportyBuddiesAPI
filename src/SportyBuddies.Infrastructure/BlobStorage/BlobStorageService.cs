@@ -26,7 +26,8 @@ public class BlobStorageService(IOptions<BlobStorageSettings> blobStorageSetting
         var blobServiceClient = new BlobServiceClient(_blobStorageSettings.ConnectionString);
         var containerClient = blobServiceClient.GetBlobContainerClient(_blobStorageSettings.ProfilePicturesContainer);
 
-        var blobClient = containerClient.GetBlobClient(blobUrl);
+        var fileName = GetBlobNameFromUrl(blobUrl);
+        var blobClient = containerClient.GetBlobClient(fileName);
 
         var response= await blobClient.DeleteIfExistsAsync();
 
