@@ -12,10 +12,10 @@ namespace SportyBuddies.Api.FunctionalTests.Users;
 public class GetCurrentUserTests(FunctionalTestWebAppFactory factory) : BaseFunctionalTest(factory)
 {
     [Fact]
-    public async Task Get_ShouldReturnUser_WhenAccessTokenIsNotMissing()
+    public async Task GetCurrenUser_ShouldReturnUser_WhenAuthenticated()
     {
         // Act
-        var user = await HttpClient.GetFromJsonAsync<UserWithSportsResponse>("api/users");
+        var user = await HttpClient.GetFromJsonAsync<UserWithSportsResponse>("api/users/me");
 
         // Assert
         user.Should().NotBeNull();
