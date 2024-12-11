@@ -6,6 +6,7 @@ using SportyBuddies.Application.Common.DTOs.User;
 using SportyBuddies.Application.Features.Users.Commands.DeleteUser;
 using SportyBuddies.Application.Features.Users.Commands.UpdateUser;
 using SportyBuddies.Application.Features.Users.Commands.UpdateUserPreferences;
+using SportyBuddies.Application.Features.Users.Commands.UploadPhoto;
 using SportyBuddies.Application.Features.Users.Queries.GetCurrentUser;
 using SportyBuddies.Application.Features.Users.Queries.GetUser;
 
@@ -17,7 +18,7 @@ namespace SportyBuddies.Api.Controllers
     public class UsersController(ISender mediator)
         : ControllerBase
     {
-        [HttpGet]
+        [HttpGet("me")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<UserWithSportsResponse>> GetCurrentUser()
         {
@@ -72,6 +73,18 @@ namespace SportyBuddies.Api.Controllers
             await mediator.Send(command);
 
             return NoContent();
+        }
+
+        [HttpPost("Photos")]
+        public async Task<IActionResult> UploadPhoto([FromForm]IFormFile file)
+        {
+            await using var stream = file.OpenReadStream();
+
+            var command = new UploadPhotoCommand(stream, file.FileName);
+
+            var result = await mediator.Send(command);
+
+            return Ok(result);
         }
     }
 }

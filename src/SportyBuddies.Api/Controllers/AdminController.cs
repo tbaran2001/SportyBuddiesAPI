@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SportyBuddies.Api.Contracts.Sports;
 using SportyBuddies.Application.Common.DTOs.Sport;
@@ -6,10 +7,12 @@ using SportyBuddies.Application.Common.DTOs.User;
 using SportyBuddies.Application.Features.Sports.Commands.CreateSport;
 using SportyBuddies.Application.Features.Sports.Queries.GetSports;
 using SportyBuddies.Application.Features.Users.Queries.GetUsers;
+using SportyBuddies.Domain.Constants;
 
 namespace SportyBuddies.Api.Controllers
 {
     [ApiController]
+    [Authorize(Roles = UserRoles.Admin)]
     [Route("api/[controller]")]
     public class AdminController(ISender mediator) : ControllerBase
     {
