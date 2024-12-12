@@ -10,13 +10,13 @@ public class ApplicationUserClaimsPrincipalFactory(
     UserManager<ApplicationUser> userManager,
     RoleManager<IdentityRole<Guid>> roleManager,
     IOptions<IdentityOptions> options,
-    IUsersRepository usersRepository)
+    IProfilesRepository iProfilesRepository)
     : UserClaimsPrincipalFactory<ApplicationUser, IdentityRole<Guid>>(userManager, roleManager, options)
 {
     public override async Task<ClaimsPrincipal> CreateAsync(ApplicationUser user)
     {
         var claimsIdentity = await GenerateClaimsAsync(user);
-        var dbUser = await usersRepository.GetUserByIdAsync(user.Id);
+        var dbUser = await iProfilesRepository.GetProfileByIdAsync(user.Id);
 
         if(dbUser?.Description != null)
             claimsIdentity.AddClaim(new Claim(AppClaimTypes.Description, dbUser.Description));

@@ -25,7 +25,7 @@ public class CreateConversationTests
         // Arrange
         var creatorId = Guid.NewGuid();
         var participantId = Guid.NewGuid();
-        _buddiesRepository.AreUsersAlreadyBuddiesAsync(creatorId, participantId).Returns(false);
+        _buddiesRepository.AreProfilesAlreadyBuddiesAsync(creatorId, participantId).Returns(false);
 
         // Act
         Func<Task> act = async () => await _conversationService.CreateConversationAsync(creatorId, participantId);
@@ -40,8 +40,8 @@ public class CreateConversationTests
         // Arrange
         var creatorId = Guid.NewGuid();
         var participantId = Guid.NewGuid();
-        _buddiesRepository.AreUsersAlreadyBuddiesAsync(creatorId, participantId).Returns(true);
-        _conversationsRepository.UsersHaveConversationAsync(creatorId, participantId).Returns(true);
+        _buddiesRepository.AreProfilesAlreadyBuddiesAsync(creatorId, participantId).Returns(true);
+        _conversationsRepository.ProfilesHaveConversationAsync(creatorId, participantId).Returns(true);
 
         // Act
         Func<Task> act = async () => await _conversationService.CreateConversationAsync(creatorId, participantId);
@@ -56,8 +56,8 @@ public class CreateConversationTests
         // Arrange
         var creatorId = Guid.NewGuid();
         var participantId = Guid.NewGuid();
-        _buddiesRepository.AreUsersAlreadyBuddiesAsync(creatorId, participantId).Returns(true);
-        _conversationsRepository.UsersHaveConversationAsync(creatorId, participantId).Returns(false);
+        _buddiesRepository.AreProfilesAlreadyBuddiesAsync(creatorId, participantId).Returns(true);
+        _conversationsRepository.ProfilesHaveConversationAsync(creatorId, participantId).Returns(false);
 
         // Act
         await _conversationService.CreateConversationAsync(creatorId, participantId);

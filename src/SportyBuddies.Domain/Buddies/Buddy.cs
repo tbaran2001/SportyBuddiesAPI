@@ -1,6 +1,6 @@
 ﻿using SportyBuddies.Domain.Common;
 using SportyBuddies.Domain.Conversations;
-using SportyBuddies.Domain.Users;
+using SportyBuddies.Domain.Profiles;
 
 namespace SportyBuddies.Domain.Buddies;
 
@@ -8,30 +8,30 @@ public class Buddy : Entity
 {
     private Buddy(
         Guid id,
-        Guid userId,
-        Guid matchedUserId,
+        Guid profileId,
+        Guid matchedProfileId,
         DateTime createdOnUtc
     ) : base(id)
     {
-        UserId = userId;
-        MatchedUserId = matchedUserId;
+        ProfileId = profileId;
+        MatchedProfileId = matchedProfileId;
         CreatedOnUtc = createdOnUtc;
     }
 
     public Guid OppositeBuddyId { get; private set; }
-    public Guid UserId { get; private set; }
-    public Guid MatchedUserId { get; private set; }
+    public Guid ProfileId { get; private set; }
+    public Guid MatchedProfileId { get; private set; }
     public DateTime CreatedOnUtc { get; private set; }
     public Guid? ConversationId { get; private set; }
 
-    public User? User { get; private set; }
-    public User? MatchedUser { private set; get; }
+    public Profile? Profile { get; private set; }
+    public Profile? MatchedProfile { private set; get; }
     public Conversation? Conversation { get; private set; }
 
-    public static (Buddy, Buddy) CreatePair(Guid userId, Guid matchedUserId, DateTime createdOnUtc)
+    public static (Buddy, Buddy) CreatePair(Guid profileId, Guid matchedProfileId, DateTime createdOnUtc)
     {
-        var buddy1 = new Buddy(Guid.NewGuid(), userId, matchedUserId, createdOnUtc);
-        var buddy2 = new Buddy(Guid.NewGuid(), matchedUserId, userId, createdOnUtc);
+        var buddy1 = new Buddy(Guid.NewGuid(), profileId, matchedProfileId, createdOnUtc);
+        var buddy2 = new Buddy(Guid.NewGuid(), matchedProfileId, profileId, createdOnUtc);
 
         buddy1.OppositeBuddyId = buddy2.Id;
         buddy2.OppositeBuddyId = buddy1.Id;

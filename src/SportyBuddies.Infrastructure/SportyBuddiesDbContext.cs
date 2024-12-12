@@ -7,8 +7,8 @@ using SportyBuddies.Domain.Buddies;
 using SportyBuddies.Domain.Common;
 using SportyBuddies.Domain.Conversations;
 using SportyBuddies.Domain.Matches;
+using SportyBuddies.Domain.Profiles;
 using SportyBuddies.Domain.Sports;
-using SportyBuddies.Domain.Users;
 using SportyBuddies.Infrastructure.Identity;
 using SportyBuddies.Infrastructure.Outbox;
 
@@ -25,7 +25,7 @@ public class SportyBuddiesDbContext(
     };
 
     public DbSet<Sport> Sports { get; set; }
-    public new DbSet<User> Users { get; set; }
+    public DbSet<Profile> Profiles { get; set; }
     public DbSet<Match> Matches { get; set; }
     public DbSet<Buddy> Buddies { get; set; }
     public DbSet<Conversation> Conversations { get; set; }

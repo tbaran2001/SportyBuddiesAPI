@@ -2,10 +2,10 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SportyBuddies.Application.Common.DTOs.Sport;
+using SportyBuddies.Application.Features.ProfileSports.Commands.AddProfileSport;
+using SportyBuddies.Application.Features.ProfileSports.Commands.RemoveProfileSport;
+using SportyBuddies.Application.Features.ProfileSports.Queries.GetProfileSports;
 using SportyBuddies.Application.Features.Sports.Queries.GetSports;
-using SportyBuddies.Application.Features.UserSports.Commands.AddUserSport;
-using SportyBuddies.Application.Features.UserSports.Commands.RemoveUserSport;
-using SportyBuddies.Application.Features.UserSports.Queries.GetUserSports;
 
 namespace SportyBuddies.Api.Controllers
 {
@@ -27,20 +27,20 @@ namespace SportyBuddies.Api.Controllers
         
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<SportResponse>>> GetUserSports()
+        public async Task<ActionResult<IEnumerable<SportResponse>>> GetProfileSports()
         {
-            var query = new GetUserSportsQuery();
+            var query = new GetProfileSportsQuery();
 
-            var userSportsResult = await mediator.Send(query);
+            var profileSportsResult = await mediator.Send(query);
 
-            return Ok(userSportsResult);
+            return Ok(profileSportsResult);
         }
 
         [HttpPost("{sportId:guid}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> AddSportToUser(Guid sportId)
+        public async Task<ActionResult> AddSportToProfile(Guid sportId)
         {
-            var command = new AddUserSportCommand(sportId);
+            var command = new AddProfileSportCommand(sportId);
 
             await mediator.Send(command);
 
@@ -49,9 +49,9 @@ namespace SportyBuddies.Api.Controllers
 
         [HttpDelete("{sportId:guid}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> RemoveSportFromUser(Guid sportId)
+        public async Task<IActionResult> RemoveSportFromProfile(Guid sportId)
         {
-            var command = new RemoveUserSportCommand(sportId);
+            var command = new RemoveProfileSportCommand(sportId);
 
             await mediator.Send(command);
 

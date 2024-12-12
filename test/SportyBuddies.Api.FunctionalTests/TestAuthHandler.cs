@@ -3,7 +3,7 @@ using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using SportyBuddies.Domain.Users;
+using SportyBuddies.Domain.Profiles;
 using SportyBuddies.Infrastructure;
 
 namespace SportyBuddies.Api.FunctionalTests;
@@ -18,11 +18,11 @@ public class TestAuthHandler(
     public const string SchemeName = "Test";
     private readonly IList<Claim> _claims = claimsProvider.Claims;
 
-    protected override Task<AuthenticateResult> HandleAuthenticateAsync()
+    protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
     {
-        var currentUser = User.Create(UserData.TestUserId,"TestUser",new DateOnly(2000,1,1),Gender.Male);
-        dbContext.Users.Add(currentUser);
-        dbContext.SaveChanges();
+        var currentUser = Profile.Create(ProfileData.TestUserId,"TestUser",new DateOnly(2000,1,1),Gender.Male);
+        await dbContext.Profiles.AddAsync(currentUser);
+        await dbContext.SaveChangesAsync();
 
         var identity = new ClaimsIdentity(_claims, SchemeName);
         var principal = new ClaimsPrincipal(identity);
@@ -30,6 +30,6 @@ public class TestAuthHandler(
 
         var result = AuthenticateResult.Success(ticket);
 
-        return Task.FromResult(result);
+        return result;
     }
 }

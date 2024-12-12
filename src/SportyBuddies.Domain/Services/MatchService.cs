@@ -6,26 +6,26 @@ using SportyBuddies.Domain.Matches;
 namespace SportyBuddies.Domain.Services;
 
 public class MatchService(
-    IUsersRepository usersRepository,
+    IProfilesRepository iProfilesRepository,
     IMatchesRepository matchesRepository,
     IUnitOfWork unitOfWork)
     : IMatchService
 {
-    public async Task FindMatchesToAddAsync(Guid userId)
+    public async Task FindMatchesToAddAsync(Guid profileId)
     {
-        var user = await usersRepository.GetUserByIdWithSportsAsync(userId);
-        if (user == null)
-            throw new Exception("User not found");
-        if (user.Sports.Count == 0)
+        var profile = await iProfilesRepository.GetProfileByIdWithSportsAsync(profileId);
+        if (profile == null)
+            throw new Exception("Profile not found");
+        if (profile.Sports.Count == 0)
             return;
 
-        var potentialMatches = await usersRepository.GetPotentialMatchesAsync(userId, user.Sports.Select(s => s.Id));
+        var potentialMatches = await iProfilesRepository.GetPotentialMatchesAsync(profileId, profile.Sports.Select(s => s.Id));
 
         var newMatches = new List<Match>();
 
-        foreach (var matchedUser in potentialMatches)
+        foreach (var matchedProfile in potentialMatches)
         {
-            var (match1, match2) = Match.CreatePair(userId, matchedUser.Id, DateTime.UtcNow);
+            var (match1, match2) = Match.CreatePair(profileId, matchedProfile.Id, DateTime.UtcNow);
             newMatches.Add(match1);
             newMatches.Add(match2);
         }
@@ -34,8 +34,8 @@ public class MatchService(
         await unitOfWork.CommitChangesAsync();
     }
 
-    public async Task FindMatchesToRemoveAsync(Guid userId)
+    public async Task FindMatchesToRemoveAsync(Guid profileId)
     {
-        await matchesRepository.RemoveInvalidMatchesForUserAsync(userId);
+        await matchesRepository.RemoveInvalidMatchesForProfileAsync(profileId);
     }
 }

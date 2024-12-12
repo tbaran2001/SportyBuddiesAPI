@@ -1,5 +1,5 @@
 using SportyBuddies.Domain.Common;
-using SportyBuddies.Domain.Users;
+using SportyBuddies.Domain.Profiles;
 
 namespace SportyBuddies.Domain.Conversations;
 
@@ -25,7 +25,7 @@ public class Message : Entity
     public DateTime CreatedOnUtc { get; private set; }
 
     public Conversation? Conversation { get; private set; }
-    public User? Sender { get; private set; }
+    public Profile? Sender { get; private set; }
 
     public static Message Create(Guid conversationId, Guid senderId, string content)
     {

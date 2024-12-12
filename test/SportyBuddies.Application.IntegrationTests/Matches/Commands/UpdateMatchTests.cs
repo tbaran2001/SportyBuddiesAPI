@@ -3,7 +3,7 @@ using SportyBuddies.Application.Exceptions;
 using SportyBuddies.Application.Features.Matches.Commands.UpdateMatch;
 using SportyBuddies.Application.IntegrationTests.Infrastructure;
 using SportyBuddies.Domain.Matches;
-using SportyBuddies.Domain.Users;
+using SportyBuddies.Domain.Profiles;
 
 namespace SportyBuddies.Application.IntegrationTests.Matches.Commands;
 
@@ -15,10 +15,10 @@ public class UpdateMatchTests(IntegrationTestWebAppFactory factory) : BaseIntegr
     public async Task UpdateMatch_ShouldUpdateMatch_WhenValidRequest(Swipe swipe)
     {
         // Arrange
-        var user = User.Create(CurrentUserId);
-        var matchedUser = User.Create(Guid.NewGuid());
-        await DbContext.Users.AddAsync(user);
-        await DbContext.Users.AddAsync(matchedUser);
+        var user = Profile.Create(CurrentUserId);
+        var matchedUser = Profile.Create(Guid.NewGuid());
+        await DbContext.Profiles.AddAsync(user);
+        await DbContext.Profiles.AddAsync(matchedUser);
 
         var (match1, match2) = Match.CreatePair(user.Id, matchedUser.Id, DateTime.UtcNow);
         await DbContext.Matches.AddAsync(match1);

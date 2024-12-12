@@ -13,7 +13,6 @@ using SportyBuddies.Domain.Common.Interfaces.Repositories;
 using SportyBuddies.Domain.Common.Interfaces.Services;
 using SportyBuddies.Domain.Conversations;
 using SportyBuddies.Domain.Services;
-using SportyBuddies.Domain.Users;
 
 namespace SportyBuddies.Application.UnitTests.Conversations.Commands;
 

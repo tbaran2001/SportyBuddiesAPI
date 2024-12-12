@@ -8,14 +8,14 @@ public class BuddyConfiguration: IEntityTypeConfiguration<Buddy>
 {
     public void Configure(EntityTypeBuilder<Buddy> builder)
     {
-        builder.HasOne(b => b.User)
+        builder.HasOne(b => b.Profile)
             .WithMany()
-            .HasForeignKey(b => b.UserId)
+            .HasForeignKey(b => b.ProfileId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasOne(b => b.MatchedUser)
+        builder.HasOne(b => b.MatchedProfile)
             .WithMany()
-            .HasForeignKey(b => b.MatchedUserId)
+            .HasForeignKey(b => b.MatchedProfileId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

@@ -9,15 +9,15 @@ public class MatchConfiguration: IEntityTypeConfiguration<Match>
     public void Configure(EntityTypeBuilder<Match> builder)
     {
         builder
-            .HasOne(m => m.User)
+            .HasOne(m => m.Profile)
             .WithMany()
-            .HasForeignKey(m => m.UserId)
+            .HasForeignKey(m => m.ProfileId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder
-            .HasOne(m => m.MatchedUser)
+            .HasOne(m => m.MatchedProfile)
             .WithMany()
-            .HasForeignKey(m => m.MatchedUserId)
+            .HasForeignKey(m => m.MatchedProfileId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

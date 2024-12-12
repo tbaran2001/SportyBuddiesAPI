@@ -10,13 +10,13 @@ public class CreateParticipantTests
     {
         // Arrange
         var conversationId = Guid.NewGuid();
-        var userId = Guid.NewGuid();
+        var profileId = Guid.NewGuid();
 
         // Act
-        var participant = Participant.Create(conversationId, userId);
+        var participant = Participant.Create(conversationId, profileId);
 
         // Assert
         participant.ConversationId.Should().Be(conversationId);
-        participant.UserId.Should().Be(userId);
+        participant.ProfileId.Should().Be(profileId);
     }
 }

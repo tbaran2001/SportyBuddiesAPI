@@ -2,11 +2,11 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SportyBuddies.Api.Contracts.Sports;
+using SportyBuddies.Application.Common.DTOs.Profile;
 using SportyBuddies.Application.Common.DTOs.Sport;
-using SportyBuddies.Application.Common.DTOs.User;
+using SportyBuddies.Application.Features.Profiles.Queries.GetProfiles;
 using SportyBuddies.Application.Features.Sports.Commands.CreateSport;
 using SportyBuddies.Application.Features.Sports.Queries.GetSports;
-using SportyBuddies.Application.Features.Users.Queries.GetUsers;
 using SportyBuddies.Domain.Constants;
 
 namespace SportyBuddies.Api.Controllers
@@ -34,13 +34,13 @@ namespace SportyBuddies.Api.Controllers
             return Ok(sports);
         }
 
-        [HttpGet("Users")]
+        [HttpGet("Profiles")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<UserWithSportsResponse>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<ProfileWithSportsResponse>>> GetProfiles()
         {
-            var query = new GetUsersQuery();
-            var users = await mediator.Send(query);
-            return Ok(users);
+            var query = new GetProfilesQuery();
+            var profiles = await mediator.Send(query);
+            return Ok(profiles);
         }
 
         /*[HttpPost("AddRandomSportsToUsers")]

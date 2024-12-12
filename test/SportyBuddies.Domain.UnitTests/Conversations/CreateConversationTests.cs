@@ -18,7 +18,7 @@ public class CreateConversationTests
         // Assert
         conversation.CreatorId.Should().Be(creatorId);
         conversation.Participants.Should().HaveCount(2);
-        conversation.Participants.Should().ContainSingle(p => p.UserId == creatorId);
-        conversation.Participants.Should().ContainSingle(p => p.UserId == participantId);
+        conversation.Participants.Should().ContainSingle(p => p.ProfileId == creatorId);
+        conversation.Participants.Should().ContainSingle(p => p.ProfileId == participantId);
     }
 }

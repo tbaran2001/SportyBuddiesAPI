@@ -9,7 +9,7 @@ using SportyBuddies.Application.Mappings;
 using SportyBuddies.Domain.Common.Interfaces;
 using SportyBuddies.Domain.Common.Interfaces.Repositories;
 using SportyBuddies.Domain.Matches;
-using SportyBuddies.Domain.Users;
+using Profile = SportyBuddies.Domain.Profiles.Profile;
 
 namespace SportyBuddies.Application.UnitTests.Matches.Queries;
 
@@ -25,7 +25,7 @@ public class GetRandomMatchTests
         var configurationProvider = new MapperConfiguration(cfg =>
         {
             cfg.AddProfile<MatchMappingProfile>();
-            cfg.AddProfile<UserMappingProfile>();
+            cfg.AddProfile<ProfileMappingProfile>();
         });
         var mapper = configurationProvider.CreateMapper();
 
@@ -38,8 +38,8 @@ public class GetRandomMatchTests
     public async Task Handle_Should_ReturnRandomMatch()
     {
         // Arrange
-        var user = User.Create(Guid.NewGuid());
-        var matchedUser = User.Create(Guid.NewGuid());
+        var user = Profile.Create(Guid.NewGuid());
+        var matchedUser = Profile.Create(Guid.NewGuid());
         var (match1, match2) = Match.CreatePair(user.Id, matchedUser.Id, DateTime.UtcNow);
 
         var currentUser = new CurrentUser(user.Id, "", []);

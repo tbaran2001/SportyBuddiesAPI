@@ -3,7 +3,7 @@ using SportyBuddies.Application.Common.DTOs.Match;
 using SportyBuddies.Application.Features.Matches.Queries.GetRandomMatch;
 using SportyBuddies.Application.IntegrationTests.Infrastructure;
 using SportyBuddies.Domain.Matches;
-using SportyBuddies.Domain.Users;
+using SportyBuddies.Domain.Profiles;
 
 namespace SportyBuddies.Application.IntegrationTests.Matches.Queries;
 
@@ -13,10 +13,10 @@ public class GetRandomMatchTests(IntegrationTestWebAppFactory factory) : BaseInt
     public async Task GetRandomMatch_ShouldReturnMatch_WhenMatchExists()
     {
         // Arrange
-        var user = User.Create(CurrentUserId);
-        var matchedUser = User.Create(Guid.NewGuid());
-        await DbContext.Users.AddAsync(user);
-        await DbContext.Users.AddAsync(matchedUser);
+        var user = Profile.Create(CurrentUserId);
+        var matchedUser = Profile.Create(Guid.NewGuid());
+        await DbContext.Profiles.AddAsync(user);
+        await DbContext.Profiles.AddAsync(matchedUser);
         
         var (match, _) = Match.CreatePair(user.Id, matchedUser.Id, DateTime.UtcNow);
         await DbContext.Matches.AddAsync(match);
@@ -37,8 +37,8 @@ public class GetRandomMatchTests(IntegrationTestWebAppFactory factory) : BaseInt
     public async Task GetRandomMatch_ShouldReturnNull_WhenMatchDoesNotExist()
     {
         // Arrange
-        var user = User.Create(CurrentUserId);
-        await DbContext.Users.AddAsync(user);
+        var user = Profile.Create(CurrentUserId);
+        await DbContext.Profiles.AddAsync(user);
         await DbContext.SaveChangesAsync();
         
         var query = new GetRandomMatchQuery();

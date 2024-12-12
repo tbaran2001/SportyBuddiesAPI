@@ -1,5 +1,5 @@
 using SportyBuddies.Domain.Common;
-using SportyBuddies.Domain.Users;
+using SportyBuddies.Domain.Profiles;
 
 namespace SportyBuddies.Domain.Conversations;
 
@@ -22,7 +22,7 @@ public class Conversation : Entity
     public ICollection<Participant> Participants { get; private set; }
     public ICollection<Message> Messages { get; private set; } = new List<Message>();
 
-    public User? Creator { get; private set; }
+    public Profile? Creator { get; private set; }
 
 
     public static Conversation CreateOneToOne(Guid creatorId, Guid participantId)

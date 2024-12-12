@@ -38,7 +38,7 @@ public static class DependencyInjection
             new SqlConnectionFactory(connectionString));
 
         services.AddScoped<ISportsRepository, SportsRepository>();
-        services.AddScoped<IUsersRepository, UsersRepository>();
+        services.AddScoped<IProfilesRepository, ProfilesRepository>();
         services.AddScoped<IMatchesRepository, MatchesRepository>();
         services.AddScoped<IBuddiesRepository, BuddiesRepository>();
         services.AddScoped<IConversationsRepository, ConversationsRepository>();

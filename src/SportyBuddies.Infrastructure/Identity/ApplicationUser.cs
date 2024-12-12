@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using SportyBuddies.Domain.Users;
+using SportyBuddies.Domain.Profiles;
 
 namespace SportyBuddies.Infrastructure.Identity;
 

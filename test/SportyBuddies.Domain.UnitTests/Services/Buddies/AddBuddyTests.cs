@@ -38,7 +38,7 @@ public class AddBuddyTests
         var (match1, match2) = Match.CreatePair(Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow);
 
         _buddiesRepository
-            .AreUsersAlreadyBuddiesAsync(match1.UserId, match2.UserId)
+            .AreProfilesAlreadyBuddiesAsync(match1.ProfileId, match2.ProfileId)
             .Returns(true);
 
         // Act
@@ -46,7 +46,7 @@ public class AddBuddyTests
 
         // Assert
         await act.Should().ThrowAsync<Exception>()
-            .WithMessage("Users are already buddies");
+            .WithMessage("Profiles are already buddies");
     }
 
     [Fact]
@@ -75,10 +75,10 @@ public class AddBuddyTests
 
         // Assert
         await _buddiesRepository.Received(1).AddBuddyAsync(Arg.Is<Buddy>(buddy =>
-            buddy.UserId == match1.UserId &&
-            buddy.MatchedUserId == match2.UserId));
+            buddy.ProfileId == match1.ProfileId &&
+            buddy.MatchedProfileId == match2.ProfileId));
         await _buddiesRepository.Received(1).AddBuddyAsync(Arg.Is<Buddy>(buddy =>
-            buddy.UserId == match2.UserId &&
-            buddy.MatchedUserId == match1.UserId));
+            buddy.ProfileId == match2.ProfileId &&
+            buddy.MatchedProfileId == match1.ProfileId));
     }
 }

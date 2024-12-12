@@ -1,4 +1,4 @@
-﻿using SportyBuddies.Domain.Users;
+﻿using SportyBuddies.Domain.Profiles;
 
 namespace SportyBuddies.Domain.UnitTests.TestData;
 

@@ -15,9 +15,9 @@ public class ParticipantConfiguration: IEntityTypeConfiguration<Participant>
             .OnDelete(DeleteBehavior.Cascade);
 
         builder
-            .HasOne(p => p.User)
+            .HasOne(p => p.Profile)
             .WithMany()
-            .HasForeignKey(p => p.UserId)
+            .HasForeignKey(p => p.ProfileId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

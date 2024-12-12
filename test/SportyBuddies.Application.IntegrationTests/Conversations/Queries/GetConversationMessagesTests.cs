@@ -4,7 +4,7 @@ using SportyBuddies.Application.Features.Conversations.Queries.GetConversationMe
 using SportyBuddies.Application.IntegrationTests.Infrastructure;
 using SportyBuddies.Domain.Buddies;
 using SportyBuddies.Domain.Conversations;
-using SportyBuddies.Domain.Users;
+using SportyBuddies.Domain.Profiles;
 
 namespace SportyBuddies.Application.IntegrationTests.Conversations.Queries;
 
@@ -14,10 +14,10 @@ public class GetConversationMessagesTests(IntegrationTestWebAppFactory factory) 
     public async Task GetConversationMessages_ShouldReturnMessages()
     {
         // Arrange
-        var user1 = User.Create(CurrentUserId);
-        var user2 = User.Create(Guid.NewGuid());
-        await DbContext.Users.AddAsync(user1);
-        await DbContext.Users.AddAsync(user2);
+        var user1 = Profile.Create(CurrentUserId);
+        var user2 = Profile.Create(Guid.NewGuid());
+        await DbContext.Profiles.AddAsync(user1);
+        await DbContext.Profiles.AddAsync(user2);
 
         var (buddy1, buddy2) = Buddy.CreatePair(user1.Id, user2.Id, DateTime.UtcNow);
         await DbContext.Buddies.AddAsync(buddy1);

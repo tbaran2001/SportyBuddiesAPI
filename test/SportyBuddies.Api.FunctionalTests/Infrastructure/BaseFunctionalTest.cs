@@ -1,7 +1,4 @@
-﻿using System.Net.Http.Json;
-using Microsoft.AspNetCore.Authentication.BearerToken;
-using Microsoft.AspNetCore.Identity.Data;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using SportyBuddies.Infrastructure;
 
 namespace SportyBuddies.Api.FunctionalTests.Infrastructure;

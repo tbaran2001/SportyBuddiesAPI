@@ -9,12 +9,12 @@ public class ConversationService(IBuddiesRepository buddiesRepository, IConversa
 {
     public async Task<Conversation> CreateConversationAsync(Guid creatorId, Guid participantId)
     {
-        if (!await buddiesRepository.AreUsersAlreadyBuddiesAsync(creatorId, participantId))
+        if (!await buddiesRepository.AreProfilesAlreadyBuddiesAsync(creatorId, participantId))
         {
             throw new InvalidOperationException("Participants are not buddies.");
         }
 
-        if (await conversationsRepository.UsersHaveConversationAsync(creatorId, participantId))
+        if (await conversationsRepository.ProfilesHaveConversationAsync(creatorId, participantId))
         {
             throw new InvalidOperationException("Conversation already exists.");
         }

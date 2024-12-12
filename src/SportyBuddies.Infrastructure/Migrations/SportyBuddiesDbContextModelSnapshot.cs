@@ -185,6 +185,25 @@ namespace SportyBuddies.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ProfileSports", b =>
+                {
+                    b.Property<Guid>("ProfileId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("profile_id");
+
+                    b.Property<Guid>("SportId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("sport_id");
+
+                    b.HasKey("ProfileId", "SportId")
+                        .HasName("pk_profile_sports");
+
+                    b.HasIndex("SportId")
+                        .HasDatabaseName("ix_profile_sports_sport_id");
+
+                    b.ToTable("profile_sports", (string)null);
+                });
+
             modelBuilder.Entity("SportyBuddies.Domain.Buddies.Buddy", b =>
                 {
                     b.Property<Guid>("Id")
@@ -200,17 +219,17 @@ namespace SportyBuddies.Infrastructure.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("created_on_utc");
 
-                    b.Property<Guid>("MatchedUserId")
+                    b.Property<Guid>("MatchedProfileId")
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnName("matched_user_id");
+                        .HasColumnName("matched_profile_id");
 
                     b.Property<Guid>("OppositeBuddyId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("opposite_buddy_id");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("ProfileId")
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnName("user_id");
+                        .HasColumnName("profile_id");
 
                     b.HasKey("Id")
                         .HasName("pk_buddies");
@@ -218,11 +237,11 @@ namespace SportyBuddies.Infrastructure.Migrations
                     b.HasIndex("ConversationId")
                         .HasDatabaseName("ix_buddies_conversation_id");
 
-                    b.HasIndex("MatchedUserId")
-                        .HasDatabaseName("ix_buddies_matched_user_id");
+                    b.HasIndex("MatchedProfileId")
+                        .HasDatabaseName("ix_buddies_matched_profile_id");
 
-                    b.HasIndex("UserId")
-                        .HasDatabaseName("ix_buddies_user_id");
+                    b.HasIndex("ProfileId")
+                        .HasDatabaseName("ix_buddies_profile_id");
 
                     b.ToTable("buddies", (string)null);
                 });
@@ -302,9 +321,9 @@ namespace SportyBuddies.Infrastructure.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("created_on_utc");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("ProfileId")
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnName("user_id");
+                        .HasColumnName("profile_id");
 
                     b.HasKey("Id")
                         .HasName("pk_participants");
@@ -312,8 +331,8 @@ namespace SportyBuddies.Infrastructure.Migrations
                     b.HasIndex("ConversationId")
                         .HasDatabaseName("ix_participants_conversation_id");
 
-                    b.HasIndex("UserId")
-                        .HasDatabaseName("ix_participants_user_id");
+                    b.HasIndex("ProfileId")
+                        .HasDatabaseName("ix_participants_profile_id");
 
                     b.ToTable("participants", (string)null);
                 });
@@ -329,13 +348,17 @@ namespace SportyBuddies.Infrastructure.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("match_date_time");
 
-                    b.Property<Guid>("MatchedUserId")
+                    b.Property<Guid>("MatchedProfileId")
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnName("matched_user_id");
+                        .HasColumnName("matched_profile_id");
 
                     b.Property<Guid>("OppositeMatchId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("opposite_match_id");
+
+                    b.Property<Guid>("ProfileId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("profile_id");
 
                     b.Property<int?>("Swipe")
                         .HasColumnType("int")
@@ -345,46 +368,19 @@ namespace SportyBuddies.Infrastructure.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("swipe_date_time");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("user_id");
-
                     b.HasKey("Id")
                         .HasName("pk_matches");
 
-                    b.HasIndex("MatchedUserId")
-                        .HasDatabaseName("ix_matches_matched_user_id");
+                    b.HasIndex("MatchedProfileId")
+                        .HasDatabaseName("ix_matches_matched_profile_id");
 
-                    b.HasIndex("UserId")
-                        .HasDatabaseName("ix_matches_user_id");
+                    b.HasIndex("ProfileId")
+                        .HasDatabaseName("ix_matches_profile_id");
 
                     b.ToTable("matches", (string)null);
                 });
 
-            modelBuilder.Entity("SportyBuddies.Domain.Sports.Sport", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("id");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("description");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("name");
-
-                    b.HasKey("Id")
-                        .HasName("pk_sports");
-
-                    b.ToTable("sports", (string)null);
-                });
-
-            modelBuilder.Entity("SportyBuddies.Domain.Users.User", b =>
+            modelBuilder.Entity("SportyBuddies.Domain.Profiles.Profile", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier")
@@ -415,9 +411,32 @@ namespace SportyBuddies.Infrastructure.Migrations
                         .HasColumnName("name");
 
                     b.HasKey("Id")
-                        .HasName("pk_users");
+                        .HasName("pk_profiles");
 
-                    b.ToTable("users", (string)null);
+                    b.ToTable("profiles", (string)null);
+                });
+
+            modelBuilder.Entity("SportyBuddies.Domain.Sports.Sport", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("description");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_sports");
+
+                    b.ToTable("sports", (string)null);
                 });
 
             modelBuilder.Entity("SportyBuddies.Infrastructure.Identity.ApplicationUser", b =>
@@ -550,25 +569,6 @@ namespace SportyBuddies.Infrastructure.Migrations
                     b.ToTable("outbox_messages", (string)null);
                 });
 
-            modelBuilder.Entity("UserSports", b =>
-                {
-                    b.Property<Guid>("SportId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("sport_id");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("SportId", "UserId")
-                        .HasName("pk_user_sports");
-
-                    b.HasIndex("UserId")
-                        .HasDatabaseName("ix_user_sports_user_id");
-
-                    b.ToTable("user_sports", (string)null);
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
@@ -626,6 +626,23 @@ namespace SportyBuddies.Infrastructure.Migrations
                         .HasConstraintName("fk_asp_net_user_tokens_asp_net_users_user_id");
                 });
 
+            modelBuilder.Entity("ProfileSports", b =>
+                {
+                    b.HasOne("SportyBuddies.Domain.Profiles.Profile", null)
+                        .WithMany()
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_profile_sports_profiles_profile_id");
+
+                    b.HasOne("SportyBuddies.Domain.Sports.Sport", null)
+                        .WithMany()
+                        .HasForeignKey("SportId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_profile_sports_sports_sport_id");
+                });
+
             modelBuilder.Entity("SportyBuddies.Domain.Buddies.Buddy", b =>
                 {
                     b.HasOne("SportyBuddies.Domain.Conversations.Conversation", "Conversation")
@@ -633,35 +650,35 @@ namespace SportyBuddies.Infrastructure.Migrations
                         .HasForeignKey("ConversationId")
                         .HasConstraintName("fk_buddies_conversations_conversation_id");
 
-                    b.HasOne("SportyBuddies.Domain.Users.User", "MatchedUser")
+                    b.HasOne("SportyBuddies.Domain.Profiles.Profile", "MatchedProfile")
                         .WithMany()
-                        .HasForeignKey("MatchedUserId")
+                        .HasForeignKey("MatchedProfileId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
-                        .HasConstraintName("fk_buddies_users_matched_user_id");
+                        .HasConstraintName("fk_buddies_profiles_matched_profile_id");
 
-                    b.HasOne("SportyBuddies.Domain.Users.User", "User")
+                    b.HasOne("SportyBuddies.Domain.Profiles.Profile", "Profile")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("ProfileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_buddies_users_user_id");
+                        .HasConstraintName("fk_buddies_profiles_profile_id");
 
                     b.Navigation("Conversation");
 
-                    b.Navigation("MatchedUser");
+                    b.Navigation("MatchedProfile");
 
-                    b.Navigation("User");
+                    b.Navigation("Profile");
                 });
 
             modelBuilder.Entity("SportyBuddies.Domain.Conversations.Conversation", b =>
                 {
-                    b.HasOne("SportyBuddies.Domain.Users.User", "Creator")
+                    b.HasOne("SportyBuddies.Domain.Profiles.Profile", "Creator")
                         .WithMany("Conversations")
                         .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_conversations_users_creator_id");
+                        .HasConstraintName("fk_conversations_profiles_creator_id");
 
                     b.Navigation("Creator");
                 });
@@ -675,12 +692,12 @@ namespace SportyBuddies.Infrastructure.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_messages_conversations_conversation_id");
 
-                    b.HasOne("SportyBuddies.Domain.Users.User", "Sender")
+                    b.HasOne("SportyBuddies.Domain.Profiles.Profile", "Sender")
                         .WithMany("Messages")
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
-                        .HasConstraintName("fk_messages_users_sender_id");
+                        .HasConstraintName("fk_messages_profiles_sender_id");
 
                     b.Navigation("Conversation");
 
@@ -696,44 +713,44 @@ namespace SportyBuddies.Infrastructure.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_participants_conversations_conversation_id");
 
-                    b.HasOne("SportyBuddies.Domain.Users.User", "User")
+                    b.HasOne("SportyBuddies.Domain.Profiles.Profile", "Profile")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("ProfileId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
-                        .HasConstraintName("fk_participants_users_user_id");
+                        .HasConstraintName("fk_participants_profiles_profile_id");
 
                     b.Navigation("Conversation");
 
-                    b.Navigation("User");
+                    b.Navigation("Profile");
                 });
 
             modelBuilder.Entity("SportyBuddies.Domain.Matches.Match", b =>
                 {
-                    b.HasOne("SportyBuddies.Domain.Users.User", "MatchedUser")
+                    b.HasOne("SportyBuddies.Domain.Profiles.Profile", "MatchedProfile")
                         .WithMany()
-                        .HasForeignKey("MatchedUserId")
+                        .HasForeignKey("MatchedProfileId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
-                        .HasConstraintName("fk_matches_users_matched_user_id");
+                        .HasConstraintName("fk_matches_profiles_matched_profile_id");
 
-                    b.HasOne("SportyBuddies.Domain.Users.User", "User")
+                    b.HasOne("SportyBuddies.Domain.Profiles.Profile", "Profile")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("ProfileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_matches_users_user_id");
+                        .HasConstraintName("fk_matches_profiles_profile_id");
 
-                    b.Navigation("MatchedUser");
+                    b.Navigation("MatchedProfile");
 
-                    b.Navigation("User");
+                    b.Navigation("Profile");
                 });
 
-            modelBuilder.Entity("SportyBuddies.Domain.Users.User", b =>
+            modelBuilder.Entity("SportyBuddies.Domain.Profiles.Profile", b =>
                 {
-                    b.OwnsOne("SportyBuddies.Domain.Users.Preferences", "Preferences", b1 =>
+                    b.OwnsOne("SportyBuddies.Domain.Profiles.Preferences", "Preferences", b1 =>
                         {
-                            b1.Property<Guid>("UserId")
+                            b1.Property<Guid>("ProfileId")
                                 .HasColumnType("uniqueidentifier")
                                 .HasColumnName("id");
 
@@ -753,33 +770,16 @@ namespace SportyBuddies.Infrastructure.Migrations
                                 .HasColumnType("int")
                                 .HasColumnName("preferences_min_age");
 
-                            b1.HasKey("UserId");
+                            b1.HasKey("ProfileId");
 
-                            b1.ToTable("users");
+                            b1.ToTable("profiles");
 
                             b1.WithOwner()
-                                .HasForeignKey("UserId")
-                                .HasConstraintName("fk_users_users_id");
+                                .HasForeignKey("ProfileId")
+                                .HasConstraintName("fk_profiles_profiles_id");
                         });
 
                     b.Navigation("Preferences");
-                });
-
-            modelBuilder.Entity("UserSports", b =>
-                {
-                    b.HasOne("SportyBuddies.Domain.Sports.Sport", null)
-                        .WithMany()
-                        .HasForeignKey("SportId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_user_sports_sports_sport_id");
-
-                    b.HasOne("SportyBuddies.Domain.Users.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_user_sports_users_user_id");
                 });
 
             modelBuilder.Entity("SportyBuddies.Domain.Conversations.Conversation", b =>
@@ -789,7 +789,7 @@ namespace SportyBuddies.Infrastructure.Migrations
                     b.Navigation("Participants");
                 });
 
-            modelBuilder.Entity("SportyBuddies.Domain.Users.User", b =>
+            modelBuilder.Entity("SportyBuddies.Domain.Profiles.Profile", b =>
                 {
                     b.Navigation("Conversations");
 

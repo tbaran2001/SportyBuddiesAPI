@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using SportyBuddies.Domain.Matches;
-using SportyBuddies.Domain.Users;
 
 namespace SportyBuddies.Domain.UnitTests.Matches;
 

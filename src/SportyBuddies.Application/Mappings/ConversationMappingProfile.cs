@@ -13,6 +13,6 @@ public class ConversationMappingProfile : Profile
             .ForMember(dest => dest.Participants, opt => opt.MapFrom(src => src.Participants));
         CreateMap<Message, MessageResponse>();
         CreateMap<Participant, ParticipantResponse>()
-            .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User));
+            .ForMember(dest => dest.Profile, opt => opt.MapFrom(src => src.Profile));
     }
 }

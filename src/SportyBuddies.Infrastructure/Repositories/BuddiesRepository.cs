@@ -6,12 +6,12 @@ namespace SportyBuddies.Infrastructure.Repositories;
 
 public class BuddiesRepository(SportyBuddiesDbContext dbContext) : IBuddiesRepository
 {
-    public async Task<IEnumerable<Buddy>> GetUserBuddiesAsync(Guid userId)
+    public async Task<IEnumerable<Buddy>> GetProfileBuddiesAsync(Guid profileId)
     {
         return await dbContext.Buddies
-            .Include(b=>b.MatchedUser)
+            .Include(b=>b.MatchedProfile)
             .Include(b=>b.Conversation)
-            .Where(b => b.UserId == userId)
+            .Where(b => b.ProfileId == profileId)
             .ToListAsync();
     }
 
@@ -20,24 +20,24 @@ public class BuddiesRepository(SportyBuddiesDbContext dbContext) : IBuddiesRepos
         await dbContext.Buddies.AddAsync(buddy);
     }
 
-    public async Task<bool> AreUsersAlreadyBuddiesAsync(Guid userId, Guid matchedUserId)
+    public async Task<bool> AreProfilesAlreadyBuddiesAsync(Guid profileId, Guid matchedProfileId)
     {
         return await dbContext.Buddies
-            .AnyAsync(b => b.UserId == userId && b.MatchedUserId == matchedUserId);
+            .AnyAsync(b => b.ProfileId == profileId && b.MatchedProfileId == matchedProfileId);
     }
 
-    public async Task RemoveUserBuddiesAsync(Guid userId)
+    public async Task RemoveProfileBuddiesAsync(Guid profileId)
     {
         await dbContext.Buddies
-            .Where(b => b.UserId == userId || b.MatchedUserId == userId)
+            .Where(b => b.ProfileId == profileId || b.MatchedProfileId == profileId)
             .ExecuteDeleteAsync();
     }
 
-    public async Task<IEnumerable<Buddy>> GetRelatedBuddies(Guid userId, Guid matchedUserId)
+    public async Task<IEnumerable<Buddy>> GetRelatedBuddies(Guid profileId, Guid matchedProfileId)
     {
         return await dbContext.Buddies
             .Include(b=>b.Conversation)
-            .Where(b => (b.UserId == userId && b.MatchedUserId == matchedUserId) || (b.UserId == matchedUserId && b.MatchedUserId == userId))
+            .Where(b => (b.ProfileId == profileId && b.MatchedProfileId == matchedProfileId) || (b.ProfileId == matchedProfileId && b.MatchedProfileId == profileId))
             .ToListAsync();
     }
 }

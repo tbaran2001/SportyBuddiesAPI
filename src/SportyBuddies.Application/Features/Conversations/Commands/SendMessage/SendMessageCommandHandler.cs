@@ -32,9 +32,9 @@ public class SendMessageCommandHandler(
         await conversationsRepository.AddMessageAsync(message);
         await unitOfWork.CommitChangesAsync();
 
-        await hubContext.Clients.Users(conversation.Participants.Select(p => p.UserId.ToString()))
+        await hubContext.Clients.Users(conversation.Participants.Select(p => p.ProfileId.ToString()))
             .ReceiveMessage(new HubMessage(conversation.Id, message.SenderId, message.Content, message.CreatedOnUtc,
-                conversation.Participants.Select(p => p.UserId).ToList()));
+                conversation.Participants.Select(p => p.ProfileId).ToList()));
 
         return mapper.Map<MessageResponse>(message);
     }

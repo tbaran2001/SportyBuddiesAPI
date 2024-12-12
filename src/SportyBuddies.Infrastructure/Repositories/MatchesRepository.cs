@@ -11,17 +11,17 @@ public class MatchesRepository(SportyBuddiesDbContext dbContext) : IMatchesRepos
         return await dbContext.Matches.FindAsync(matchId);
     }
 
-    public async Task<IEnumerable<Match>> GetUserMatchesAsync(Guid userId)
+    public async Task<IEnumerable<Match>> GetProfileMatchesAsync(Guid profileId)
     {
         return await dbContext.Matches
-            .Where(m => m.UserId == userId)
+            .Where(m => m.ProfileId == profileId)
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<Match>> GetUserExistingMatchesAsync(Guid userId)
+    public async Task<IEnumerable<Match>> GetProfileExistingMatchesAsync(Guid profileId)
     {
         return await dbContext.Matches
-            .Where(m => m.UserId == userId || m.MatchedUserId == userId)
+            .Where(m => m.ProfileId == profileId || m.MatchedProfileId == profileId)
             .ToListAsync();
     }
 
@@ -30,18 +30,18 @@ public class MatchesRepository(SportyBuddiesDbContext dbContext) : IMatchesRepos
         await dbContext.Matches.AddRangeAsync(matches);
     }
 
-    public async Task<Match?> GetRandomMatchAsync(Guid userId)
+    public async Task<Match?> GetRandomMatchAsync(Guid profileId)
     {
-        var count = await dbContext.Matches.CountAsync(m => m.UserId == userId && m.Swipe == null);
+        var count = await dbContext.Matches.CountAsync(m => m.ProfileId == profileId && m.Swipe == null);
         if (count == 0)
             return null;
 
         var randomIndex = new Random().Next(count);
 
         return await dbContext.Matches
-            .Where(m => m.UserId == userId && m.Swipe == null)
-            .Include(m => m.User)
-            .Include(m => m.MatchedUser)
+            .Where(m => m.ProfileId == profileId && m.Swipe == null)
+            .Include(m => m.Profile)
+            .Include(m => m.MatchedProfile)
             .ThenInclude(u => u.Sports)
             .Skip(randomIndex)
             .Take(1)
@@ -55,17 +55,17 @@ public class MatchesRepository(SportyBuddiesDbContext dbContext) : IMatchesRepos
         return Task.CompletedTask;
     }
 
-    public async Task RemoveInvalidMatchesForUserAsync(Guid userId)
+    public async Task RemoveInvalidMatchesForProfileAsync(Guid profileId)
     {
         await dbContext.Matches
-            .Where(m => (m.UserId == userId || m.MatchedUserId == userId) &&
-                        !dbContext.Users
-                            .Where(u => u.Id == m.UserId)
+            .Where(m => (m.ProfileId == profileId || m.MatchedProfileId == profileId) &&
+                        !dbContext.Profiles
+                            .Where(u => u.Id == m.ProfileId)
                             .SelectMany(u => u.Sports)
                             .Select(s => s.Id)
                             .Intersect(
-                                dbContext.Users
-                                    .Where(u => u.Id == m.MatchedUserId)
+                                dbContext.Profiles
+                                    .Where(u => u.Id == m.MatchedProfileId)
                                     .SelectMany(u => u.Sports)
                                     .Select(s => s.Id)
                             ).Any()

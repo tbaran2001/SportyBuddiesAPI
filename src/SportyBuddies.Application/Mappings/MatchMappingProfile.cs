@@ -10,7 +10,7 @@ public class MatchMappingProfile : Profile
     public MatchMappingProfile()
     {
         CreateMap<Match, MatchResponse>();
-        CreateMap<Match, MatchWithUsersResponse>();
+        CreateMap<Match, MatchWithProfilesResponse>();
         CreateMap<Match, RandomMatchResponse>();
         CreateMap<UpdateMatchCommand, Match>();
     }

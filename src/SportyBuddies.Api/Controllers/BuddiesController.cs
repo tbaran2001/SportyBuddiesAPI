@@ -2,7 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SportyBuddies.Application.Common.DTOs.Buddy;
-using SportyBuddies.Application.Features.Buddies.Queries.GetUserBuddies;
+using SportyBuddies.Application.Features.Buddies.Queries.GetProfileBuddies;
 
 namespace SportyBuddies.Api.Controllers;
 
@@ -13,12 +13,12 @@ public class BuddiesController(ISender mediator) : ControllerBase
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<BuddyResponse>>> GetUserBuddies()
+    public async Task<ActionResult<IEnumerable<BuddyResponse>>> GetProfileBuddies()
     {
-        var query = new GetUserBuddiesQuery();
+        var query = new GetProfileBuddiesQuery();
 
-        var userBuddiesResult = await mediator.Send(query);
+        var profileBuddiesResult = await mediator.Send(query);
 
-        return Ok(userBuddiesResult);
+        return Ok(profileBuddiesResult);
     }
 }

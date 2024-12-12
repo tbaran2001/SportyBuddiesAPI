@@ -31,8 +31,8 @@ public class GetConversationMessagesTests
     {
         // Arrange
         var conversation = Conversation.CreateOneToOne(Guid.NewGuid(), Guid.NewGuid());
-        var message1 = Message.Create(conversation.Id, conversation.Participants.First().UserId, "Hello");
-        var message2 = Message.Create(conversation.Id, conversation.Participants.Last().UserId, "Hi");
+        var message1 = Message.Create(conversation.Id, conversation.Participants.First().ProfileId, "Hello");
+        var message2 = Message.Create(conversation.Id, conversation.Participants.Last().ProfileId, "Hi");
         conversation.Messages.Add(message1);
         conversation.Messages.Add(message2);
         _conversationsRepositoryMock.GetConversationWithMessagesAsync(_query.ConversationId).Returns(conversation);

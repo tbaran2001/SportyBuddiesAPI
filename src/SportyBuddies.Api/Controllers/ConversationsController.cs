@@ -8,7 +8,7 @@ using SportyBuddies.Application.Features.Conversations.Commands.CreateConversati
 using SportyBuddies.Application.Features.Conversations.Commands.SendMessage;
 using SportyBuddies.Application.Features.Conversations.Queries.GetConversation;
 using SportyBuddies.Application.Features.Conversations.Queries.GetConversationMessages;
-using SportyBuddies.Application.Features.Conversations.Queries.GetLastMessageFromEachUserConversation;
+using SportyBuddies.Application.Features.Conversations.Queries.GetLastMessageFromEachProfileConversation;
 
 namespace SportyBuddies.Api.Controllers
 {
@@ -61,9 +61,9 @@ namespace SportyBuddies.Api.Controllers
 
         [HttpGet("LastMessages")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<MessageResponse>>> GetLastMessageFromEachUserConversation()
+        public async Task<ActionResult<IEnumerable<MessageResponse>>> GetLastMessageFromEachProfileConversation()
         {
-            var query = new GetLastMessageFromEachUserConversationQuery();
+            var query = new GetLastMessageFromEachProfileConversationQuery();
             var result = await mediator.Send(query);
 
             return Ok(result);

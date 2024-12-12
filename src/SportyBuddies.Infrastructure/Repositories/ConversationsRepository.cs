@@ -15,7 +15,7 @@ public class ConversationsRepository(SportyBuddiesDbContext dbContext) : IConver
     {
         return await dbContext.Conversations
             .Include(c=>c.Participants)
-            .ThenInclude(p=>p.User)
+            .ThenInclude(p=>p.Profile)
             .FirstOrDefaultAsync(c => c.Id == id);
     }
 
@@ -31,21 +31,21 @@ public class ConversationsRepository(SportyBuddiesDbContext dbContext) : IConver
             .FirstOrDefaultAsync(c => c.Id == conversationId);
     }
 
-    public async Task<IEnumerable<Message?>> GetLastMessageFromEachUserConversationAsync(Guid userId)
+    public async Task<IEnumerable<Message?>> GetLastMessageFromEachProfileConversationAsync(Guid profileId)
     {
         return await dbContext.Conversations
-            .Where(c => c.Participants.Any(p => p.UserId == userId))
+            .Where(c => c.Participants.Any(p => p.ProfileId == profileId))
             .SelectMany(c => c.Messages)
             .GroupBy(m => m.ConversationId)
             .Select(g => g.OrderByDescending(m => m.CreatedOnUtc).FirstOrDefault())
             .ToListAsync();
     }
 
-    public async Task<bool> UsersHaveConversationAsync(Guid firstUserId, Guid secondUserId)
+    public async Task<bool> ProfilesHaveConversationAsync(Guid firstUserId, Guid secondUserId)
     {
         return await dbContext.Conversations
-            .Where(c => c.Participants.Any(p => p.UserId == firstUserId))
-            .Where(c => c.Participants.Any(p => p.UserId == secondUserId))
+            .Where(c => c.Participants.Any(p => p.ProfileId == firstUserId))
+            .Where(c => c.Participants.Any(p => p.ProfileId == secondUserId))
             .AnyAsync();
     }
 }

@@ -1,5 +1,5 @@
 using SportyBuddies.Domain.Common;
-using SportyBuddies.Domain.Users;
+using SportyBuddies.Domain.Profiles;
 
 namespace SportyBuddies.Domain.Conversations;
 
@@ -8,28 +8,28 @@ public class Participant : Entity
     private Participant(
         Guid id,
         Guid conversationId,
-        Guid userId,
+        Guid profileId,
         DateTime createdOnUtc
     ) : base(id)
     {
         ConversationId = conversationId;
-        UserId = userId;
+        ProfileId = profileId;
         CreatedOnUtc = createdOnUtc;
     }
 
     public Guid ConversationId { get; private set; }
-    public Guid UserId { get; private set; }
+    public Guid ProfileId { get; private set; }
     public DateTime CreatedOnUtc { get; private set; }
 
     public Conversation? Conversation { get; private set; }
-    public User? User { get; private set; }
+    public Profile? Profile { get; private set; }
 
-    public static Participant Create(Guid conversationId, Guid userId)
+    public static Participant Create(Guid conversationId, Guid profileId)
     {
         return new Participant(
             id: Guid.NewGuid(),
             conversationId: conversationId,
-            userId: userId,
+            profileId: profileId,
             createdOnUtc: DateTime.UtcNow);
     }
 
