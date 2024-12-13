@@ -5,6 +5,9 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <UserSecretsId>4d465143-a683-440e-a5b9-a19b8fdb0256</UserSecretsId>
+        <DockerfileContext>..\..\..\..</DockerfileContext>
+        <DockerComposeProjectPath>..\..\..\..\docker-compose-microservices.dcproj</DockerComposeProjectPath>
     </PropertyGroup>
 
     <ItemGroup>
@@ -19,6 +22,8 @@
 
     <ItemGroup>
       <PackageReference Include="Carter" Version="8.2.1" />
+      <PackageReference Include="Marten" Version="7.34.0" />
+      <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
     </ItemGroup>
 
 </Project>

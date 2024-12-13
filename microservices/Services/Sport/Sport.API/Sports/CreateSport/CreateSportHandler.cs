@@ -1,12 +1,10 @@
-﻿using BuildingBlocks.CQRS;
-
-namespace Sport.API.Sports.CreateSport;
+﻿namespace Sport.API.Sports.CreateSport;
 
 public record CreateSportCommand(string Name, string Description) : ICommand<CreateSportResult>;
 
 public record CreateSportResult(Guid Id);
 
-public class CreateSportCommandHandler : ICommandHandler<CreateSportCommand, CreateSportResult>
+internal class CreateSportCommandHandler(IDocumentSession session) : ICommandHandler<CreateSportCommand, CreateSportResult>
 {
     public async Task<CreateSportResult> Handle(CreateSportCommand command, CancellationToken cancellationToken)
     {
@@ -16,6 +14,9 @@ public class CreateSportCommandHandler : ICommandHandler<CreateSportCommand, Cre
             Description = command.Description
         };
 
-        return new CreateSportResult(Guid.NewGuid());
+        session.Store(sport);
+        await session.SaveChangesAsync(cancellationToken);
+
+        return new CreateSportResult(sport.Id);
     }
 }
