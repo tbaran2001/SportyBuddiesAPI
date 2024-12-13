@@ -10,9 +10,7 @@ internal class GetSportByIdQueryHandler(IDocumentSession session) : IQueryHandle
     {
         var sport = await session.LoadAsync<Models.Sport>(query.Id, cancellationToken);
         if (sport is null)
-        {
-            throw new SportNotFoundException();
-        }
+            throw new SportNotFoundException(query.Id);
 
         return new GetSportByIdResult(sport);
     }

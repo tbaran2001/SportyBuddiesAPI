@@ -1,3 +1,5 @@
-﻿namespace Sport.API.Exceptions;
+﻿using BuildingBlocks.Exceptions;
 
-public class SportNotFoundException() : Exception("Sport not found");
+namespace Sport.API.Exceptions;
+
+public class SportNotFoundException(Guid id) : NotFoundException("Sport", id);

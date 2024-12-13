@@ -4,7 +4,17 @@ public record CreateSportCommand(string Name, string Description) : ICommand<Cre
 
 public record CreateSportResult(Guid Id);
 
-internal class CreateSportCommandHandler(IDocumentSession session) : ICommandHandler<CreateSportCommand, CreateSportResult>
+public class CreateSportCommandValidator : AbstractValidator<CreateSportCommand>
+{
+    public CreateSportCommandValidator()
+    {
+        RuleFor(x => x.Name).NotEmpty().WithMessage("Name is required");
+        RuleFor(x => x.Description).NotEmpty();
+    }
+}
+
+internal class CreateSportCommandHandler(IDocumentSession session)
+    : ICommandHandler<CreateSportCommand, CreateSportResult>
 {
     public async Task<CreateSportResult> Handle(CreateSportCommand command, CancellationToken cancellationToken)
     {

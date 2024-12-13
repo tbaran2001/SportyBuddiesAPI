@@ -1,14 +1,31 @@
+using BuildingBlocks.Exceptions.Handler;
+using Sport.API.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCarter();
 
-builder.Services.AddMediatR(configuration => { configuration.RegisterServicesFromAssembly(typeof(Program).Assembly); });
-
 builder.Services.AddMarten(options => { options.Connection(builder.Configuration.GetConnectionString("Database")!); })
     .UseLightweightSessions();
+
+if (builder.Environment.IsDevelopment())
+    builder.Services.InitializeMartenWith<SportInitialData>();
+
+var assembly = typeof(Program).Assembly;
+builder.Services.AddMediatR(configuration =>
+{
+    configuration.RegisterServicesFromAssembly(assembly);
+    configuration.AddOpenBehavior(typeof(ValidationBehavior<,>));
+    configuration.AddOpenBehavior(typeof(LoggingBehavior<,>));
+});
+builder.Services.AddValidatorsFromAssembly(assembly);
+
+builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
 var app = builder.Build();
 
 app.MapCarter();
+
+app.UseExceptionHandler(options => { });
 
 app.Run();
