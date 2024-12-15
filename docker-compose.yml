@@ -4,5 +4,8 @@ services:
   sportdb:
     image: postgres
 
+  profiledb:
+    image: mcr.microsoft.com/mssql/server
+
 volumes:
   postgres_sport:

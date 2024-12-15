@@ -1,4 +1,5 @@
 using Profile.Domain.Common;
+using Profile.Domain.Enums;
 using Profile.Domain.Events;
 using Profile.Domain.Exceptions;
 using Profile.Domain.ValueObjects;
@@ -11,12 +12,12 @@ public class Profile : Entity
     public ProfileDescription Description { get; private set; } = default!;
     public DateTime CreatedOnUtc { get; private set; }
     public DateOnly DateOfBirth { get; private set; }
-    public Gender Gender { get; private set; }
+    public Gender Gender { get; private set; } = Gender.Unknown;
     public string? MainPhotoUrl { get; private set; }
-    public Preferences? Preferences { get; private set; }
+    public Preferences Preferences { get; private set; } = default!;
 
-    private readonly List<Sport> _sports = new();
-    public IReadOnlyList<Sport> Sports => _sports.AsReadOnly();
+    private readonly List<ProfileSport> _profileSports = new();
+    public IReadOnlyList<ProfileSport> ProfileSports => _profileSports.AsReadOnly();
 
     public static Profile Create(
         Guid id,
@@ -57,21 +58,22 @@ public class Profile : Entity
         AddDomainEvent(new ProfileUpdatedEvent(this));
     }
 
-    public void AddSport(Sport sport)
+    public void AddSport(Guid sportId)
     {
-        if(_sports.Contains(sport))
+        if (_profileSports.Any(s => s.SportId == sportId))
             throw new DomainException("Profile already has this sport.");
 
-        _sports.Add(sport);
+        _profileSports.Add(new ProfileSport(Id, sportId));
         AddDomainEvent(new ProfileSportAddedEvent(this));
     }
 
-    public void RemoveSport(Sport sport)
+    public void RemoveSport(Guid sportId)
     {
-        if(!_sports.Contains(sport))
+        var sport = _profileSports.FirstOrDefault(s => s.SportId == sportId);
+        if (sport is null)
             throw new DomainException("Profile does not have this sport.");
 
-        _sports.Remove(sport);
+        _profileSports.Remove(sport);
         AddDomainEvent(new ProfileSportRemovedEvent(this));
     }
 }
