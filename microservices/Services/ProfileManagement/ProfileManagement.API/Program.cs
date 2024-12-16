@@ -1,6 +1,6 @@
-using Profile.Infrastructure;
 using ProfileManagement.Application;
 using ProfileManagement.Infrastructure;
+using ProfileManagement.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +19,8 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    await app.InitializeDatabaseAsync();
 }
 
 app.UseHttpsRedirection();
