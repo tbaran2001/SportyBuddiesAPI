@@ -7,5 +7,11 @@ services:
   profiledb:
     image: mcr.microsoft.com/mssql/server
 
+  sport.api:
+    image: ${DOCKER_REGISTRY-}sportapi
+    build:
+      context: .
+      dockerfile: microservices/Services/Sport/Sport.API/Dockerfile
+
 volumes:
   postgres_sport:

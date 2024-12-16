@@ -8,6 +8,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["microservices/Services/Sport/Sport.API/Sport.API.csproj", "microservices/Services/Sport/Sport.API/"]
+COPY ["microservices/BuildingBlocks/BuildingBlocks/BuildingBlocks.csproj", "microservices/BuildingBlocks/BuildingBlocks/"]
 RUN dotnet restore "microservices/Services/Sport/Sport.API/Sport.API.csproj"
 COPY . .
 WORKDIR "/src/microservices/Services/Sport/Sport.API"
