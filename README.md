@@ -16,6 +16,7 @@ Database & Storage
 - Dapper
 - MSSQL
 - Redis
+- Azurite
 
 Architecture & Patterns
 - REST Api
@@ -40,6 +41,9 @@ Testing
 - TestContainers
 - NSubsitute
 - FluentAssertions
+
+Cloud Infrastructure
+- Azure
 
 Development:
 - JetBrains Rider
