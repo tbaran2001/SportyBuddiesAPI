@@ -13,13 +13,15 @@ Core Framework & Language
 
 Database & Storage
 - Entity Framework Core
-- PostgreSQL
+- Dapper
+- MSSQL
 - Redis
 
 Architecture & Patterns
 - REST Api
 - Clean Architecture 
 - Domain Driven Design
+- Outbox Pattern
 
 Application Infrastructure
 - Docker
@@ -31,12 +33,15 @@ Libraries & Utilities
 - AutoMapper
 - Serilog
 - SignalR
+- Quartz
 
 Testing
 - XUnit
+- TestContainers
 - NSubsitute
 - FluentAssertions
 
 Development:
 - JetBrains Rider
+- Visual Studio 2022
 - Postman
