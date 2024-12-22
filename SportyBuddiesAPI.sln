@@ -25,6 +25,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestCommon", "test\TestComm
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SportyBuddies.Api.FunctionalTests", "test\SportyBuddies.Api.FunctionalTests\SportyBuddies.Api.FunctionalTests.csproj", "{59818CC8-9A3F-44C8-B0C0-8FC19EA25C47}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2A76C8BA-EF46-4DA7-ACC3-365CA66E8758}"
+	ProjectSection(SolutionItems) = preProject
+		compose.yaml = compose.yaml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
